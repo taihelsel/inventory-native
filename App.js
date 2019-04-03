@@ -1,6 +1,6 @@
 import React from 'react';
 import { createAppContainer, createBottomTabNavigator } from "react-navigation";
-import InventoryScreen from "./screens/InventoryScreen";
+import InventoryStack from "./screens/InventoryScreen";
 import RestockScreen from "./screens/RestockScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 export default class App extends React.Component {
@@ -9,7 +9,7 @@ export default class App extends React.Component {
   }
 }
 const AppStackNavigator = createBottomTabNavigator({
-  Inventory: InventoryScreen,
+  Inventory: InventoryStack,
   Restock: RestockScreen,
   Checkout: CheckoutScreen,
 })

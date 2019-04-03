@@ -1,14 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-export default class InventoryScreen extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>InventoryScreen</Text>
-      </View>
-    );
-  }
-}
+import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { createStackNavigator } from "react-navigation";
+
+const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,4 +11,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  contentContainer: {
+    paddingTop: 30,
+  },
+  navigationHeader: {
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    height: 80,
+  },
+  navigationInput: {
+    width: width / 1.20,
+    height: 30,
+    backgroundColor: "white",
+    color: "grey",
+    borderWidth: 1,
+    borderColor: "grey",
+    borderStyle: "solid",
+    borderRadius: 5,
+    marginTop: 40,
+    paddingHorizontal: 7,
+  }
 });
+class InventoryScreen extends React.Component {
+  static navigationOptions = {
+    header: (
+      <View style={styles.navigationHeader}>
+        <TextInput style={styles.navigationInput} placeholder="Search Inventory" />
+      </View>
+    )
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <Text>
+            Inventory Items
+          </Text>
+        </ScrollView>
+      </View>
+    );
+  }
+}
+export default InventoryStack = createStackNavigator({
+  InventoryScreen: { screen: InventoryScreen }
+});
+
+

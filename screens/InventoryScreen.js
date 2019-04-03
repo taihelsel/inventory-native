@@ -15,16 +15,18 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   navigationHeader: {
+    width: width,
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "center",
     height: 80,
+    backgroundColor: "grey",
   },
   navigationInput: {
     width: width / 1.20,
     height: 30,
     backgroundColor: "white",
-    color: "grey",
+    color: "black",
     borderWidth: 1,
     borderColor: "grey",
     borderStyle: "solid",
@@ -34,16 +36,21 @@ const styles = StyleSheet.create({
   }
 });
 class InventoryScreen extends React.Component {
+  state = {
+    searchText: "",
+  }
   static navigationOptions = {
-    header: (
-      <View style={styles.navigationHeader}>
-        <TextInput style={styles.navigationInput} placeholder="Search Inventory" />
-      </View>
-    )
-  };
+    header: null,
+  }
+  handleSearchInput = (e) => {
+    console.log(e);
+  }
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.navigationHeader}>
+          <TextInput style={styles.navigationInput} onChange={this.handleSearchInput} placeholder="Search Inventory" />
+        </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Text>
             Inventory Items

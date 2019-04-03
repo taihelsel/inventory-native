@@ -1,21 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { createAppContainer, createBottomTabNavigator } from "react-navigation";
+import InventoryScreen from "./screens/InventoryScreen";
+import RestockScreen from "./screens/RestockScreen";
+import CheckoutScreen from "./screens/CheckoutScreen";
 export default class App extends React.Component {
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Hello World</Text>
-      </View>
-    );
+    return <AppContainer />
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const AppStackNavigator = createBottomTabNavigator({
+  Inventory: InventoryScreen,
+  Restock: RestockScreen,
+  Checkout: CheckoutScreen,
+})
+const AppContainer = createAppContainer(AppStackNavigator);

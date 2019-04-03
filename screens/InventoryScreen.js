@@ -42,14 +42,18 @@ class InventoryScreen extends React.Component {
   static navigationOptions = {
     header: null,
   }
-  handleSearchInput = (e) => {
-    console.log(e);
+  handleSearchInput = txt => {
+    this.setState({ searchText: txt });
+  }
+  handleSearchSubmit = e => {
+    console.log("searching for ", this.state.searchText);
+    this.setState({ searchText: "" });
   }
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.navigationHeader}>
-          <TextInput style={styles.navigationInput} onChange={this.handleSearchInput} placeholder="Search Inventory" />
+          <TextInput style={styles.navigationInput} value={this.state.searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Text>

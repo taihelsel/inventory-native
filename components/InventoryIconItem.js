@@ -17,8 +17,8 @@ export default class InventoryIconItem extends React.Component {
 }
 const styles = StyleSheet.create({
   container: {
-    width: 150,
-    height: 150,
+    width: 170,
+    height: 170,
     backgroundColor: "blue",
     borderStyle: "solid",
     borderColor: "black",

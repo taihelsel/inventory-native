@@ -1,13 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from "react-native";
 import InventoryListItem from "../components/InventoryListItem";
+import InventoryIconItem from "../components/InventoryIconItem";
 export default class InventoryItemsScreen extends React.Component {
     state = {
-        viewType: "list", // either icon or list view
+        viewType: "icon", // either icon or list view
+    }
+    handleItemTouch = data => {
+        console.log("go to item overview");
     }
     renderItems = (items) => {
         return Object.values(items).map((data, i) => {
-            return this.state.viewType === "list" ? <InventoryListItem key={`${data.title}-${i}`} data={data} /> : "RENDER ICON VIEW";
+            return this.state.viewType === "list" ? <InventoryListItem key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
         });
     }
     render() {
@@ -15,7 +19,7 @@ export default class InventoryItemsScreen extends React.Component {
         const items = navigation.getParam("data", {});
         return (
             <View style={styles.container}>
-                <ScrollView style={styles.contentContainer}>
+                <ScrollView contentContainerStyle={styles["contentContainer" + this.state.viewType]}>
                     {this.renderItems(items)}
                 </ScrollView>
             </View>
@@ -26,8 +30,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    contentContainer: {
+    contentContainerlist: {
+        paddingTop: 30,
+    },
+    contentContainericon: {
         paddingTop: 30,
         flex: 1,
-    },
+        flexWrap: "wrap",
+        alignContent: "flex-start",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+    }
 });

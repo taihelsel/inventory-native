@@ -10,8 +10,9 @@ export default class InventoryItemsScreen extends React.Component {
         this.props.navigation.navigate("ItemOverviewScreen", data);
     }
     renderItems = (items) => {
-        return Object.values(items).map((data, i) => {
-            return this.state.viewType === "list" ? <InventoryListItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
+        const itemValues = Object.values(items);
+        return itemValues.map((data, i) => {
+            return this.state.viewType === "list" ? <InventoryListItem index={i + 1} length={itemValues.length} handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
         });
     }
     render() {
@@ -31,7 +32,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainerlist: {
-        paddingTop: 30,
     },
     contentContainericon: {
         paddingTop: 30,

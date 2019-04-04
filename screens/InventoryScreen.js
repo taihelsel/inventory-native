@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
+import data from "../datasets/testInventoryDataset";
 import InventoryCategory from "../components/InventoryCategory";
 import InventoryListScreen from "./InventoryListScreen";
 const width = Dimensions.get('window').width;
@@ -44,9 +45,25 @@ const styles = StyleSheet.create({
 class InventoryScreen extends React.Component {
   state = {
     searchText: "",
+    InventoryCategories: [],
+    InventoryItems: [],
+  }
+  componentWillMount() {
+    this.sortInventory(data);
   }
   static navigationOptions = {
     header: null,
+  }
+  sortInventory = (inventory) => {
+    const keys = Object.keys(inventory);
+    const items = [];
+    keys.forEach((key) => {
+      items.push(inventory[key]);
+    });
+    this.setState({
+      InventoryCategories: keys,
+      InventoryItems: items,
+    });
   }
   handleSearchInput = txt => {
     this.setState({ searchText: txt });
@@ -62,10 +79,9 @@ class InventoryScreen extends React.Component {
           <TextInput style={styles.navigationInput} value={this.state.searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          <InventoryCategory navigation={this.props.navigation} />
-          <InventoryCategory navigation={this.props.navigation}/>
-          <InventoryCategory navigation={this.props.navigation}/>
-          <InventoryCategory navigation={this.props.navigation}/>
+          {this.state.InventoryCategories.map((cat) => {
+            return <InventoryCategory title={cat} items={data[cat]} navigation={this.props.navigation} />
+          })}
         </ScrollView>
       </View>
     );

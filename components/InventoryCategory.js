@@ -2,13 +2,15 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 export default class InventoryCategory extends React.Component {
   handleTouch = e => {
-    this.props.navigation.navigate("InventoryListScreen");
+    this.props.navigation.navigate("InventoryListScreen", {
+      data: this.props.items,
+    });
   }
   render() {
     return (
       <TouchableHighlight onPress={this.handleTouch}>
         <View style={styles.container}>
-          <Text>Inventory Cat</Text>
+          <Text>{this.props.title}</Text>
         </View>
       </TouchableHighlight>
 

@@ -121,5 +121,46 @@ export default data = {
                 "Lorem Ipsum description stuff here",
             ],
         },
+    },
+    jackets: {
+        blueJackets: {
+            title: "blue jackets",
+            color: "blue",
+            price: {
+                min: 20,
+                max: 45
+            },
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
+        },
+        redJackets: {
+            title: "red jackets",
+            color: "red",
+            price: {
+                min: 79,
+                max: 200
+            },
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
+        },
+        orangeJackets: {
+            title: "orange jackets",
+            color: "orange",
+            price: {
+                min: 2,
+                max: 65
+            },
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
+        },
     }
 }

@@ -1,8 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
 export default class ItemOverviewScreen extends React.Component {
     hasValidData = data => {
         return (typeof data.title !== "undefined" && typeof data.color !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");
+    }
+    handleCartPress = e => {
+        console.log("add to cart");
+    }
+    handleRestockPress = e => {
+        console.log("add to restock");
     }
     render() {
         const { navigation } = this.props;
@@ -21,6 +27,14 @@ export default class ItemOverviewScreen extends React.Component {
                         {desc.map((item, i) => {
                             return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>
                         })}
+                    </View>
+                    <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
+                        <TouchableOpacity onPress={this.handleRestockPress} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
+                            <Text style={{ color: "black", textAlign: "center", }}>Add to Restock</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={this.handleCartPress} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
+                            <Text style={{ color: "white", textAlign: "center", }}>Add to Cart</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </View>

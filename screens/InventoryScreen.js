@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import data from "../datasets/testInventoryDataset";
-import InventoryCategory from "../components/InventoryCategory";
+import InventoryIconItem from "../components/InventoryIconItem";
 import InventoryListScreen from "./InventoryListScreen";
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
@@ -71,6 +71,9 @@ class InventoryScreen extends React.Component {
   handleSearchSubmit = e => {
     this.setState({ searchText: "" });
   }
+  handleCategoryTouch = data => {
+    this.props.navigation.navigate("InventoryListScreen", data);
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -79,7 +82,7 @@ class InventoryScreen extends React.Component {
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {this.state.InventoryCategories.map((cat, i) => {
-            return <InventoryCategory key={`${cat}-${i}`} title={cat} items={data[cat]} navigation={this.props.navigation} />
+            return <InventoryIconItem key={`${cat}-${i}`} title={cat} data={data[cat]} handleTouch={this.handleCategoryTouch} />
           })}
         </ScrollView>
       </View>

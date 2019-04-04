@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
-export default class InventoryCategory extends React.Component {
+export default class InventoryIconItem extends React.Component {
   handleTouch = e => {
-    this.props.navigation.navigate("InventoryListScreen", {
-      data: this.props.items,
-    });
+    this.props.handleTouch({ data: this.props.data });
   }
   render() {
     return (

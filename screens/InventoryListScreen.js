@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import InventoryListItem from "../components/InventoryListItem";
 export default class InventoryListScreen extends React.Component {
     state = {

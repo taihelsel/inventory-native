@@ -69,7 +69,6 @@ class InventoryScreen extends React.Component {
     this.setState({ searchText: txt });
   }
   handleSearchSubmit = e => {
-    console.log("searching for ", this.state.searchText);
     this.setState({ searchText: "" });
   }
   render() {
@@ -79,8 +78,8 @@ class InventoryScreen extends React.Component {
           <TextInput style={styles.navigationInput} value={this.state.searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.state.InventoryCategories.map((cat) => {
-            return <InventoryCategory title={cat} items={data[cat]} navigation={this.props.navigation} />
+          {this.state.InventoryCategories.map((cat, i) => {
+            return <InventoryCategory key={`${cat}-${i}`} title={cat} items={data[cat]} navigation={this.props.navigation} />
           })}
         </ScrollView>
       </View>

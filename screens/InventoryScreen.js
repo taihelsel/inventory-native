@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import data from "../datasets/testInventoryDataset";
+/*Components*/
 import InventoryIconItem from "../components/InventoryIconItem";
+/*Screens*/
 import InventoryItemsScreen from "./InventoryItemsScreen";
+import ItemOverviewScreen from "./ItemOverviewScreen";
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
@@ -91,7 +94,8 @@ class InventoryScreen extends React.Component {
 }
 export default InventoryStack = createStackNavigator({
   InventoryScreen: { screen: InventoryScreen },
-  InventoryItemsScreen: { screen: InventoryItemsScreen }
+  InventoryItemsScreen: { screen: InventoryItemsScreen },
+  ItemOverviewScreen: { screen: ItemOverviewScreen }
 });
 
 

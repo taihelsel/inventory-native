@@ -4,14 +4,14 @@ import InventoryListItem from "../components/InventoryListItem";
 import InventoryIconItem from "../components/InventoryIconItem";
 export default class InventoryItemsScreen extends React.Component {
     state = {
-        viewType: "icon", // either icon or list view
+        viewType: "list", // either icon or list view
     }
     handleItemTouch = data => {
-        console.log("go to item overview");
+        this.props.navigation.navigate("ItemOverviewScreen");
     }
     renderItems = (items) => {
         return Object.values(items).map((data, i) => {
-            return this.state.viewType === "list" ? <InventoryListItem key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
+            return this.state.viewType === "list" ? <InventoryListItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
         });
     }
     render() {

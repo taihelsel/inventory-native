@@ -7,7 +7,7 @@ export default class InventoryItemsScreen extends React.Component {
         viewType: "list", // either icon or list view
     }
     handleItemTouch = data => {
-        this.props.navigation.navigate("ItemOverviewScreen");
+        this.props.navigation.navigate("ItemOverviewScreen", data);
     }
     renderItems = (items) => {
         return Object.values(items).map((data, i) => {

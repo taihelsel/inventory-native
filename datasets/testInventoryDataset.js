@@ -1,89 +1,125 @@
 export default data = {
     pants: {
         bluePants: {
-            title:"blue pants",
+            title: "blue pants",
             color: "blue",
             price: {
                 min: 20,
                 max: 45
             },
-            desc: "example blue Pants desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         redPants: {
-            title:"red pants",
+            title: "red pants",
             color: "red",
             price: {
                 min: 79,
                 max: 200
             },
-            desc: "example red Pants desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         orangePants: {
-            title:"orange pants",
+            title: "orange pants",
             color: "orange",
             price: {
                 min: 2,
                 max: 65
             },
-            desc: "example orange Pants desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
     },
-    shirts:{
+    shirts: {
         blueShirts: {
-            title:"blue shirts",
+            title: "blue shirts",
             color: "blue",
             price: {
                 min: 20,
                 max: 45
             },
-            desc: "example blue Shirts desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         redShirts: {
-            title:"red shirts",
+            title: "red shirts",
             color: "red",
             price: {
                 min: 79,
                 max: 200
             },
-            desc: "example red Shirts desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         orangeShirts: {
-            title:"orange shirts",
+            title: "orange shirts",
             color: "orange",
             price: {
                 min: 2,
                 max: 65
             },
-            desc: "example orange Shirts desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
     },
-    shoes:{
+    shoes: {
         blueShoes: {
-            title:"blue shoes",
+            title: "blue shoes",
             color: "blue",
             price: {
                 min: 20,
                 max: 45
             },
-            desc: "example blue Shoes desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         redShoes: {
-            title:"red shoes",
+            title: "red shoes",
             color: "red",
             price: {
                 min: 79,
                 max: 200
             },
-            desc: "example red Shoes desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
         orangeShoes: {
-            title:"orange shoes",
+            title: "orange shoes",
             color: "orange",
             price: {
                 min: 2,
                 max: 65
             },
-            desc: "example orange Shoes desc",
+            desc: [
+                "super awesome example description",
+                "quality description",
+                "Lorem Ipsum description stuff here",
+            ],
         },
     }
 }

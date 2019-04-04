@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
-
+import InventoryCategory from "../components/InventoryCategory";
+import InventoryListScreen from "./InventoryListScreen";
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +14,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
+    flex: 1,
+    flexWrap: "wrap",
+    alignContent: "flex-start",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
   navigationHeader: {
     width: width,
@@ -56,16 +62,18 @@ class InventoryScreen extends React.Component {
           <TextInput style={styles.navigationInput} value={this.state.searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          <Text>
-            Inventory Items
-          </Text>
+          <InventoryCategory navigation={this.props.navigation} />
+          <InventoryCategory navigation={this.props.navigation}/>
+          <InventoryCategory navigation={this.props.navigation}/>
+          <InventoryCategory navigation={this.props.navigation}/>
         </ScrollView>
       </View>
     );
   }
 }
 export default InventoryStack = createStackNavigator({
-  InventoryScreen: { screen: InventoryScreen }
+  InventoryScreen: { screen: InventoryScreen },
+  InventoryListScreen: { screen: InventoryListScreen }
 });
 
 

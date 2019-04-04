@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import data from "../datasets/testInventoryDataset";
 import InventoryIconItem from "../components/InventoryIconItem";
-import InventoryListScreen from "./InventoryListScreen";
+import InventoryItemsScreen from "./InventoryItemsScreen";
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
@@ -72,7 +72,7 @@ class InventoryScreen extends React.Component {
     this.setState({ searchText: "" });
   }
   handleCategoryTouch = data => {
-    this.props.navigation.navigate("InventoryListScreen", data);
+    this.props.navigation.navigate("InventoryItemsScreen", data);
   }
   render() {
     return (
@@ -91,7 +91,7 @@ class InventoryScreen extends React.Component {
 }
 export default InventoryStack = createStackNavigator({
   InventoryScreen: { screen: InventoryScreen },
-  InventoryListScreen: { screen: InventoryListScreen }
+  InventoryItemsScreen: { screen: InventoryItemsScreen }
 });
 
 

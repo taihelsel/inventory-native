@@ -38,5 +38,18 @@ export default data = [
             "quality description",
             "Lorem Ipsum description stuff here",
         ],
+    },
+    {
+        title: "Rainbow Shoes",
+        color: "rainbow",
+        price: {
+            min: 10,
+            max: 25
+        },
+        desc: [
+            "super awesome example description",
+            "quality description",
+            "Lorem Ipsum description stuff here",
+        ],
     }
 ];

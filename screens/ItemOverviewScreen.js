@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
+import HyperLink from "../components/HyperLink";
 export default class ItemOverviewScreen extends React.Component {
-    hasValidData = data => {
-        return (typeof data.title !== "undefined" && typeof data.color !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");
+    hasValidData = (data) => {
+        return (typeof data.title !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");
     }
     handleCartPress = e => {
         console.log("add to cart");
@@ -13,8 +14,9 @@ export default class ItemOverviewScreen extends React.Component {
     render() {
         const { navigation } = this.props;
         const data = navigation.getParam("data", {});
+        const isBarcodeData = navigation.getParam("isBarcodeData", false);
         if (this.hasValidData(data) === false) return <Text>Error loading item</Text>
-        const { title, color, price, desc } = data;
+        const { title, price, desc } = data;
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -22,7 +24,9 @@ export default class ItemOverviewScreen extends React.Component {
                         <Text>IMG HERE</Text>
                     </View>
                     <Text style={styles.title}>{title}</Text>
+                    {isBarcodeData ? <Text style={styles.price}>By {data.manufacturer}</Text> : null}
                     <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
+                    {isBarcodeData ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={data.videoLink} /> : null}
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {
                             return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>
@@ -52,7 +56,8 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: "bold",
         textAlign: "center",
-        marginVertical: 10,
+        marginTop: 10,
+        marginBottom: 5,
     },
     price: {
         fontSize: 25,

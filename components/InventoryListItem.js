@@ -52,9 +52,9 @@ export default class InventoryListItem extends React.Component {
     }
     render() {
         const { data, isCartView, isRestockView } = this.props;
-        const underlayColorDynamic = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
+        const dynamicUnderlayColor = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
         return (
-            <TouchableHighlight onPress={this.handleTouch} underlayColor={underlayColorDynamic} >
+            <TouchableHighlight onPress={this.handleTouch} underlayColor={dynamicUnderlayColor} >
                 <View style={[styles.container, this.dynamicStyle()]}>
                     <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
                         <Text>IMG HERE</Text>

@@ -1,10 +1,10 @@
 export default data = [
     {
-        title: "blue pants",
-        color: "blue",
+        title: "Rainbow Pants",
+        color: "Rainbow",
         price: {
-            min: 20,
-            max: 45
+            min: 322,
+            max: 700
         },
         desc: [
             "super awesome example description",
@@ -14,11 +14,11 @@ export default data = [
     },
     {
 
-        title: "orange shirts",
-        color: "orange",
+        title: "Jean Jackets",
+        color: "Jean",
         price: {
-            min: 2,
-            max: 65
+            min: 12,
+            max: 255
         },
         desc: [
             "super awesome example description",
@@ -27,11 +27,11 @@ export default data = [
         ],
     },
     {
-        title: "red jackets",
-        color: "red",
+        title: "Brown Shoes",
+        color: "brown",
         price: {
             min: 79,
-            max: 200
+            max: 100
         },
         desc: [
             "super awesome example description",

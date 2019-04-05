@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput } from "react-native";
 export default class InventoryListItem extends React.Component {
     constructor(props) {
         super(props);
@@ -39,13 +39,22 @@ export default class InventoryListItem extends React.Component {
                 </View>
             );
         }
-        if (this.props.isRestockView === true) return <Text>render retock buttons here</Text>
+        if (this.props.isRestockView === true) {
+            items = (
+                <TouchableHighlight style={{ width: 50 }} onPress={this.props.handleDeleteTouch(this.props.index)}>
+                    <View style={{ flex: 1, backgroundColor: "red", justifyContent: "center" }}>
+                        <Text style={{ color: "white", textAlign: "center" }}>Delete</Text>
+                    </View>
+                </TouchableHighlight>
+            );
+        }
         return items;
     }
     render() {
-        const { data } = this.props;
+        const { data, isCartView, isRestockView } = this.props;
+        const underlayColorDynamic = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
         return (
-            <TouchableHighlight onPress={this.handleTouch}>
+            <TouchableHighlight onPress={this.handleTouch} underlayColor={underlayColorDynamic} >
                 <View style={[styles.container, this.dynamicStyle()]}>
                     <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
                         <Text>IMG HERE</Text>
@@ -56,7 +65,7 @@ export default class InventoryListItem extends React.Component {
                     </View>
                     {this.renderScreenSpecificItems()}
                 </View >
-            </TouchableHighlight>
+            </TouchableHighlight >
         );
     }
 }
@@ -65,6 +74,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignContent: "flex-start",
+        marginVertical: 0.2
     },
     detailsText: {
         textAlign: "center"

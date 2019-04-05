@@ -30,7 +30,7 @@ export default class ItemOverviewScreen extends React.Component {
                     </View>
                     <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
                         <TouchableOpacity onPress={this.handleRestockPress} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
-                            <Text style={{ color: "black", textAlign: "center", }}>Add to Restock</Text>
+                            <Text style={{ color: "white", textAlign: "center", }}>Add to Restock</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={this.handleCartPress} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
                             <Text style={{ color: "white", textAlign: "center", }}>Add to Cart</Text>

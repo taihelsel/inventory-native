@@ -9,10 +9,11 @@ export default class CheckoutScreen extends React.Component {
     maxPrice: 0,
     cartItems: [],
   }
-  componentWillMount() {
+  componentDidMount() {
     this.buildCart();
   }
   updateCartTotal = (cartItemIndex, amntTxt) => {
+    // setting vars
     let currentCartMax = this.state.maxPrice,
       currentCartMin = this.state.minPrice,
       itemData = cartData[cartItemIndex - 1],
@@ -22,6 +23,7 @@ export default class CheckoutScreen extends React.Component {
       diff = Math.abs(currentAmnt - newAmnt),
       newCartMin = 0,
       newCartMax = 0;
+    // setting new data
     if (currentAmnt === newAmnt) return false;
     if (currentAmnt > newAmnt) {
       //subtract from current Cart min/max
@@ -32,6 +34,7 @@ export default class CheckoutScreen extends React.Component {
       newCartMax = currentCartMax + (price.max * diff);
       newCartMin = currentCartMin + (price.min * diff);
     }
+    // updating with new data
     itemData.amnt = newAmnt;
     this.setState({
       minPrice: newCartMin,

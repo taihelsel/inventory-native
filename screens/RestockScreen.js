@@ -33,7 +33,7 @@ export default class RestockScreen extends React.Component {
         backgroundColor: "red",
       }];
       return (
-        <Swipeout right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
+        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
           <InventoryListItem isRestockView={true} index={i + 1} length={this.state.restockData.length} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )

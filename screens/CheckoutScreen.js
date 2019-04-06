@@ -68,7 +68,7 @@ export default class CheckoutScreen extends React.Component {
         backgroundColor: "red",
       }];
       return (
-        <Swipeout right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
+        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
           <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )
@@ -81,7 +81,7 @@ export default class CheckoutScreen extends React.Component {
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {this.state.cartItems}
         </ScrollView>
-        <Text style={{ textAlign: "center" }}>{`Your price range is: $${this.state.minPrice} - $${this.state.maxPrice}`}</Text>
+        <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${this.state.minPrice} - $${this.state.maxPrice}`}</Text>
       </View>
     );
   }

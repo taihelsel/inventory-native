@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
 import cartData from "../datasets/testCartDataset";
+import Swipeout from 'react-native-swipeout';
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 export default class CheckoutScreen extends React.Component {
@@ -47,7 +48,7 @@ export default class CheckoutScreen extends React.Component {
   handleItemTouch = () => {
     console.log("cart item touched");
   }
-  handleDeleteTouch = index => e => {
+  handleDeleteTouch = index => {
     const cartData = [...this.state.cartData];
     cartData.splice(index - 1, 1);
     const { minPrice, maxPrice, cartItems } = this.buildCart(cartData);
@@ -59,7 +60,18 @@ export default class CheckoutScreen extends React.Component {
     const cartItems = cartData.map((data, i) => {
       minPrice += data.price.min * data.amnt;
       maxPrice += data.price.max * data.amnt;
-      return <InventoryListItem handleDeleteTouch={this.handleDeleteTouch} isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} />
+      const swipeoutBtns = [{
+        type: "delete",
+        text: "Delete",
+        onPress: () => this.handleDeleteTouch(i),
+        color: "white",
+        backgroundColor: "red",
+      }];
+      return (
+        <Swipeout right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
+          <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} data={data} />
+        </Swipeout>
+      )
     });
     return { cartItems, minPrice, maxPrice };
   }

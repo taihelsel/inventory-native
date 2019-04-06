@@ -1,16 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Constants } from "expo";
 import cartData from "../datasets/testCartDataset";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 export default class CheckoutScreen extends React.Component {
   state = {
+    cartData,//importing from local file.
     minPrice: 0,
     maxPrice: 0,
     cartItems: [],
   }
   componentDidMount() {
-    this.buildCart();
+    const { minPrice, maxPrice, cartItems } = this.buildCart(this.state.cartData);
+    this.setState({ minPrice, maxPrice, cartItems });
   }
   updateCartTotal = (cartItemIndex, amntTxt) => {
     // setting vars
@@ -44,15 +47,21 @@ export default class CheckoutScreen extends React.Component {
   handleItemTouch = () => {
     console.log("cart item touched");
   }
-  buildCart = () => {
+  handleDeleteTouch = index => e => {
+    const cartData = [...this.state.cartData];
+    cartData.splice(index - 1, 1);
+    const { minPrice, maxPrice, cartItems } = this.buildCart(cartData);
+    this.setState({ minPrice, maxPrice, cartItems, cartData });
+  }
+  buildCart = (cartData) => {
     //using static data from import atm.. convert later when redux is added.
     let minPrice = 0, maxPrice = 0;
     const cartItems = cartData.map((data, i) => {
       minPrice += data.price.min * data.amnt;
       maxPrice += data.price.max * data.amnt;
-      return <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} />
+      return <InventoryListItem handleDeleteTouch={this.handleDeleteTouch} isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} />
     });
-    this.setState({ minPrice, maxPrice, cartItems });
+    return { cartItems, minPrice, maxPrice };
   }
   render() {
     return (
@@ -68,7 +77,7 @@ export default class CheckoutScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: Constants.statusBarHeight,
   },
   contentContainer: {
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Constants } from "expo";
 import restockData from "../datasets/testRestockDataset";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
@@ -40,7 +41,7 @@ export default class RestockScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: Constants.statusBarHeight,
   },
   contentContainer: {
   }

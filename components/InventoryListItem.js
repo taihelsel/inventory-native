@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput } from "react-native";
+import Swipeout from 'react-native-swipeout';
 export default class InventoryListItem extends React.Component {
     constructor(props) {
         super(props);
@@ -31,40 +32,41 @@ export default class InventoryListItem extends React.Component {
         }
     }
     renderScreenSpecificItems = () => {
-        let items = null;
         if (this.props.isCartView === true) {
-            items = (
+            return (
                 <View style={{ width: 50, justifyContent: "center", paddingRight: 15, }}>
                     <TextInput style={{ height: 50, borderWidth: 1, borderColor: "grey", borderStyle: "solid", textAlign: "center" }} keyboardType="number-pad" onChangeText={this.handleAmntInput} value={this.state.amnt.toString()} />
                 </View>
             );
         }
-        if (this.props.isRestockView === true) {
-            items = (
-                <TouchableHighlight style={{ width: 50 }} onPress={this.props.handleDeleteTouch(this.props.index)}>
-                    <View style={{ flex: 1, backgroundColor: "red", justifyContent: "center" }}>
-                        <Text style={{ color: "white", textAlign: "center" }}>Delete</Text>
-                    </View>
-                </TouchableHighlight>
-            );
-        }
-        return items;
     }
     render() {
         const { data, isCartView, isRestockView } = this.props;
         const dynamicUnderlayColor = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
+        const swipeoutBtns = [
+            {
+                type: "delete",
+                text: "Delete",
+                onPress: this.props.handleDeleteTouch(this.props.index),
+                color: "white",
+                backgroundColor: "red",
+            }
+        ];
+        const swipeDisabled = isCartView === false && isRestockView === false;
         return (
-            <TouchableHighlight onPress={this.handleTouch} underlayColor={dynamicUnderlayColor} >
-                <View style={[styles.container, this.dynamicStyle()]}>
-                    <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
-                        <Text>IMG HERE</Text>
-                    </View>
-                    <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
-                        <Text style={[styles.detailsText, { fontSize: 28, fontWeight: "bold", color: "black", marginBottom: 5 }]}>{data.title}</Text>
-                        <Text style={[styles.detailsText, { color: "green" }]}>{`$${data.price.min} - $${data.price.max}`}</Text>
-                    </View>
-                    {this.renderScreenSpecificItems()}
-                </View >
+            <TouchableHighlight onPress={this.handleTouch} underlayColor={dynamicUnderlayColor}>
+                <Swipeout right={swipeoutBtns} disabled={swipeDisabled} onOpen={() => console.log("opened")} close={true} autoClose={true} buttonWidth={120} >
+                    <View style={[styles.container, this.dynamicStyle()]}>
+                        <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
+                            <Text>IMG HERE</Text>
+                        </View>
+                        <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
+                            <Text style={[styles.detailsText, { fontSize: 28, fontWeight: "bold", color: "black", marginBottom: 5 }]}>{data.title}</Text>
+                            <Text style={[styles.detailsText, { color: "green" }]}>{`$${data.price.min} - $${data.price.max}`}</Text>
+                        </View>
+                        {this.renderScreenSpecificItems()}
+                    </View >
+                </Swipeout>
             </TouchableHighlight >
         );
     }

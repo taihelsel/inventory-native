@@ -1,28 +1,18 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import {
     Linking,
-    Text,
-    StyleSheet
+    Text
 } from 'react-native';
-
-export default class HyperLink extends Component {
-    _goToURL = () => {
-        const { url } = this.props;
-        Linking.canOpenURL(url).then(supported => {
-            if (supported) {
-                Linking.openURL(this.props.url);
-            } else {
-                console.log('Don\'t know how to open URI: ' + this.props.url);
-            }
-        });
-    }
-    render() {
-        const { title, styles } = this.props;
-
-        return (
-            <Text style={{...styles}} onPress={this._goToURL}>
-                {title}
-            </Text>
-        );
-    }
+const _goToURL = url => e => {
+    Linking.canOpenURL(url).then(supported => {
+        if (supported) Linking.openURL(url);
+        else console.log(`Error opening URL ${url}`);
+    });
+}
+export default HyperLink = ({ title, styles, url }) => {
+    return (
+        <Text style={{ ...styles }} onPress={_goToURL(url)}>
+            {title}
+        </Text>
+    );
 }

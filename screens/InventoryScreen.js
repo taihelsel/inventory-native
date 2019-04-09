@@ -74,7 +74,7 @@ class InventoryScreen extends React.Component {
   handleSearchSubmit = e => {
     this.setState({ searchText: "" });
   }
-  handleCategoryTouch = data => {
+  handleCategoryTouch = data => e => {
     this.props.navigation.navigate("InventoryItemsScreen", data);
   }
   render() {

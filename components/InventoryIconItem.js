@@ -1,19 +1,15 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
-export default class InventoryIconItem extends React.Component {
-  handleTouch = e => {
-    this.props.handleTouch({ data: this.props.data });
-  }
-  render() {
-    return (
-      <TouchableHighlight onPress={this.handleTouch}>
-        <View style={styles.container}>
-          <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>{this.props.title}</Text>
-        </View>
-      </TouchableHighlight>
 
-    );
-  }
+export default InventoryIconItem = ({ title, data, handleTouch }) => {
+  return (
+    <TouchableHighlight onPress={handleTouch({ data })}>
+      <View style={styles.container}>
+        <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>{title}</Text>
+      </View>
+    </TouchableHighlight>
+
+  );
 }
 const styles = StyleSheet.create({
   container: {

@@ -2,30 +2,29 @@ import React from 'react';
 import { StyleSheet, View, ScrollView } from "react-native";
 import InventoryListItem from "../components/InventoryListItem";
 import InventoryIconItem from "../components/InventoryIconItem";
-export default class InventoryItemsScreen extends React.Component {
-    state = {
-        viewType: "list", // either icon or list view
-    }
-    handleItemTouch = data => {
-        this.props.navigation.navigate("ItemOverviewScreen", data);
-    }
-    renderItems = (items) => {
-        const itemValues = Object.values(items);
-        return itemValues.map((data, i) => {
-            return this.state.viewType === "list" ? <InventoryListItem index={i + 1} length={itemValues.length} handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={this.handleItemTouch} key={`${data.title}-${i}`} data={data} title={data.title} />;
-        });
-    }
-    render() {
-        const { navigation } = this.props;
-        const items = navigation.getParam("data", {});
-        return (
-            <View style={styles.container}>
-                <ScrollView contentContainerStyle={styles["contentContainer" + this.state.viewType]}>
-                    {this.renderItems(items)}
-                </ScrollView>
-            </View>
-        );
-    }
+
+const viewType = "list"; //either icon or list view
+const handleListItemTouch = nav => data => {
+    nav.navigate("ItemOverviewScreen", data);
+}
+const handleIconItemTouch = nav => data => e => {
+    nav.navigate("ItemOverviewScreen", data);
+}
+const renderItems = (items, nav) => {
+    const itemValues = Object.values(items);
+    return itemValues.map((data, i) => {
+        return viewType === "list" ? <InventoryListItem index={i + 1} length={itemValues.length} handleTouch={handleListItemTouch(nav)} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={handleIconItemTouch(nav)} key={`${data.title}-${i}`} data={data} title={data.title} />;
+    });
+}
+export default InventoryItemsScreen = ({ navigation }) => {
+    const items = navigation.getParam("data", {});
+    return (
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles["contentContainer" + viewType]}>
+                {renderItems(items, navigation)}
+            </ScrollView>
+        </View>
+    );
 }
 const styles = StyleSheet.create({
     container: {

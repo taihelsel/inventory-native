@@ -55,7 +55,6 @@ class CheckoutScreen extends React.Component {
     deleteCartItem({ minPrice, maxPrice, cartItems, cartData: clonedCartData });
   }
   buildCart = (cartData) => {
-    //using static data from import atm.. convert later when redux is added.
     let minPrice = 0, maxPrice = 0;
     const cartItems = cartData.map((data, i) => {
       minPrice += data.price.min * data.amnt;

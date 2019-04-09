@@ -1,7 +1,6 @@
 import { UPDATE_CART, BUILD_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "../actions/actionTypes";
-import cartData from "../datasets/testCartDataset";
 const initState = {
-    cartData,
+    cartData: [],
     minPrice: 0,
     maxPrice: 0,
     cartItems: [],

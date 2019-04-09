@@ -1,7 +1,6 @@
 import { BUILD_RESTOCK_LIST, DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM } from "../actions/actionTypes";
-import restockData from "../datasets/testRestockDataset";
 const initState = {
-    restockData, //importing from local file
+    restockData: [],
     restockItems: [],
 }
 const restockReducer = (state = initState, action) => {

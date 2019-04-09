@@ -1,13 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
-import cartData from "../datasets/testCartDataset";
 import Swipeout from 'react-native-swipeout';
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 export default class CheckoutScreen extends React.Component {
   state = {
-    cartData,//importing from local file.
     minPrice: 0,
     maxPrice: 0,
     cartItems: [],
@@ -20,7 +18,8 @@ export default class CheckoutScreen extends React.Component {
     // setting vars
     let currentCartMax = this.state.maxPrice,
       currentCartMin = this.state.minPrice,
-      itemData = cartData[cartItemIndex - 1],
+      cartData = [...this.state.cartData];
+    itemData = cartData[cartItemIndex - 1],
       price = itemData.price,
       currentAmnt = itemData.amnt,
       newAmnt = parseInt(amntTxt),
@@ -42,7 +41,8 @@ export default class CheckoutScreen extends React.Component {
     itemData.amnt = newAmnt;
     this.setState({
       minPrice: newCartMin,
-      maxPrice: newCartMax
+      maxPrice: newCartMax,
+      cartData: cartData
     });
   }
   handleItemTouch = () => {

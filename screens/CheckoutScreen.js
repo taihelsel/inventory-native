@@ -2,24 +2,23 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
+import { connect } from "react-redux";
+import { updateCart, initCart, deleteCartItem } from "../actions/cartActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
-export default class CheckoutScreen extends React.Component {
-  state = {
-    minPrice: 0,
-    maxPrice: 0,
-    cartItems: [],
-  }
+class CheckoutScreen extends React.Component {
   componentDidMount() {
-    const { minPrice, maxPrice, cartItems } = this.buildCart(this.state.cartData);
-    this.setState({ minPrice, maxPrice, cartItems });
+    const { initCart, cartData } = this.props;
+    const { minPrice, maxPrice, cartItems } = this.buildCart(cartData);
+    initCart({ minPrice, maxPrice, cartItems });
   }
   updateCartTotal = (cartItemIndex, amntTxt) => {
+    const { maxPrice, minPrice, cartData, updateCart } = this.props;
     // setting vars
-    let currentCartMax = this.state.maxPrice,
-      currentCartMin = this.state.minPrice,
-      cartData = [...this.state.cartData];
-    itemData = cartData[cartItemIndex - 1],
+    let currentCartMax = maxPrice,
+      currentCartMin = minPrice,
+      clonedCartData = [...cartData],
+      itemData = clonedCartData[cartItemIndex - 1],
       price = itemData.price,
       currentAmnt = itemData.amnt,
       newAmnt = parseInt(amntTxt),
@@ -39,20 +38,21 @@ export default class CheckoutScreen extends React.Component {
     }
     // updating with new data
     itemData.amnt = newAmnt;
-    this.setState({
+    updateCart({
       minPrice: newCartMin,
       maxPrice: newCartMax,
-      cartData: cartData
+      cartData: clonedCartData
     });
   }
   handleItemTouch = () => {
     console.log("cart item touched");
   }
   handleDeleteTouch = index => {
-    const cartData = [...this.state.cartData];
-    cartData.splice(index - 1, 1);
-    const { minPrice, maxPrice, cartItems } = this.buildCart(cartData);
-    this.setState({ minPrice, maxPrice, cartItems, cartData });
+    const { cartData, deleteCartItem } = this.props;
+    const clonedCartData = [...cartData];
+    clonedCartData.splice(index, 1);
+    const { minPrice, maxPrice, cartItems } = this.buildCart(clonedCartData);
+    deleteCartItem({ minPrice, maxPrice, cartItems, cartData: clonedCartData });
   }
   buildCart = (cartData) => {
     //using static data from import atm.. convert later when redux is added.
@@ -76,12 +76,13 @@ export default class CheckoutScreen extends React.Component {
     return { cartItems, minPrice, maxPrice };
   }
   render() {
+    const { cartItems, minPrice, maxPrice } = this.props;
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.state.cartItems}
+          {cartItems}
         </ScrollView>
-        <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${this.state.minPrice} - $${this.state.maxPrice}`}</Text>
+        <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${minPrice} - $${maxPrice}`}</Text>
       </View>
     );
   }
@@ -95,3 +96,22 @@ const styles = StyleSheet.create({
 
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    cartData: state.cart.cartData,
+    minPrice: state.cart.minPrice,
+    maxPrice: state.cart.maxPrice,
+    cartItems: state.cart.cartItems,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateCart: (content) => { dispatch(updateCart(content)) },
+    initCart: (content) => { dispatch(initCart(content)) },
+    deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutScreen);

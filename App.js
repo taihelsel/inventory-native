@@ -1,14 +1,23 @@
 import React from 'react';
 import { FontAwesome } from "@expo/vector-icons";
 import { createAppContainer, createBottomTabNavigator } from "react-navigation";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from "./reducers/rootReducer";
 /*Screens*/
 import InventoryStack from "./screens/InventoryScreen";
 import RestockScreen from "./screens/RestockScreen";
 import ScanBarcodeStack from "./screens/ScanBarcodeScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
+
+const store = createStore(rootReducer);
 export default class App extends React.Component {
   render() {
-    return <AppContainer />
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    );
   }
 }
 const AppStackNavigator = createBottomTabNavigator({

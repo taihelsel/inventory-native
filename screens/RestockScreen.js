@@ -3,14 +3,21 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
-import { initRestock, deleteRestockItem } from "../actions/restockActions";
+import { buildRestockList, deleteRestockItem } from "../actions/restockActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 class RestockScreen extends React.Component {
   componentDidMount = () => {
-    const { initRestock, restockData } = this.props;
+    const { buildRestockList, restockData } = this.props;
     const restockItems = this.buildRestockList(restockData);
-    initRestock({ restockItems });
+    buildRestockList({ restockItems });
+  }
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.restockData) !== JSON.stringify(this.props.restockData)) {
+      const { buildRestockList, restockData } = this.props;
+      const restockItems = this.buildRestockList(restockData);
+      buildRestockList({ restockItems });
+    }
   }
   handleItemTouch = data => e => {
     console.log("restock item clicked");
@@ -68,7 +75,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    initRestock: (content) => { dispatch(initRestock(content)) },
+    buildRestockList: (content) => { dispatch(buildRestockList(content)) },
     deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
   }
 }

@@ -1,4 +1,4 @@
-import { INIT_RESTOCK_LIST, DELETE_RESTOCK_ITEM } from "../actions/actionTypes";
+import { BUILD_RESTOCK_LIST, DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM } from "../actions/actionTypes";
 import restockData from "../datasets/testRestockDataset";
 const initState = {
     restockData, //importing from local file
@@ -6,7 +6,7 @@ const initState = {
 }
 const restockReducer = (state = initState, action) => {
     switch (action.type) {
-        case INIT_RESTOCK_LIST: {
+        case BUILD_RESTOCK_LIST: {
             const { restockItems } = action.payload;
             return {
                 ...state,
@@ -18,6 +18,15 @@ const restockReducer = (state = initState, action) => {
             return {
                 ...state,
                 restockItems,
+                restockData
+            }
+        }
+        case ADD_RESTOCK_ITEM: {
+            const { data } = action.payload;
+            const restockData = [...state.restockData];
+            restockData.push(data);
+            return {
+                ...state,
                 restockData
             }
         }

@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import { addRestockItem } from "../actions/restockActions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
 const hasValidData = (data) => {
@@ -8,10 +10,10 @@ const hasValidData = (data) => {
 const handleCartPress = e => {
     console.log("add to cart");
 }
-const handleRestockPress = e => {
-    console.log("add to restock");
+const handleRestockPress = (data, addRestockItem) => e => {
+    addRestockItem({ data });
 }
-export default ItemOverviewScreen = ({ navigation }) => {
+const ItemOverviewScreen = ({ navigation, addRestockItem }) => {
     const data = navigation.getParam("data", {});
     const isBarcodeData = navigation.getParam("isBarcodeData", false);
     if (hasValidData(data) === false) return <Text>Error loading item</Text>
@@ -32,7 +34,7 @@ export default ItemOverviewScreen = ({ navigation }) => {
                     })}
                 </View>
                 <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                    <TouchableOpacity onPress={handleRestockPress} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
+                    <TouchableOpacity onPress={handleRestockPress(data, addRestockItem)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Restock</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleCartPress} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
@@ -75,3 +77,11 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     }
 });
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addRestockItem: (content) => { dispatch(addRestockItem(content)) },
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ItemOverviewScreen);

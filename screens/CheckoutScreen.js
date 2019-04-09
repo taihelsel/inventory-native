@@ -3,14 +3,21 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
-import { updateCart, initCart, deleteCartItem } from "../actions/cartActions";
+import { updateCart, buildCart, deleteCartItem } from "../actions/cartActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 class CheckoutScreen extends React.Component {
   componentDidMount() {
-    const { initCart, cartData } = this.props;
-    const { minPrice, maxPrice, cartItems } = this.buildCart(cartData);
-    initCart({ minPrice, maxPrice, cartItems });
+    const { buildCart, cartData } = this.props;
+    const { minPrice, maxPrice, cartItems } = this.buildCartItems(cartData);
+    buildCart({ minPrice, maxPrice, cartItems });
+  }
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.cartData) !== JSON.stringify(this.props.cartData)) {
+      const { buildCart, cartData } = this.props;
+      const { minPrice, maxPrice, cartItems } = this.buildCartItems(cartData);
+      buildCart({ minPrice, maxPrice, cartItems });
+    }
   }
   updateCartTotal = (cartItemIndex, amntTxt) => {
     const { maxPrice, minPrice, cartData, updateCart } = this.props;
@@ -51,10 +58,10 @@ class CheckoutScreen extends React.Component {
     const { cartData, deleteCartItem } = this.props;
     const clonedCartData = [...cartData];
     clonedCartData.splice(index, 1);
-    const { minPrice, maxPrice, cartItems } = this.buildCart(clonedCartData);
+    const { minPrice, maxPrice, cartItems } = this.buildCartItems(clonedCartData);
     deleteCartItem({ minPrice, maxPrice, cartItems, cartData: clonedCartData });
   }
-  buildCart = (cartData) => {
+  buildCartItems = (cartData) => {
     let minPrice = 0, maxPrice = 0;
     const cartItems = cartData.map((data, i) => {
       minPrice += data.price.min * data.amnt;
@@ -108,7 +115,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCart: (content) => { dispatch(updateCart(content)) },
-    initCart: (content) => { dispatch(initCart(content)) },
+    buildCart: (content) => { dispatch(buildCart(content)) },
     deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
   }
 }

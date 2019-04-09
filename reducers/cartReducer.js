@@ -1,4 +1,4 @@
-import { UPDATE_CART, INIT_CART, DELETE_CART_ITEM } from "../actions/actionTypes";
+import { UPDATE_CART, BUILD_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "../actions/actionTypes";
 import cartData from "../datasets/testCartDataset";
 const initState = {
     cartData,
@@ -17,7 +17,7 @@ const cartReducer = (state = initState, action) => {
                 cartData
             }
         }
-        case INIT_CART: {
+        case BUILD_CART: {
             const { minPrice, maxPrice, cartItems } = action.payload;
             return {
                 ...state,
@@ -33,6 +33,15 @@ const cartReducer = (state = initState, action) => {
                 minPrice,
                 maxPrice,
                 cartItems,
+                cartData
+            }
+        }
+        case ADD_CART_ITEM: {
+            const { data } = action.payload;
+            const cartData = [...state.cartData];
+            cartData.push(data);
+            return {
+                ...state,
                 cartData
             }
         }

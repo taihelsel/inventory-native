@@ -1,4 +1,4 @@
-import { UPDATE_CART, INIT_CART, DELETE_CART_ITEM } from "./actionTypes";
+import { UPDATE_CART, BUILD_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "./actionTypes";
 
 export const updateCart = ({ minPrice, maxPrice, cartData }) => {
     return {
@@ -6,10 +6,16 @@ export const updateCart = ({ minPrice, maxPrice, cartData }) => {
         payload: { minPrice, maxPrice, cartData },
     }
 }
-export const initCart = ({ minPrice, maxPrice, cartItems }) => {
+export const buildCart = ({ minPrice, maxPrice, cartItems }) => {
     return {
-        type: INIT_CART,
+        type: BUILD_CART,
         payload: { minPrice, maxPrice, cartItems },
+    }
+}
+export const addCartItem = ({ data }) => {
+    return {
+        type: ADD_CART_ITEM,
+        payload: { data },
     }
 }
 export const deleteCartItem = ({ minPrice, maxPrice, cartItems, cartData }) => {

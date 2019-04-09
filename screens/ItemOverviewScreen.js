@@ -2,13 +2,17 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { addRestockItem } from "../actions/restockActions";
+import { addCartItem } from "../actions/cartActions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
 const hasValidData = (data) => {
     return (typeof data.title !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");
 }
-const handleCartPress = e => {
-    console.log("add to cart");
+const handleCartPress = (data, cartData, addCartItem) => e => {
+    if (checkIfInData(data, cartData) === false) {
+        data.amnt = 1;
+        addCartItem({ data });
+    }
 }
 const handleRestockPress = (data, restockData, addRestockItem) => e => {
     if (checkIfInData(data, restockData) === false) addRestockItem({ data });
@@ -21,7 +25,7 @@ const checkIfInData = (toCheck, data) => {
     }
     return isInData;
 }
-const ItemOverviewScreen = ({ navigation, addRestockItem, restockData }) => {
+const ItemOverviewScreen = ({ navigation, addRestockItem, restockData, addCartItem, cartData }) => {
     const data = navigation.getParam("data", {});
     const isBarcodeData = navigation.getParam("isBarcodeData", false);
     if (hasValidData(data) === false) return <Text>Error loading item</Text>
@@ -45,7 +49,7 @@ const ItemOverviewScreen = ({ navigation, addRestockItem, restockData }) => {
                     <TouchableOpacity onPress={handleRestockPress(data, restockData, addRestockItem)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Restock</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCartPress} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
+                    <TouchableOpacity onPress={handleCartPress(data, cartData, addCartItem)} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Cart</Text>
                     </TouchableOpacity>
                 </View>
@@ -88,11 +92,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         restockData: state.restock.restockData,
+        cartData: state.cart.cartData,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         addRestockItem: (content) => { dispatch(addRestockItem(content)) },
+        addCartItem: (content) => { dispatch(addCartItem(content)) },
     }
 }
 

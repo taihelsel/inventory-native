@@ -16,7 +16,8 @@ const handleRestockPress = (data, restockData, addRestockItem) => e => {
 const checkIfInData = (toCheck, data) => {
     let isInData = false;
     for (let i = 0; i < data.length; i++) {
-        if (JSON.stringify(data[i]) === JSON.stringify(toCheck)) isInData = true;
+        const x = data[i];
+        if (x.title === toCheck.title) isInData = true;
     }
     return isInData;
 }

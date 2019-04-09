@@ -72,6 +72,15 @@ class InventoryScreen extends React.Component {
     this.setState({ searchText: txt });
   }
   handleSearchSubmit = e => {
+    const possibleItems = [];
+    this.state.InventoryItems.forEach(x => {
+      const keys = Object.keys(x);
+      keys.forEach((key) => {
+        const data = x[key];
+        if (data.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) >= 0) possibleItems.push(data);
+      });
+    });
+    this.props.navigation.navigate("InventoryItemsScreen", { data: possibleItems });
     this.setState({ searchText: "" });
   }
   handleCategoryTouch = data => e => {

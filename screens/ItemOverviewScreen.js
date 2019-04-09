@@ -10,10 +10,17 @@ const hasValidData = (data) => {
 const handleCartPress = e => {
     console.log("add to cart");
 }
-const handleRestockPress = (data, addRestockItem) => e => {
-    addRestockItem({ data });
+const handleRestockPress = (data, restockData, addRestockItem) => e => {
+    if (checkIfInData(data, restockData) === false) addRestockItem({ data });
 }
-const ItemOverviewScreen = ({ navigation, addRestockItem }) => {
+const checkIfInData = (toCheck, data) => {
+    let isInData = false;
+    for (let i = 0; i < data.length; i++) {
+        if (JSON.stringify(data[i]) === JSON.stringify(toCheck)) isInData = true;
+    }
+    return isInData;
+}
+const ItemOverviewScreen = ({ navigation, addRestockItem, restockData }) => {
     const data = navigation.getParam("data", {});
     const isBarcodeData = navigation.getParam("isBarcodeData", false);
     if (hasValidData(data) === false) return <Text>Error loading item</Text>
@@ -34,7 +41,7 @@ const ItemOverviewScreen = ({ navigation, addRestockItem }) => {
                     })}
                 </View>
                 <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                    <TouchableOpacity onPress={handleRestockPress(data, addRestockItem)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
+                    <TouchableOpacity onPress={handleRestockPress(data, restockData, addRestockItem)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Restock</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleCartPress} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
@@ -77,11 +84,15 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     }
 });
-
+const mapStateToProps = (state) => {
+    return {
+        restockData: state.restock.restockData,
+    }
+}
 const mapDispatchToProps = (dispatch) => {
     return {
         addRestockItem: (content) => { dispatch(addRestockItem(content)) },
     }
 }
 
-export default connect(null, mapDispatchToProps)(ItemOverviewScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemOverviewScreen);

@@ -1,27 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
-import restockData from "../datasets/testRestockDataset";
 import Swipeout from 'react-native-swipeout';
+import { connect } from "react-redux";
+import { initRestock, deleteRestockItem } from "../actions/restockActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
-export default class RestockScreen extends React.Component {
-  state = {
-    restockData, //importing from local file
-    restockItems: [],
+class RestockScreen extends React.Component {
+  componentDidMount = () => {
+    const { initRestock, restockData } = this.props;
+    const restockItems = this.buildRestockList(restockData);
+    initRestock({ restockItems });
   }
-  componentDidMount() {
-    const restockItems = this.buildRestockList(this.state.restockData);
-    this.setState({ restockItems });
-  }
-  handleItemTouch = e => {
+  handleItemTouch = data => e => {
     console.log("restock item clicked");
   }
   handleDeleteTouch = index => {
-    const restockData = [...this.state.restockData];
-    restockData.splice(index, 1);
-    const restockItems = this.buildRestockList(restockData);
-    this.setState({ restockItems, restockData });
+    const { deleteRestockItem, restockData } = this.props;
+    const clonedRestockData = [...restockData];
+    clonedRestockData.splice(index, 1);
+    const restockItems = this.buildRestockList(clonedRestockData);
+    deleteRestockItem({ restockItems, restockData: clonedRestockData });
   }
   buildRestockList = (restockData) => {
     const restockItems = restockData.map((data, i) => {
@@ -34,17 +33,18 @@ export default class RestockScreen extends React.Component {
       }];
       return (
         <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
-          <InventoryListItem isRestockView={true} index={i + 1} length={this.state.restockData.length} handleTouch={this.handleItemTouch} data={data} />
+          <InventoryListItem isRestockView={true} index={i + 1} length={restockData.length} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )
     });
     return restockItems;
   }
   render() {
+    const { restockItems } = this.props;
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.state.restockItems.length > 0 ? this.state.restockItems : <Text style={{ textAlign: "center" }}>No items in restock list</Text>}
+          {restockItems.length > 0 ? restockItems : <Text style={{ textAlign: "center" }}>No items in restock list</Text>}
         </ScrollView>
       </View>
     );
@@ -58,3 +58,19 @@ const styles = StyleSheet.create({
   contentContainer: {
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    restockData: state.restock.restockData,
+    restockItems: state.restock.restockItems,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    initRestock: (content) => { dispatch(initRestock(content)) },
+    deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RestockScreen);

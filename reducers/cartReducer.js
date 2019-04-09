@@ -6,7 +6,7 @@ const initState = {
     maxPrice: 0,
     cartItems: [],
 }
-const checkout = (state = initState, action) => {
+const cartReducer = (state = initState, action) => {
     switch (action.type) {
         case UPDATE_CART: {
             const { minPrice, maxPrice, cartData } = action.payload;
@@ -40,4 +40,4 @@ const checkout = (state = initState, action) => {
     }
 };
 
-export default checkout;
+export default cartReducer;

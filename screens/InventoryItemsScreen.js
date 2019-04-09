@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from "react-native";
+/*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 import InventoryIconItem from "../components/InventoryIconItem";
 

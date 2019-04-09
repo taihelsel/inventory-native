@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
+/*Components*/
 import HyperLink from "../components/HyperLink";
 const hasValidData = (data) => {
     return (typeof data.title !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");

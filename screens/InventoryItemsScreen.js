@@ -13,7 +13,6 @@ const handleIconItemTouch = nav => data => e => {
 }
 const renderItems = (items, nav) => {
     const itemValues = Array.isArray(items) === false ? Object.values(items) : items;
-    console.log(itemValues);
     return itemValues.map((data, i) => {
         return viewType === "list" ? <InventoryListItem index={i + 1} length={itemValues.length} handleTouch={handleListItemTouch(nav)} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={handleIconItemTouch(nav)} key={`${data.title}-${i}`} data={data} title={data.title} />;
     });

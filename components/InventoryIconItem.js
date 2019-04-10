@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
 export default InventoryIconItem = ({ title, data, handleTouch }) => {
   return (
-    <TouchableHighlight onPress={handleTouch({ data })}>
+    <TouchableHighlight underlayColor="rgba(212, 212, 212, 0.25)" onPress={handleTouch({ data })}>
       <View style={styles.container}>
         <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>{title}</Text>
       </View>

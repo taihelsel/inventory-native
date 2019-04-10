@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
     justifyContent: "center",
     height: 80,
-    backgroundColor: "grey",
+    backgroundColor: "#f1f1f1",
   },
   navigationInput: {
     width: width / 1.20,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     color: "black",
     borderWidth: 1,
-    borderColor: "grey",
+    borderColor: "#dedcdc",
     borderStyle: "solid",
     borderRadius: 5,
     marginTop: 40,

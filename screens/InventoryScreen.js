@@ -1,9 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import { updateSearchText, setInventory } from "../actions/inventoryActions";
+/*firebase*/
+import * as firebase from "firebase";
+import firebaseConfig from "../firebaseConfig";
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 /*Components*/
 import InventoryIconItem from "../components/InventoryIconItem";
 /*Screens*/
@@ -51,17 +55,23 @@ class InventoryScreen extends React.Component {
     header: null,
   }
   componentWillMount() {
-    const { inventoryData } = this.props;
-    this.sortInventory(inventoryData);
+    const inventoryRef = firebaseApp.database().ref('inventoryItems');
+    inventoryRef.on("value", snapshot => {
+      const inventoryData = snapshot.val();
+      this.sortInventory(inventoryData);
+    });
   }
   sortInventory = (inventory) => {
-    const keys = Object.keys(inventory), items = [], { setInventory } = this.props;
-    keys.forEach((key) => {
-      items.push(inventory[key]);
+    const keys = Object.values(inventory), items = [], categories = {}, { setInventory } = this.props;
+    keys.forEach((item) => {
+      if (typeof categories[item.category] === "undefined") categories[item.category] = {};
+      const category = categories[item.category];
+      category[item.title] = { ...item };
+      items.push(item);
     });
     setInventory({
-      inventoryCategories: keys,
-      inventoryItems:items,
+      inventoryCategories: categories,
+      inventoryItems: items,
     });
   }
   handleSearchInput = text => {
@@ -84,17 +94,20 @@ class InventoryScreen extends React.Component {
     const { navigation } = this.props;
     navigation.navigate("InventoryItemsScreen", data);
   }
+  renderInventoryCategories = (inventoryCategories) => {
+    return Object.keys(inventoryCategories).map((category, i) => {
+      return <InventoryIconItem key={`${category}-${i}`} title={category} data={inventoryCategories[category]} handleTouch={this.handleCategoryTouch} />
+    })
+  }
   render() {
-    const { inventoryData, searchText, inventoryCategories } = this.props;
+    const { searchText, inventoryCategories } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.navigationHeader}>
           <TextInput style={styles.navigationInput} value={searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {inventoryCategories.map((category, i) => {
-            return <InventoryIconItem key={`${category}-${i}`} title={category} data={inventoryData[category]} handleTouch={this.handleCategoryTouch} />
-          })}
+          {this.renderInventoryCategories(inventoryCategories)}
         </ScrollView>
       </View>
     );
@@ -105,7 +118,6 @@ const mapStateToProps = (state) => {
     searchText: state.inventory.searchText,
     inventoryCategories: state.inventory.inventoryCategories,
     inventoryItems: state.inventory.inventoryItems,
-    inventoryData: state.inventory.inventoryData,
   }
 }
 

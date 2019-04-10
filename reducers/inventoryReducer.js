@@ -1,10 +1,8 @@
 import { SET_INVENTORY, UPDATE_SEARCH_TEXT } from "../actions/actionTypes";
-import inventoryData from "../datasets/testInventoryDataset";
 const initState = {
     searchText: "",
     inventoryCategories: [],
     inventoryItems: [],
-    inventoryData
 }
 const inventoryReducer = (state = initState, action) => {
     switch (action.type) {

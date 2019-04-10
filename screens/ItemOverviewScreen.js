@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { connect } from "react-redux";
 import { addRestockItem } from "../actions/restockActions";
 import { addCartItem } from "../actions/cartActions";
@@ -25,21 +25,35 @@ const checkIfInData = (toCheck, data) => {
     }
     return isInData;
 }
+renderImg = img => {
+    if (typeof img === "undefined") {
+        return (
+            <View style={{ height: 200, marginHorizontal: 75, backgroundColor: "orange" }}>
+                <Text>Err displaying image</Text>
+            </View>
+        );
+    }
+    return (
+        <View style={{ height: 200, marginHorizontal: 75 }}>
+            <Image style={{
+                flex: 1,
+                resizeMode: 'contain'
+            }} source={{ uri: img }} />
+        </View>
+    );
+}
 const ItemOverviewScreen = ({ navigation, addRestockItem, restockData, addCartItem, cartData }) => {
     const data = navigation.getParam("data", {});
-    const isBarcodeData = navigation.getParam("isBarcodeData", false);
     if (hasValidData(data) === false) return <Text>Error loading item</Text>
-    const { title, price, desc } = data;
+    const { title, price, desc, img, manufacturer, videoLink } = data;
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
-                <View style={{ height: 200, marginHorizontal: 75, backgroundColor: "orange" }}>
-                    <Text>IMG HERE</Text>
-                </View>
+                {this.renderImg(img)}
                 <Text style={styles.title}>{title}</Text>
-                {isBarcodeData ? <Text style={styles.price}>By {data.manufacturer}</Text> : null}
+                {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
                 <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
-                {isBarcodeData ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={data.videoLink} /> : null}
+                {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={videoLink} /> : null}
                 <View style={styles.descriptionContainer}>
                     {desc.map((item, i) => {
                         return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>

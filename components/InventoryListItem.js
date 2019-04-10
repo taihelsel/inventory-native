@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput, Image } from "react-native";
 export default class InventoryListItem extends React.Component {
     constructor(props) {
         super(props);
@@ -39,15 +39,31 @@ export default class InventoryListItem extends React.Component {
             );
         }
     }
+    renderImg = img => {
+        if (typeof img === "undefined") {
+            return (
+                <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
+                    <Text>Err displaying image</Text>
+                </View>
+            );
+        }
+        return (
+            <View style={{ height: 80, width: 80, }}>
+                <Image style={{
+                    flex: 1,
+                    resizeMode: 'contain'
+                }} source={{ uri: img }} />
+            </View>
+        );
+    }
     render() {
         const { data, isCartView, isRestockView } = this.props;
         const dynamicUnderlayColor = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
+        const { img } = data;
         return (
             <TouchableHighlight onPress={this.handleTouch} underlayColor={dynamicUnderlayColor}>
                 <View style={[styles.container, this.dynamicStyle()]}>
-                    <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
-                        <Text>IMG HERE</Text>
-                    </View>
+                    {this.renderImg(img)}
                     <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
                         <Text style={[styles.detailsText, { fontSize: 28, fontWeight: "bold", color: "black", marginBottom: 5 }]}>{data.title}</Text>
                         <Text style={[styles.detailsText, { color: "green" }]}>{`$${data.price.min} - $${data.price.max}`}</Text>

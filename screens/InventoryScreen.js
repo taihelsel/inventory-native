@@ -62,19 +62,17 @@ class InventoryScreen extends React.Component {
     });
   }
   sortInventory = (inventory) => {
-    const keys = Object.values(inventory), items = [], { setInventory } = this.props;
-    let categories = {}, barcodeData = {};
+    const keys = Object.values(inventory), { setInventory } = this.props;
+    let categories = {}, items = {};
     keys.forEach((item) => {
       if (typeof categories[item.category] === "undefined") categories[item.category] = {};
-      if (typeof barcodeData[item.barcode] === "undefined") barcodeData[item.barcode] = { ...item };
+      if (typeof items[item.barcode] === "undefined") items[item.barcode] = { ...item };
       const category = categories[item.category];
       category[item.title] = { ...item };
-      items.push(item);
     });
     setInventory({
       inventoryCategories: categories,
       inventoryItems: items,
-      inventoryBarcodeData: barcodeData,
     });
   }
   handleSearchInput = text => {
@@ -83,12 +81,8 @@ class InventoryScreen extends React.Component {
   }
   handleSearchSubmit = e => {
     const possibleItems = [], { navigation, updateSearchText, searchText, inventoryItems } = this.props;
-    inventoryItems.forEach(x => {
-      const keys = Object.keys(x);
-      keys.forEach((key) => {
-        const data = x[key];
-        if (data.title.toLowerCase().indexOf(searchText.toLowerCase()) >= 0) possibleItems.push(data);
-      });
+    Object.values(inventoryItems).forEach(data => {
+      if (data.title.toLowerCase().indexOf(searchText.toLowerCase()) >= 0) possibleItems.push(data);
     });
     navigation.navigate("InventoryItemsScreen", { data: possibleItems });
     updateSearchText({ text: "" });

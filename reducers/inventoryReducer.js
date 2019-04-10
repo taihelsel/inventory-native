@@ -3,17 +3,15 @@ const initState = {
     searchText: "",
     inventoryCategories: {},
     inventoryItems: [],
-    inventoryBarcodeData: {}
 }
 const inventoryReducer = (state = initState, action) => {
     switch (action.type) {
         case SET_INVENTORY: {
-            const { inventoryItems, inventoryCategories, inventoryBarcodeData } = action.payload;
+            const { inventoryItems, inventoryCategories } = action.payload;
             return {
                 ...state,
                 inventoryItems,
                 inventoryCategories,
-                inventoryBarcodeData,
             }
         }
         case UPDATE_SEARCH_TEXT: {

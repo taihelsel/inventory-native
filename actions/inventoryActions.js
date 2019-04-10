@@ -6,9 +6,9 @@ export const updateSearchText = ({ text }) => {
         payload: { text },
     }
 }
-export const setInventory = ({ inventoryItems, inventoryCategories, inventoryBarcodeData }) => {
+export const setInventory = ({ inventoryItems, inventoryCategories }) => {
     return {
         type: SET_INVENTORY,
-        payload: { inventoryItems, inventoryCategories, inventoryBarcodeData },
+        payload: { inventoryItems, inventoryCategories },
     }
 }

@@ -6,11 +6,10 @@ import { connect } from "react-redux";
 import ItemOverviewScreen from "./ItemOverviewScreen";
 /*Components*/
 import ExpoScanner from "../components/ExpoScanner";
-const ScanBarcodeScreen = ({ navigation, inventoryBarcodeData }) => {
-    console.log("inventory items", inventoryBarcodeData);
+const ScanBarcodeScreen = ({ navigation, inventoryItems }) => {
     return (
         <View style={styles.container}>
-            <ExpoScanner navigation={navigation} barcodeDataset={inventoryBarcodeData} />
+            <ExpoScanner navigation={navigation} barcodeDataset={inventoryItems} />
         </View>
     );
 }
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => {
     return {
-        inventoryBarcodeData: state.inventory.inventoryBarcodeData,
+        inventoryItems: state.inventory.inventoryItems,
     }
 }
 

@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
-import data from "../datasets/testInventoryDataset";
+import { connect } from "react-redux";
+import { updateSearchText, setInventory } from "../actions/inventoryActions";
 /*Components*/
 import InventoryIconItem from "../components/InventoryIconItem";
 /*Screens*/
@@ -46,63 +47,78 @@ const styles = StyleSheet.create({
   }
 });
 class InventoryScreen extends React.Component {
-  state = {
-    searchText: "",
-    InventoryCategories: [],
-    InventoryItems: [],
-  }
-  componentWillMount() {
-    this.sortInventory(data);
-  }
   static navigationOptions = {
     header: null,
   }
+  componentWillMount() {
+    const { inventoryData } = this.props;
+    this.sortInventory(inventoryData);
+  }
   sortInventory = (inventory) => {
-    const keys = Object.keys(inventory);
-    const items = [];
+    const keys = Object.keys(inventory), items = [], { setInventory } = this.props;
     keys.forEach((key) => {
       items.push(inventory[key]);
     });
-    this.setState({
-      InventoryCategories: keys,
-      InventoryItems: items,
+    setInventory({
+      inventoryCategories: keys,
+      inventoryItems:items,
     });
   }
-  handleSearchInput = txt => {
-    this.setState({ searchText: txt });
+  handleSearchInput = text => {
+    const { updateSearchText } = this.props;
+    updateSearchText({ text });
   }
   handleSearchSubmit = e => {
-    const possibleItems = [];
-    this.state.InventoryItems.forEach(x => {
+    const possibleItems = [], { navigation, updateSearchText, searchText, inventoryItems } = this.props;
+    inventoryItems.forEach(x => {
       const keys = Object.keys(x);
       keys.forEach((key) => {
         const data = x[key];
-        if (data.title.toLowerCase().indexOf(this.state.searchText.toLowerCase()) >= 0) possibleItems.push(data);
+        if (data.title.toLowerCase().indexOf(searchText.toLowerCase()) >= 0) possibleItems.push(data);
       });
     });
-    this.props.navigation.navigate("InventoryItemsScreen", { data: possibleItems });
-    this.setState({ searchText: "" });
+    navigation.navigate("InventoryItemsScreen", { data: possibleItems });
+    updateSearchText({ text: "" });
   }
   handleCategoryTouch = data => e => {
-    this.props.navigation.navigate("InventoryItemsScreen", data);
+    const { navigation } = this.props;
+    navigation.navigate("InventoryItemsScreen", data);
   }
   render() {
+    const { inventoryData, searchText, inventoryCategories } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.navigationHeader}>
-          <TextInput style={styles.navigationInput} value={this.state.searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
+          <TextInput style={styles.navigationInput} value={searchText} onSubmitEditing={this.handleSearchSubmit} onChangeText={this.handleSearchInput} returnKeyType={"search"} placeholder="Search Inventory" />
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {this.state.InventoryCategories.map((cat, i) => {
-            return <InventoryIconItem key={`${cat}-${i}`} title={cat} data={data[cat]} handleTouch={this.handleCategoryTouch} />
+          {inventoryCategories.map((category, i) => {
+            return <InventoryIconItem key={`${category}-${i}`} title={category} data={inventoryData[category]} handleTouch={this.handleCategoryTouch} />
           })}
         </ScrollView>
       </View>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    searchText: state.inventory.searchText,
+    inventoryCategories: state.inventory.inventoryCategories,
+    inventoryItems: state.inventory.inventoryItems,
+    inventoryData: state.inventory.inventoryData,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateSearchText: (content) => { dispatch(updateSearchText(content)) },
+    setInventory: (content) => { dispatch(setInventory(content)) },
+  }
+}
 export default InventoryStack = createStackNavigator({
-  InventoryScreen: { screen: InventoryScreen },
+  InventoryScreen: {
+    screen: connect(mapStateToProps, mapDispatchToProps)(InventoryScreen)
+  },
   InventoryItemsScreen: { screen: InventoryItemsScreen },
   ItemOverviewScreen: { screen: ItemOverviewScreen }
 });

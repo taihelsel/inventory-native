@@ -62,9 +62,11 @@ class InventoryScreen extends React.Component {
     });
   }
   sortInventory = (inventory) => {
-    const keys = Object.values(inventory), items = [], categories = {}, { setInventory } = this.props;
+    const keys = Object.values(inventory), items = [], { setInventory } = this.props;
+    let categories = {}, barcodeData = {};
     keys.forEach((item) => {
       if (typeof categories[item.category] === "undefined") categories[item.category] = {};
+      if (typeof barcodeData[item.barcode] === "undefined") barcodeData[item.barcode] = { ...item };
       const category = categories[item.category];
       category[item.title] = { ...item };
       items.push(item);
@@ -72,6 +74,7 @@ class InventoryScreen extends React.Component {
     setInventory({
       inventoryCategories: categories,
       inventoryItems: items,
+      inventoryBarcodeData: barcodeData,
     });
   }
   handleSearchInput = text => {

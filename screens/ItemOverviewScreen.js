@@ -3,70 +3,67 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "rea
 import { connect } from "react-redux";
 import { addRestockItem, deleteRestockItem } from "../actions/restockActions";
 import { addCartItem, deleteCartItem } from "../actions/cartActions";
-import { markInventoryInCart, markInventoryInRestock } from "../actions/inventoryActions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
 class ItemOverviewScreen extends Component {
     state = {
-        restockBtn: null,
-        cartBtn: null,
+        inRestock: false,
+        inCart: false,
     }
     componentWillMount() {
-        const restockBtn = this.buildRestockBtn(), cartBtn = this.buildCartBtn();
-        this.setState({ restockBtn, cartBtn });
+        const { restockData, cartData, navigation } = this.props;
+        const data = navigation.getParam("data", {}), { barcode } = data;
+        const inRestock = typeof restockData[barcode] === "undefined" ? false : true;
+        const inCart = typeof cartData[barcode] === "undefined" ? false : true;
+        this.setState({ inCart, inRestock });
     }
     componentDidUpdate(prevProps) {
-        const { inventoryItems, navigation } = this.props;
-        const oldInventory = prevProps.inventoryItems;
+        const { restockData, cartData, navigation } = this.props;
+        const oldRestock = prevProps.restockData, oldCart = prevProps.cartData;
         const data = navigation.getParam("data", {}), { barcode } = data;
-        if ((oldInventory[barcode].inRestock !== inventoryItems[barcode].inRestock)) {
-            const restockBtn = this.buildRestockBtn();
-            this.setState({ restockBtn });
+        if (JSON.stringify(oldRestock[barcode]) !== JSON.stringify(restockData[barcode])) {
+            const inRestock = typeof restockData[barcode] === "undefined" ? false : true;
+            this.setState({ inRestock });
         }
-        if (oldInventory[barcode].inCart !== inventoryItems[barcode].inCart) {
-            const cartBtn = this.buildCartBtn();
-            this.setState({ cartBtn });
+        if (JSON.stringify(oldCart[barcode]) !== JSON.stringify(cartData[barcode])) {
+            const inCart = typeof cartData[barcode] === "undefined" ? false : true;
+            this.setState({ inCart });
         }
     }
     handleRestockPress = (data) => e => {
-        const { addRestockItem, markInventoryInRestock, inventoryItems, deleteRestockItem, restockData } = this.props, { barcode } = data, { inRestock } = inventoryItems[barcode];
+        const { addRestockItem, restockData, deleteRestockItem } = this.props, { barcode } = data, inRestock = typeof restockData[barcode] === "undefined" ? false : true;
         if (inRestock === false) {
             //adding item to restock
             addRestockItem({ data });
-            markInventoryInRestock({ inventoryItem: data, status: true });
         } else {
             //removing item from restock
             let clonedRestockData = { ...restockData };
             delete clonedRestockData[barcode];
             deleteRestockItem({ restockData: clonedRestockData });
-            markInventoryInRestock({ inventoryItem: data, status: false });
         }
-        const restockBtn = this.buildRestockBtn();
-        this.setState({ restockBtn });
+        //updating component
+        this.setState({ inRestock: !inRestock });
     }
     handleCartPress = (data) => e => {
-        const { addCartItem, markInventoryInCart, deleteCartItem, cartData, inventoryItems } = this.props, { barcode } = data, { inCart } = inventoryItems[barcode];
+        const { addCartItem, deleteCartItem, cartData } = this.props, { barcode } = data, inCart = typeof cartData[barcode] === "undefined" ? false : true;
         if (inCart === false) {
             data.amnt = 1;
             addCartItem({ data });
-            markInventoryInCart({ inventoryItem: data, status: true });
         } else {
             let clonedCartData = { ...cartData };
             delete clonedCartData[barcode];
             deleteCartItem({ cartData: clonedCartData });
-            markInventoryInCart({ inventoryItem: data, status: false });
         }
-        const cartBtn = this.buildCartBtn();
-        this.setState({ cartBtn });
+        //updating component
+        this.setState({ inCart: !inCart });
     }
     buildRestockBtn = () => {
-        const { navigation, inventoryItems } = this.props, data = navigation.getParam("data", {}), { barcode } = data, { inRestock } = inventoryItems[barcode],
+        const { navigation } = this.props, data = navigation.getParam("data", {}),
             styles = {
-                container: { flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
+                container: { flex: 1, backgroundColor: this.state.inRestock ? "red" : "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
                 text: { color: "white", textAlign: "center" }
             },
-            text = inRestock ? "Remove from Restock" : "Add to Restock";
-        styles.container.backgroundColor = inRestock ? "red" : "grey";
+            text = this.state.inRestock ? "Remove from Restock" : "Add to Restock";
         return (
             <TouchableOpacity onPress={this.handleRestockPress(data)} style={styles.container}>
                 {<Text style={styles.text}>{text}</Text>}
@@ -74,13 +71,12 @@ class ItemOverviewScreen extends Component {
         );
     }
     buildCartBtn = () => {
-        const { navigation, inventoryItems } = this.props, data = navigation.getParam("data", {}), { barcode } = data, { inCart } = inventoryItems[barcode],
+        const { navigation } = this.props, data = navigation.getParam("data", {}),
             styles = {
-                container: { flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
+                container: { flex: 1, backgroundColor: this.state.inCart ? "red" : "green", marginRight: 4, borderRadius: 5, justifyContent: "center" },
                 text: { color: "white", textAlign: "center" }
             },
-            text = inCart ? "Remove from Cart" : "Add to Cart";
-        styles.container.backgroundColor = inCart ? "red" : "green";
+            text = this.state.inCart ? "Remove from Cart" : "Add to Cart";
         return (
             <TouchableOpacity onPress={this.handleCartPress(data)} style={styles.container}>
                 {<Text style={styles.text}>{text}</Text>}
@@ -126,8 +122,8 @@ class ItemOverviewScreen extends Component {
                         })}
                     </View>
                     <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                        {this.state.restockBtn}
-                        {this.state.cartBtn}
+                        {this.buildRestockBtn()}
+                        {this.buildCartBtn()}
                     </View>
                 </ScrollView>
             </View>
@@ -179,8 +175,6 @@ const mapDispatchToProps = (dispatch) => {
         deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
         addCartItem: (content) => { dispatch(addCartItem(content)) },
         deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
-        markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
-        markInventoryInRestock: (content) => { dispatch(markInventoryInRestock(content)) },
     }
 }
 

@@ -4,7 +4,6 @@ import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
 import { buildRestockList, deleteRestockItem } from "../actions/restockActions";
-import { markInventoryInRestock } from "../actions/inventoryActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 class RestockScreen extends React.Component {
@@ -24,13 +23,10 @@ class RestockScreen extends React.Component {
     console.log("restock item clicked");
   }
   handleDeleteTouch = key => {
-    const { deleteRestockItem, restockData, markInventoryInRestock } = this.props;
+    const { deleteRestockItem, restockData } = this.props;
     let clonedRestockData = { ...restockData };
-    markInventoryInRestock({ inventoryItem: clonedRestockData[key], status: false });
     delete clonedRestockData[key];
-    const restockItems = this.buildRestockList(clonedRestockData);
     deleteRestockItem({ restockData: clonedRestockData });
-    buildRestockList({ restockItems });
   }
   buildRestockList = (restockData) => {
     const keys = Object.keys(restockData);
@@ -73,7 +69,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    inventoryItems: state.inventory.inventoryItems,
     restockData: state.restock.restockData,
     restockItems: state.restock.restockItems,
   }
@@ -83,7 +78,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     buildRestockList: (content) => { dispatch(buildRestockList(content)) },
     deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
-    markInventoryInRestock: (content) => { dispatch(markInventoryInRestock(content)) },
   }
 }
 

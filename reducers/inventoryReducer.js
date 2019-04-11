@@ -1,4 +1,4 @@
-import { SET_INVENTORY, UPDATE_SEARCH_TEXT, MARK_INVENTORY_IN_CART, MARK_INVENTORY_IN_RESTOCK } from "../actions/actionTypes";
+import { SET_INVENTORY, UPDATE_SEARCH_TEXT } from "../actions/actionTypes";
 const initState = {
     searchText: "",
     inventoryCategories: {},
@@ -19,30 +19,6 @@ const inventoryReducer = (state = initState, action) => {
             return {
                 ...state,
                 searchText: text,
-            }
-        }
-        case MARK_INVENTORY_IN_CART: {
-            const { inventoryItem, status } = action.payload;
-            let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
-            inventoryItem.inCart = status;
-            inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
-            inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
-            return {
-                ...state,
-                inventoryItems,
-                inventoryCategories,
-            }
-        }
-        case MARK_INVENTORY_IN_RESTOCK: {
-            const { inventoryItem, status } = action.payload;
-            let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
-            inventoryItem.inRestock = status;
-            inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
-            inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
-            return {
-                ...state,
-                inventoryItems,
-                inventoryCategories,
             }
         }
         default: return state;

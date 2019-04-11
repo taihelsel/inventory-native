@@ -4,7 +4,6 @@ import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
 import { updateCart, buildCart, deleteCartItem } from "../actions/cartActions";
-import { markInventoryInCart } from "../actions/inventoryActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 class CheckoutScreen extends React.Component {
@@ -56,9 +55,8 @@ class CheckoutScreen extends React.Component {
     console.log("cart item touched");
   }
   handleDeleteTouch = key => {
-    const { cartData, deleteCartItem, markInventoryInCart } = this.props;
+    const { cartData, deleteCartItem } = this.props;
     const clonedCartData = { ...cartData };
-    markInventoryInCart({ inventoryItem: clonedCartData[key], status: false });
     delete clonedCartData[key];
     deleteCartItem({ cartData: clonedCartData });
   }
@@ -108,7 +106,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    inventoryItems: state.inventory.inventoryItems,
     cartData: state.cart.cartData,
     minPrice: state.cart.minPrice,
     maxPrice: state.cart.maxPrice,
@@ -118,7 +115,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
     updateCart: (content) => { dispatch(updateCart(content)) },
     buildCart: (content) => { dispatch(buildCart(content)) },
     deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },

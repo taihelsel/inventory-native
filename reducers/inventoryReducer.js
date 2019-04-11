@@ -26,7 +26,7 @@ const inventoryReducer = (state = initState, action) => {
             let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
             inventoryItem.inCart = true;
             inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
-            inventoryCategories[inventoryItem.category][inventoryItem.barcode] = { ...inventoryItem };
+            inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
             return {
                 ...state,
                 inventoryItems,
@@ -38,7 +38,7 @@ const inventoryReducer = (state = initState, action) => {
             let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
             inventoryItem.inRestock = true;
             inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
-            inventoryCategories[inventoryItem.category][inventoryItem.barcode] = { ...inventoryItem };
+            inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
             return {
                 ...state,
                 inventoryItems,

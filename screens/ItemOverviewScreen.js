@@ -3,27 +3,24 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "rea
 import { connect } from "react-redux";
 import { addRestockItem } from "../actions/restockActions";
 import { addCartItem } from "../actions/cartActions";
+import { markInventoryInCart, markInventoryInRestock } from "../actions/inventoryActions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
 const hasValidData = (data) => {
     return (typeof data.title !== "undefined" && typeof data.price !== "undefined" && typeof data.desc !== "undefined");
 }
-const handleCartPress = (data, cartData, addCartItem) => e => {
-    if (checkIfInData(data, cartData) === false) {
+const handleCartPress = (data, addCartItem, markInventoryInCart) => e => {
+    if (data.inCart === false) {
         data.amnt = 1;
         addCartItem({ data });
+        markInventoryInCart({ inventoryItem: data });
     }
 }
-const handleRestockPress = (data, restockData, addRestockItem) => e => {
-    if (checkIfInData(data, restockData) === false) addRestockItem({ data });
-}
-const checkIfInData = (toCheck, data) => {
-    let isInData = false;
-    for (let i = 0; i < data.length; i++) {
-        const x = data[i];
-        if (x.title === toCheck.title) isInData = true;
+const handleRestockPress = (data, addRestockItem, markInventoryInRestock) => e => {
+    if (data.inRestock === false) {
+        addRestockItem({ data });
+        markInventoryInRestock({ inventoryItem: data });
     }
-    return isInData;
 }
 renderImg = img => {
     if (typeof img === "undefined") {
@@ -42,7 +39,7 @@ renderImg = img => {
         </View>
     );
 }
-const ItemOverviewScreen = ({ navigation, addRestockItem, restockData, addCartItem, cartData }) => {
+const ItemOverviewScreen = ({ navigation, addRestockItem, addCartItem, markInventoryInCart, markInventoryInRestock }) => {
     const data = navigation.getParam("data", {});
     if (hasValidData(data) === false) return <Text>Error loading item</Text>
     const { title, price, desc, img, manufacturer, videoLink } = data;
@@ -60,10 +57,10 @@ const ItemOverviewScreen = ({ navigation, addRestockItem, restockData, addCartIt
                     })}
                 </View>
                 <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                    <TouchableOpacity onPress={handleRestockPress(data, restockData, addRestockItem)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
+                    <TouchableOpacity onPress={handleRestockPress(data, addRestockItem, markInventoryInRestock)} style={{ flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Restock</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleCartPress(data, cartData, addCartItem)} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
+                    <TouchableOpacity onPress={handleCartPress(data, addCartItem, markInventoryInCart)} style={{ flex: 1, backgroundColor: "green", marginLeft: 4, borderRadius: 5, justifyContent: "center" }}>
                         <Text style={{ color: "white", textAlign: "center", }}>Add to Cart</Text>
                     </TouchableOpacity>
                 </View>
@@ -103,17 +100,13 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     }
 });
-const mapStateToProps = (state) => {
-    return {
-        restockData: state.restock.restockData,
-        cartData: state.cart.cartData,
-    }
-}
 const mapDispatchToProps = (dispatch) => {
     return {
         addRestockItem: (content) => { dispatch(addRestockItem(content)) },
         addCartItem: (content) => { dispatch(addCartItem(content)) },
+        markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
+        markInventoryInRestock: (content) => { dispatch(markInventoryInRestock(content)) },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemOverviewScreen);
+export default connect(null, mapDispatchToProps)(ItemOverviewScreen);

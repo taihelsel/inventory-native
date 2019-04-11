@@ -35,7 +35,7 @@ class ExpoScanner extends Component {
             // Do something for EAN
             console.log(`EAN scanned: ${barcodeID}`);
             this.resetScanner();
-            navigation.navigate("ItemOverviewScreen", { data: barcodeDataset[barcodeID], isBarcodeData: true });
+            navigation.navigate("ItemOverviewScreen", { data: barcodeDataset[barcodeID] });
         } else if (type.startsWith('org.iso.QRCode')) {
             // Do samething for QRCode
             console.log(`QRCode scanned: ${barcodeID}`);

@@ -4,6 +4,7 @@ import { Constants } from "expo";
 import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
 import { updateCart, buildCart, deleteCartItem } from "../actions/cartActions";
+import { markInventoryInCart } from "../actions/inventoryActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 class CheckoutScreen extends React.Component {
@@ -19,13 +20,13 @@ class CheckoutScreen extends React.Component {
       buildCart({ minPrice, maxPrice, cartItems });
     }
   }
-  updateCartTotal = (cartItemIndex, amntTxt) => {
+  updateCartTotal = (barcode, amntTxt) => {
     const { maxPrice, minPrice, cartData, updateCart } = this.props;
     // setting vars
     let currentCartMax = maxPrice,
       currentCartMin = minPrice,
-      clonedCartData = [...cartData],
-      itemData = clonedCartData[cartItemIndex - 1],
+      clonedCartData = { ...cartData },
+      itemData = clonedCartData[barcode],
       price = itemData.price,
       currentAmnt = itemData.amnt,
       newAmnt = parseInt(amntTxt),
@@ -54,28 +55,30 @@ class CheckoutScreen extends React.Component {
   handleItemTouch = () => {
     console.log("cart item touched");
   }
-  handleDeleteTouch = index => {
+  handleDeleteTouch = key => {
     const { cartData, deleteCartItem } = this.props;
-    const clonedCartData = [...cartData];
-    clonedCartData.splice(index, 1);
-    const { minPrice, maxPrice, cartItems } = this.buildCartItems(clonedCartData);
-    deleteCartItem({ minPrice, maxPrice, cartItems, cartData: clonedCartData });
+    const clonedCartData = { ...cartData };
+    markInventoryInCart({ inventoryItem: clonedCartData[key], status: false });
+    delete clonedCartData[key];
+    deleteCartItem({ cartData: clonedCartData });
   }
   buildCartItems = (cartData) => {
     let minPrice = 0, maxPrice = 0;
-    const cartItems = cartData.map((data, i) => {
+    const keys = Object.keys(cartData);
+    const cartItems = keys.map((k, i) => {
+      const data = cartData[k];
       minPrice += data.price.min * data.amnt;
       maxPrice += data.price.max * data.amnt;
       const swipeoutBtns = [{
         type: "delete",
         text: "Delete",
-        onPress: () => this.handleDeleteTouch(i),
+        onPress: () => this.handleDeleteTouch(k),
         color: "white",
         backgroundColor: "red",
       }];
       return (
         <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
-          <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} length={cartData.length} handleTouch={this.handleItemTouch} data={data} />
+          <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )
     });
@@ -117,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
     updateCart: (content) => { dispatch(updateCart(content)) },
     buildCart: (content) => { dispatch(buildCart(content)) },
     deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
+    markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
   }
 }
 

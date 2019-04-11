@@ -1,9 +1,9 @@
 import { UPDATE_CART, BUILD_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "../actions/actionTypes";
 const initState = {
-    cartData: [],
+    cartData: {}, //source data
     minPrice: 0,
     maxPrice: 0,
-    cartItems: [],
+    cartItems: [], //items rendering on DOM (component list)
 }
 const cartReducer = (state = initState, action) => {
     switch (action.type) {
@@ -26,19 +26,16 @@ const cartReducer = (state = initState, action) => {
             }
         }
         case DELETE_CART_ITEM: {
-            const { minPrice, maxPrice, cartItems, cartData } = action.payload;
+            const { cartData } = action.payload;
             return {
                 ...state,
-                minPrice,
-                maxPrice,
-                cartItems,
                 cartData
             }
         }
         case ADD_CART_ITEM: {
             const { data } = action.payload;
-            const cartData = [...state.cartData];
-            cartData.push(data);
+            const cartData = { ...state.cartData };
+            cartData[data.barcode] = { ...data };
             return {
                 ...state,
                 cartData

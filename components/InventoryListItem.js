@@ -18,13 +18,14 @@ export default class InventoryListItem extends React.Component {
         return styles;
     }
     handleAmntInput = txt => {
+        const { barcode } = this.props.data;
         if (parseInt(txt) >= 0) {
-            this.props.updateCartTotal(this.props.index, txt);
+            this.props.updateCartTotal(barcode, txt);
             this.setState({
                 amnt: parseInt(txt),
             });
         } else {
-            this.props.updateCartTotal(this.props.index, 0);
+            this.props.updateCartTotal(barcode, 0);
             this.setState({
                 amnt: parseInt(0),
             });

@@ -18,9 +18,9 @@ export const addCartItem = ({ data }) => {
         payload: { data },
     }
 }
-export const deleteCartItem = ({ minPrice, maxPrice, cartItems, cartData }) => {
+export const deleteCartItem = ({ cartData }) => {
     return {
         type: DELETE_CART_ITEM,
-        payload: { minPrice, maxPrice, cartItems, cartData },
+        payload: { cartData },
     }
 }

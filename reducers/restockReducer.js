@@ -21,7 +21,7 @@ const restockReducer = (state = initState, action) => {
         }
         case ADD_RESTOCK_ITEM: {
             const { data } = action.payload;
-            const restockData = {...state.restockData};
+            const restockData = { ...state.restockData };
             restockData[data.barcode] = { ...data };
             return {
                 ...state,

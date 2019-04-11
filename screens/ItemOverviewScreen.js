@@ -15,25 +15,33 @@ class ItemOverviewScreen extends Component {
         const restockBtn = this.buildRestockBtn(), cartBtn = this.buildCartBtn();
         this.setState({ restockBtn, cartBtn });
     }
+    componentDidUpdate(prevProps, x) {
+        const { inventoryItems, navigation } = this.props;
+        const oldInventory = prevProps.inventoryItems;
+        const data = navigation.getParam("data", {}), { barcode } = data;
+
+        if (oldInventory[barcode].inRestock !== inventoryItems[barcode].inRestock) {
+            const restockBtn = this.buildRestockBtn();
+            this.setState({ restockBtn });
+        }
+        if (oldInventory[barcode].inCart !== inventoryItems[barcode].inCart) {
+            const cartBtn = this.buildCartBtn();
+            this.setState({ cartBtn });
+        }
+    }
     handleRestockPress = (data) => e => {
         const { addRestockItem, markInventoryInRestock } = this.props;
         if (data.inRestock === false) {
             //adding item to restock
             addRestockItem({ data });
-            markInventoryInRestock({ inventoryItem: data });
-            //updating button
-            const restockBtn = this.buildRestockBtn();
-            this.setState({ restockBtn });
+            markInventoryInRestock({ inventoryItem: data, status: true });
         } else {
             //removing item from restock
             const { deleteRestockItem, restockData } = this.props;
             let clonedRestockData = { ...restockData };
             delete clonedRestockData[data.barcode];
-            markInventoryInRestock({ inventoryItem: data });
+            markInventoryInRestock({ inventoryItem: data, status: false });
             deleteRestockItem({ restockData: clonedRestockData });
-            //updating btn
-            const restockBtn = this.buildRestockBtn();
-            this.setState({ restockBtn });
         }
     }
     handleCartPress = (data) => e => {
@@ -41,13 +49,11 @@ class ItemOverviewScreen extends Component {
         if (data.inCart === false) {
             data.amnt = 1;
             addCartItem({ data });
-            markInventoryInCart({ inventoryItem: data });
-            const cartBtn = this.buildCartBtn();
-            this.setState({ cartBtn });
+            markInventoryInCart({ inventoryItem: data, status: true });
         }
     }
     buildRestockBtn = () => {
-        const { navigation } = this.props, data = navigation.getParam("data", {}), { inRestock } = data,
+        const { navigation, inventoryItems } = this.props, data = navigation.getParam("data", {}), { barcode } = data, { inRestock } = inventoryItems[barcode],
             styles = {
                 container: { flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
                 text: { color: "white", textAlign: "center" }
@@ -61,7 +67,7 @@ class ItemOverviewScreen extends Component {
         );
     }
     buildCartBtn = () => {
-        const { navigation } = this.props, data = navigation.getParam("data", {}), { inCart } = data,
+        const { navigation, inventoryItems } = this.props, data = navigation.getParam("data", {}), { barcode } = data, { inCart } = inventoryItems[barcode],
             styles = {
                 container: { flex: 1, backgroundColor: "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
                 text: { color: "white", textAlign: "center" }
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state) => {
     return {
-        inventoryItems: state.inventory.inventoryitems,
+        inventoryItems: state.inventory.inventoryItems,
         restockData: state.restock.restockData,
     }
 }

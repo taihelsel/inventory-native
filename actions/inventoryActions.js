@@ -12,15 +12,15 @@ export const setInventory = ({ inventoryItems, inventoryCategories }) => {
         payload: { inventoryItems, inventoryCategories },
     }
 }
-export const markInventoryInCart = ({ inventoryItem }) => {
+export const markInventoryInCart = ({ inventoryItem, status }) => {
     return {
         type: MARK_INVENTORY_IN_CART,
-        payload: { inventoryItem },
+        payload: { inventoryItem, status },
     }
 }
-export const markInventoryInRestock = ({ inventoryItem }) => {
+export const markInventoryInRestock = ({ inventoryItem, status }) => {
     return {
         type: MARK_INVENTORY_IN_RESTOCK,
-        payload: { inventoryItem },
+        payload: { inventoryItem, status },
     }
 }

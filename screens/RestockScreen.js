@@ -22,25 +22,28 @@ class RestockScreen extends React.Component {
   handleItemTouch = data => e => {
     console.log("restock item clicked");
   }
-  handleDeleteTouch = index => {
+  handleDeleteTouch = key => {
     const { deleteRestockItem, restockData } = this.props;
-    const clonedRestockData = [...restockData];
-    clonedRestockData.splice(index, 1);
+    let clonedRestockData = { ...restockData };
+    delete clonedRestockData[key];
     const restockItems = this.buildRestockList(clonedRestockData);
-    deleteRestockItem({ restockItems, restockData: clonedRestockData });
+    deleteRestockItem({ restockData: clonedRestockData });
+    buildRestockList({ restockItems });
   }
   buildRestockList = (restockData) => {
-    const restockItems = restockData.map((data, i) => {
+    const keys = Object.keys(restockData);
+    const restockItems = keys.map((k, i) => {
+      const data = restockData[k];
       const swipeoutBtns = [{
         type: "delete",
         text: "Delete",
-        onPress: () => this.handleDeleteTouch(i),
+        onPress: () => this.handleDeleteTouch(k),
         color: "white",
         backgroundColor: "red",
       }];
       return (
         <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
-          <InventoryListItem isRestockView={true} index={i + 1} length={restockData.length} handleTouch={this.handleItemTouch} data={data} />
+          <InventoryListItem isRestockView={true} index={i + 1} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )
     });

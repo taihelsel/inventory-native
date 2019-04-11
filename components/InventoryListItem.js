@@ -12,7 +12,7 @@ export default class InventoryListItem extends React.Component {
     }
     dynamicStyle = () => {
         const styles = {};
-        const { length, index } = this.props;
+        const { index } = this.props;
         if (index % 2 === 0) styles.backgroundColor = "rgba(128, 128, 128, 0.25)";
         else styles.backgroundColor = "rgba(128, 128, 128, 0.1)";
         return styles;

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { connect } from "react-redux";
-import { addRestockItem } from "../actions/restockActions";
-import { addCartItem } from "../actions/cartActions";
+import { addRestockItem, deleteRestockItem } from "../actions/restockActions";
+import { addCartItem, deleteCartItem } from "../actions/cartActions";
 import { markInventoryInCart, markInventoryInRestock } from "../actions/inventoryActions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
@@ -18,8 +18,20 @@ class ItemOverviewScreen extends Component {
     handleRestockPress = (data) => e => {
         const { addRestockItem, markInventoryInRestock } = this.props;
         if (data.inRestock === false) {
+            //adding item to restock
             addRestockItem({ data });
             markInventoryInRestock({ inventoryItem: data });
+            //updating button
+            const restockBtn = this.buildRestockBtn();
+            this.setState({ restockBtn });
+        } else {
+            //removing item from restock
+            const { deleteRestockItem, restockData } = this.props;
+            let clonedRestockData = { ...restockData };
+            delete clonedRestockData[data.barcode];
+            markInventoryInRestock({ inventoryItem: data });
+            deleteRestockItem({ restockData: clonedRestockData });
+            //updating btn
             const restockBtn = this.buildRestockBtn();
             this.setState({ restockBtn });
         }
@@ -144,12 +156,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         inventoryItems: state.inventory.inventoryitems,
+        restockData: state.restock.restockData,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         addRestockItem: (content) => { dispatch(addRestockItem(content)) },
+        deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
         addCartItem: (content) => { dispatch(addCartItem(content)) },
+        deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
         markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
         markInventoryInRestock: (content) => { dispatch(markInventoryInRestock(content)) },
     }

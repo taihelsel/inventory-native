@@ -24,7 +24,7 @@ const inventoryReducer = (state = initState, action) => {
         case MARK_INVENTORY_IN_CART: {
             const { inventoryItem } = action.payload;
             let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
-            inventoryItem.inCart = true;
+            inventoryItem.inCart = !inventoryItem.inCart;
             inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
             inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
             return {
@@ -36,7 +36,7 @@ const inventoryReducer = (state = initState, action) => {
         case MARK_INVENTORY_IN_RESTOCK: {
             const { inventoryItem } = action.payload;
             let inventoryItems = { ...state.inventoryItems }, inventoryCategories = { ...state.inventoryCategories };
-            inventoryItem.inRestock = true;
+            inventoryItem.inRestock = !inventoryItem.inRestock;
             inventoryItems[inventoryItem.barcode] = { ...inventoryItem };
             inventoryCategories[inventoryItem.category][inventoryItem.title] = { ...inventoryItem };
             return {

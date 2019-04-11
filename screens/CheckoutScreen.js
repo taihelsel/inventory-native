@@ -56,7 +56,7 @@ class CheckoutScreen extends React.Component {
     console.log("cart item touched");
   }
   handleDeleteTouch = key => {
-    const { cartData, deleteCartItem } = this.props;
+    const { cartData, deleteCartItem, markInventoryInCart } = this.props;
     const clonedCartData = { ...cartData };
     markInventoryInCart({ inventoryItem: clonedCartData[key], status: false });
     delete clonedCartData[key];
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
+    inventoryItems: state.inventory.inventoryItems,
     cartData: state.cart.cartData,
     minPrice: state.cart.minPrice,
     maxPrice: state.cart.maxPrice,
@@ -117,10 +118,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
     updateCart: (content) => { dispatch(updateCart(content)) },
     buildCart: (content) => { dispatch(buildCart(content)) },
     deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
-    markInventoryInCart: (content) => { dispatch(markInventoryInCart(content)) },
   }
 }
 

@@ -41,6 +41,8 @@ class ItemOverviewScreen extends Component {
             deleteRestockItem({ restockData: clonedRestockData });
             markInventoryInRestock({ inventoryItem: data, status: false });
         }
+        const restockBtn = this.buildRestockBtn();
+        this.setState({ restockBtn });
     }
     handleCartPress = (data) => e => {
         const { addCartItem, markInventoryInCart, deleteCartItem, cartData, inventoryItems } = this.props, { barcode } = data, { inCart } = inventoryItems[barcode];
@@ -54,6 +56,8 @@ class ItemOverviewScreen extends Component {
             deleteCartItem({ cartData: clonedCartData });
             markInventoryInCart({ inventoryItem: data, status: false });
         }
+        const cartBtn = this.buildCartBtn();
+        this.setState({ cartBtn });
     }
     buildRestockBtn = () => {
         const { navigation, inventoryItems } = this.props, data = navigation.getParam("data", {}), { barcode } = data, { inRestock } = inventoryItems[barcode],

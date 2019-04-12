@@ -90,7 +90,9 @@ class CheckoutScreen extends React.Component {
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {cartItems}
         </ScrollView>
-        {cartItems.length > 0 ? <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${minPrice} - $${maxPrice}`}</Text> : null}
+        {cartItems.length > 0 ? <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>
+          Price range: <Text style={styles.price}>{`$${minPrice} - $${maxPrice}`}</Text>
+        </Text> : null}
       </View>
     );
   }
@@ -102,6 +104,9 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
 
+  },
+  price: {
+    color: "green",
   }
 });
 

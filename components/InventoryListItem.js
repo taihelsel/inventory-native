@@ -1,11 +1,38 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput, Image } from "react-native";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-export default class InventoryListItem extends React.Component {
+import { StyleSheet, View, Text, TouchableHighlight, TextInput, Image } from "react-native";
+import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { connect } from "react-redux";
+import { addRestockItem, deleteRestockItem } from "../actions/restockActions";
+import { addCartItem, deleteCartItem } from "../actions/cartActions";
+class InventoryListItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             amnt: this.props.data.amnt,
+            inRestock: false,
+            inCart: false,
+        }
+    }
+    componentWillMount() {
+        if (this.props.isInventoryView === true) {
+            const { restockData, cartData, data } = this.props, { barcode } = data;
+            const inRestock = typeof restockData[barcode] === "undefined" ? false : true;
+            const inCart = typeof cartData[barcode] === "undefined" ? false : true;
+            this.setState({ inCart, inRestock });
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.isInventoryView === true) {
+            const { restockData, cartData, data } = this.props, { barcode } = data;
+            const oldRestock = prevProps.restockData, oldCart = prevProps.cartData;
+            if (JSON.stringify(oldRestock[barcode]) !== JSON.stringify(restockData[barcode])) {
+                const inRestock = typeof restockData[barcode] === "undefined" ? false : true;
+                this.setState({ inRestock });
+            }
+            if (JSON.stringify(oldCart[barcode]) !== JSON.stringify(cartData[barcode])) {
+                const inCart = typeof cartData[barcode] === "undefined" ? false : true;
+                this.setState({ inCart });
+            }
         }
     }
     handleTouch = e => {
@@ -25,6 +52,33 @@ export default class InventoryListItem extends React.Component {
             });
         }
     }
+    handleRestockBtnPress = () => {
+        const { addRestockItem, restockData, deleteRestockItem, data } = this.props, { barcode } = data, inRestock = typeof restockData[barcode] === "undefined" ? false : true;
+        if (inRestock === false) {
+            //adding item to restock
+            addRestockItem({ data });
+        } else {
+            //removing item from restock
+            let clonedRestockData = { ...restockData };
+            delete clonedRestockData[barcode];
+            deleteRestockItem({ restockData: clonedRestockData });
+        }
+        //updating component
+        this.setState({ inRestock: !inRestock });
+    }
+    handleCartBtnPress = () => {
+        const { addCartItem, deleteCartItem, cartData, data } = this.props, { barcode } = data, inCart = typeof cartData[barcode] === "undefined" ? false : true;
+        if (inCart === false) {
+            data.amnt = 1;
+            addCartItem({ data });
+        } else {
+            let clonedCartData = { ...cartData };
+            delete clonedCartData[barcode];
+            deleteCartItem({ cartData: clonedCartData });
+        }
+        //updating component
+        this.setState({ inCart: !inCart });
+    }
     renderScreenSpecificItems = () => {
         if (this.props.isCartView === true) {
             return (
@@ -34,6 +88,7 @@ export default class InventoryListItem extends React.Component {
             );
         }
         if (this.props.isInventoryView === true) {
+            const { inCart, inRestock } = this.state;
             const styles = {
                 container: {
                     width: 80,
@@ -45,14 +100,14 @@ export default class InventoryListItem extends React.Component {
             };
             return (
                 <View style={styles.container}>
-                    <TouchableHighlight >
+                    <TouchableHighlight onPress={this.handleRestockBtnPress} underlayColor="transparent">
                         <View style={styles.button}>
-                            <MaterialCommunityIcons name="playlist-plus" size={40} style={{ color: "grey", textAlign: "center", marginLeft: 7 }} />
+                            {inRestock ? <MaterialCommunityIcons name="playlist-remove" size={40} style={{ color: "red", textAlign: "center", marginLeft: 7 }} /> : <MaterialCommunityIcons name="playlist-plus" size={40} style={{ color: "grey", textAlign: "center", marginLeft: 7 }} />}
                         </View>
                     </TouchableHighlight>
-                    <TouchableHighlight >
+                    <TouchableHighlight onPress={this.handleCartBtnPress} underlayColor="transparent" >
                         <View style={styles.button}>
-                            <FontAwesome name="cart-plus" size={35} style={{ color: "grey", textAlign: "center" }} />
+                            {inCart ? <MaterialIcons name="remove-shopping-cart" size={35} style={{ color: "red", textAlign: "center" }} /> : <FontAwesome name="cart-plus" size={35} style={{ color: "grey", textAlign: "center" }} />}
                         </View>
                     </TouchableHighlight>
                 </View>
@@ -120,3 +175,21 @@ const styles = StyleSheet.create({
         color: "green"
     }
 });
+
+const mapStateToProps = (state) => {
+    return {
+        inventoryItems: state.inventory.inventoryItems,
+        restockData: state.restock.restockData,
+        cartData: state.cart.cartData,
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addRestockItem: (content) => { dispatch(addRestockItem(content)) },
+        deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
+        addCartItem: (content) => { dispatch(addCartItem(content)) },
+        deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InventoryListItem);

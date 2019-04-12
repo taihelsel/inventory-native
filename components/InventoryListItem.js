@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity, TextInput, Image } from "react-native";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 export default class InventoryListItem extends React.Component {
     constructor(props) {
         super(props);
@@ -9,13 +10,6 @@ export default class InventoryListItem extends React.Component {
     }
     handleTouch = e => {
         this.props.handleTouch({ data: this.props.data });
-    }
-    dynamicStyle = () => {
-        const styles = {};
-        const { index } = this.props;
-        if (index % 2 === 0) styles.backgroundColor = "rgba(128, 128, 128, 0.25)";
-        else styles.backgroundColor = "rgba(128, 128, 128, 0.1)";
-        return styles;
     }
     handleAmntInput = txt => {
         const { barcode } = this.props.data;
@@ -39,17 +33,43 @@ export default class InventoryListItem extends React.Component {
                 </View>
             );
         }
+        if (this.props.isInventoryView === true) {
+            const styles = {
+                container: {
+                    width: 80,
+                    paddingRight: 5,
+                },
+                button: {
+                    marginVertical: 2,
+                }
+            };
+            return (
+                <View style={styles.container}>
+                    <TouchableHighlight >
+                        <View style={styles.button}>
+                            <MaterialCommunityIcons name="playlist-plus" size={40} style={{ color: "grey", textAlign: "center", marginLeft: 7 }} />
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight >
+                        <View style={styles.button}>
+                            <FontAwesome name="cart-plus" size={35} style={{ color: "grey", textAlign: "center" }} />
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            );
+        }
     }
     renderImg = img => {
+        const baseStyle = { justifyContent: "center", width: 80, marginLeft: 8 };
         if (typeof img === "undefined") {
             return (
-                <View style={{ height: 80, width: 80, backgroundColor: "orange", }}>
+                <View style={[baseStyle, { backgroundColor: "orange", }]}>
                     <Text>Err displaying image</Text>
                 </View>
             );
         }
         return (
-            <View style={{ height: 80, width: 80, }}>
+            <View style={baseStyle}>
                 <Image style={{
                     flex: 1,
                     resizeMode: 'contain'
@@ -63,11 +83,11 @@ export default class InventoryListItem extends React.Component {
         const { img } = data;
         return (
             <TouchableHighlight onPress={this.handleTouch} underlayColor={dynamicUnderlayColor}>
-                <View style={[styles.container, this.dynamicStyle()]}>
+                <View style={styles.container}>
                     {this.renderImg(img)}
                     <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
-                        <Text style={[styles.detailsText, { fontSize: 28, fontWeight: "bold", color: "black", marginBottom: 5 }]}>{data.title}</Text>
-                        <Text style={[styles.detailsText, { color: "green" }]}>{`$${data.price.min} - $${data.price.max}`}</Text>
+                        <Text style={[styles.detailsText, styles.titleText]}>{data.title}</Text>
+                        <Text style={[styles.detailsText, styles.priceText]}>{`$${data.price.min} - $${data.price.max}`}</Text>
                     </View>
                     {this.renderScreenSpecificItems()}
                 </View >
@@ -80,9 +100,23 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignContent: "flex-start",
-        marginVertical: 0.2
+        marginVertical: 0.2,
+        backgroundColor: "white",
+        borderColor: "rgba(35,35,35,0.15)",
+        borderBottomWidth: 0.5,
+        borderStyle: "solid",
+        paddingVertical: 8,
     },
     detailsText: {
-        textAlign: "center"
+        textAlign: "left"
+    },
+    titleText: {
+        fontSize: 20,
+        fontWeight: "600",
+        color: "black",
+        marginBottom: 5
+    },
+    priceText: {
+        color: "green"
     }
 });

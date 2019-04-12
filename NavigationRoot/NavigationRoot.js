@@ -2,10 +2,15 @@ import React, { Component } from "react";
 import { View, Text } from "react-native";
 /*Nav Stacks*/
 import ClerkNavigation from "./ClerkNavigation";
+/*Components*/
+import UserTypeOptions from "../components/UserTypeOptions";
 export default class NavigationRoot extends Component {
     state = {
-        userType: "clerk",
+        userType: null,
     };
+    handleOptionTypePress = type => e => {
+        this.setState({ userType: type });
+    }
     render() {
         switch (this.state.userType) {
             case "clerk": {
@@ -18,7 +23,7 @@ export default class NavigationRoot extends Component {
                 return <Text>Admin Screen Here</Text>
             }
             default: {
-                return <Text>Show sign in options here</Text>
+                return <UserTypeOptions handlePress={this.handleOptionTypePress} />
             }
         }
     }

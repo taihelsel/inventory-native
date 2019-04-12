@@ -45,12 +45,13 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "white",
     color: "black",
+    fontSize: 15,
     borderWidth: 1,
     borderColor: "#dedcdc",
     borderStyle: "solid",
     borderRadius: 5,
     marginTop: 45,
-    paddingHorizontal: 7,
+    paddingHorizontal: 12,
   }
 });
 class InventoryScreen extends React.Component {

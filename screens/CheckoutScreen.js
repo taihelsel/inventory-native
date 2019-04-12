@@ -75,7 +75,7 @@ class CheckoutScreen extends React.Component {
         backgroundColor: "red",
       }];
       return (
-        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={120} key={`${data.title}-${i}`} >
+        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={90} key={`${data.title}-${i}`} >
           <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} handleTouch={this.handleItemTouch} data={data} />
         </Swipeout>
       )

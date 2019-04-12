@@ -83,10 +83,10 @@ class ExpoScanner extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 15,
         backgroundColor: '#fff',
     },
     scanScreenMessage: {
+        marginTop: 50,
         fontSize: 20,
         color: 'white',
         textAlign: 'center',

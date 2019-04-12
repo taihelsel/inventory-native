@@ -27,19 +27,19 @@ const mapStateToProps = (state) => {
 
 export default ScanBarcodeStack = createStackNavigator({
     ScanBarcodeScreen: {
-        screen: connect(mapStateToProps, null)(ScanBarcodeScreen)
+        screen: connect(mapStateToProps, null)(ScanBarcodeScreen),
+        navigationOptions: {
+            header: null,
+        }
     },
-    ItemOverviewScreen: { screen: ItemOverviewScreen },
-}, {
-        defaultNavigationOptions: ({ navigation }) => ({
+    ItemOverviewScreen: {
+        screen: ItemOverviewScreen,
+        navigationOptions: ({ navigation }) => ({
             headerLeft: (
                 <TouchableHighlight style={{ paddingBottom: 5, paddingHorizontal: 25 }} underlayColor="transparent" onPress={() => { navigation.goBack() }}>
                     <Ionicons size={48} style={{ flex: 1, textAlign: "center", color: "grey" }} name={"ios-arrow-round-back"} />
                 </TouchableHighlight>
             )
-        })
+        }),
     }
-);
-
-
-
+});

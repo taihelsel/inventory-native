@@ -115,7 +115,7 @@ class InventoryListItem extends React.Component {
         }
     }
     renderImg = img => {
-        const baseStyle = { justifyContent: "center", width: 80, marginLeft: 8 };
+        const baseStyle = { justifyContent: "center", minHeight: 80, width: 80, marginLeft: 8 };
         if (typeof img === "undefined") {
             return (
                 <View style={[baseStyle, { backgroundColor: "orange", }]}>

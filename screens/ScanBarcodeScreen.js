@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableHighlight } from 'react-native';
 import { createStackNavigator } from "react-navigation";
 import { connect } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
 /*Screens*/
 import ItemOverviewScreen from "./ItemOverviewScreen";
 /*Components*/
@@ -29,7 +30,16 @@ export default ScanBarcodeStack = createStackNavigator({
         screen: connect(mapStateToProps, null)(ScanBarcodeScreen)
     },
     ItemOverviewScreen: { screen: ItemOverviewScreen },
-});
+}, {
+        defaultNavigationOptions: ({ navigation }) => ({
+            headerLeft: (
+                <TouchableHighlight style={{ paddingBottom: 5, paddingHorizontal: 25 }} underlayColor="transparent" onPress={() => { navigation.goBack() }}>
+                    <Ionicons size={48} style={{ flex: 1, textAlign: "center", color: "grey" }} name={"ios-arrow-round-back"} />
+                </TouchableHighlight>
+            )
+        })
+    }
+);
 
 
 

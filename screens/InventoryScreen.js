@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Dimensions } from 'react-native';
+import { StyleSheet, View, TextInput, Dimensions, TouchableHighlight } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import { updateSearchText, setInventory } from "../actions/inventoryActions";
+import { Ionicons } from "@expo/vector-icons";
 /*firebase*/
 import * as firebase from "firebase";
 import firebaseConfig from "../firebaseConfig";
@@ -133,7 +134,15 @@ export default InventoryStack = createStackNavigator({
     screen: connect(mapStateToProps, mapDispatchToProps)(InventoryScreen)
   },
   InventoryItemsScreen: { screen: InventoryItemsScreen },
-  ItemOverviewScreen: { screen: ItemOverviewScreen }
-});
+  ItemOverviewScreen: { screen: ItemOverviewScreen },
+}, {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerLeft: (
+        <TouchableHighlight style={{ paddingBottom: 5, paddingHorizontal: 25 }} underlayColor="transparent" onPress={() => { navigation.goBack() }}>
+          <Ionicons size={48} style={{ flex: 1, textAlign: "center", color: "grey" }} name={"ios-arrow-round-back"} />
+        </TouchableHighlight>
+      )
+    })
+  });
 
 

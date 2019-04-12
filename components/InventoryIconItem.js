@@ -6,7 +6,7 @@ export default InventoryIconItem = ({ title, data, handleTouch }) => {
   return typeof img === "undefined" ? (
     <TouchableHighlight style={styles.container} underlayColor="rgba(212, 212, 212, 0.25)" onPress={handleTouch({ data })}>
       <View style={[styles.contentContainer]}>
-        <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>{title}</Text>
+        <Text style={styles.label}>{title}</Text>
       </View>
     </TouchableHighlight>
 
@@ -27,10 +27,18 @@ const styles = StyleSheet.create({
     height: 170,
   },
   contentContainer: {
-    backgroundColor: "orange",
+    backgroundColor: "#44bad4",
     flex: 1,
     margin: 7,
-    justifyContent: "center"
+    justifyContent: "center",
+    borderRadius: 3,
+  },
+  label: {
+    color: "white",
+    fontSize: 25,
+    fontWeight: "600",
+    textTransform: "capitalize",
+    textAlign: "center",
   },
   imgContentContainer: {
     flex: 1,

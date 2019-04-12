@@ -86,10 +86,11 @@ class CheckoutScreen extends React.Component {
     const { cartItems, minPrice, maxPrice } = this.props;
     return (
       <View style={styles.container}>
+        {cartItems.length <= 0 ? <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in cart</Text> : null}
         <ScrollView contentContainerStyle={styles.contentContainer}>
           {cartItems}
         </ScrollView>
-        <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${minPrice} - $${maxPrice}`}</Text>
+        {cartItems.length > 0 ? <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>{`Your price range is: $${minPrice} - $${maxPrice}`}</Text> : null}
       </View>
     );
   }

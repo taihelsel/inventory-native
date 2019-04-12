@@ -52,7 +52,7 @@ class RestockScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {restockItems.length > 0 ? restockItems : <Text style={{ textAlign: "center" }}>No items in restock list</Text>}
+          {restockItems.length > 0 ? restockItems : <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in restock list</Text>}
         </ScrollView>
       </View>
     );

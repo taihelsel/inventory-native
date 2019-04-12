@@ -42,10 +42,10 @@ const AppStackNavigator = createBottomTabNavigator({
     },
 }, {
         tabBarOptions: {
-            activeTintColor: '#D4AF37',
+            activeTintColor: 'white',
             inactiveTintColor: 'gray',
             style: {
-                backgroundColor: 'white',
+                backgroundColor: 'rgb(34,34,34)',
             },
             showIcon: true,
             showLabel: false,

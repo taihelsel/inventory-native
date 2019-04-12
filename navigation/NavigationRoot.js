@@ -6,7 +6,7 @@ import ClerkNavigation from "./ClerkNavigation";
 import UserTypeOptions from "../components/UserTypeOptions";
 export default class NavigationRoot extends Component {
     state = {
-        userType: null,
+        userType: "clerk",
     };
     handleOptionTypePress = type => e => {
         this.setState({ userType: type });

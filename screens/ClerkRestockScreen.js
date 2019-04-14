@@ -1,62 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Text } from 'react-native';
 import { Constants } from "expo";
-import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
-import { buildRestockList, deleteRestockItem } from "../actions/restockActions";
+import { deleteRestockItem } from "../actions/restockActions";
 /*Components*/
-import InventoryListItem from "../components/InventoryListItem";
-class ClerkRestockScreen extends React.Component {
-  componentDidMount = () => {
-    const { buildRestockList, restockData } = this.props;
-    const restockItems = this.buildRestockList(restockData);
-    buildRestockList({ restockItems });
-  }
-  componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.restockData) !== JSON.stringify(this.props.restockData)) {
-      const { buildRestockList, restockData } = this.props;
-      const restockItems = this.buildRestockList(restockData);
-      buildRestockList({ restockItems });
-    }
-  }
-  handleItemTouch = data => e => {
-    console.log("restock item clicked");
-  }
-  handleDeleteTouch = key => {
-    const { deleteRestockItem, restockData } = this.props;
-    let clonedRestockData = { ...restockData };
-    delete clonedRestockData[key];
-    deleteRestockItem({ restockData: clonedRestockData });
-  }
-  buildRestockList = (restockData) => {
-    const keys = Object.keys(restockData);
-    const restockItems = keys.map((k, i) => {
-      const data = restockData[k];
-      const swipeoutBtns = [{
-        type: "delete",
-        text: "Delete",
-        onPress: () => this.handleDeleteTouch(k),
-        color: "white",
-        backgroundColor: "red",
-      }];
-      return (
-        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={90} key={`${data.title}-${i}`} >
-          <InventoryListItem isRestockView={true} index={i + 1} handleTouch={this.handleItemTouch} data={data} />
-        </Swipeout>
-      )
-    });
-    return restockItems;
-  }
-  render() {
-    const { restockItems } = this.props;
-    return (
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          {restockItems.length > 0 ? restockItems : <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in restock list</Text>}
-        </ScrollView>
-      </View>
-    );
-  }
+import InventoryListItemSwipeout from "../components/InventoryListItemSwipeout";
+
+handleItemTouch = data => e => {
+  console.log("restock item clicked");
+}
+handleDeleteTouch = (key, deleteRestockItem, restockData) => {
+  let clonedRestockData = { ...restockData };
+  delete clonedRestockData[key];
+  deleteRestockItem({ restockData: clonedRestockData });
+}
+buildSwipeoutBtns = (deleteRestockItem, restockData) => k => (
+  [{
+    type: "delete",
+    text: "Delete",
+    onPress: () => handleDeleteTouch(k, deleteRestockItem, restockData),
+    color: "white",
+    backgroundColor: "red",
+  }]
+);
+const ClerkRestockScreen = ({ deleteRestockItem, restockData }) => {
+  return (
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        {Object.keys(restockData).length > 0 ? <InventoryListItemSwipeout buildSwipeoutBtns={buildSwipeoutBtns(deleteRestockItem, restockData)} data={restockData} handlePress={handleItemTouch} /> : <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in restock list</Text>}
+      </ScrollView>
+    </View>
+  );
 }
 const styles = StyleSheet.create({
   container: {
@@ -70,13 +44,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     restockData: state.restock.restockData,
-    restockItems: state.restock.restockItems,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    buildRestockList: (content) => { dispatch(buildRestockList(content)) },
     deleteRestockItem: (content) => { dispatch(deleteRestockItem(content)) },
   }
 }

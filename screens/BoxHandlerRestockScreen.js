@@ -1,44 +1,44 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import Swipeout from 'react-native-swipeout';
 /*Components*/
-import InventoryListItem from "../components/InventoryListItem";
+import InventoryListItemSwipeout from "../components/InventoryListItemSwipeout";
 //test static data
 import testData from "../datasets/testRestockDataset";
 class BoxHandlerRestockScreen extends Component {
     state = {
         restockData: testData,
     }
-    handleCompletePress(k) {
-        console.log("handle complete pressed");
+    handleCompletePress = k => {
+        console.log("handle complete pressed", k);
     }
-    handleItemTouch() {
+    handleOutOfStockPress = k => {
+        console.log("out of stock press");
+    }
+    handleItemTouch = () => {
         console.log("restock item press");
     }
-    buildRestockList() {
-        const { restockData } = this.state;
-        const keys = Object.keys(restockData);
-        const restockList = keys.map((k, i) => {
-            const data = restockData[k];
-            const swipeoutBtns = [{
-                text: "Mark as complete",
+    buildSwipeoutBtns = k => (
+        [
+            {
+                text: "Out of Stock",
+                onPress: () => this.handleOutOfStockPress(k),
+                color: "white",
+                backgroundColor: "red",
+            },
+            {
+                text: "Done",
                 onPress: () => this.handleCompletePress(k),
                 color: "white",
                 backgroundColor: "green",
-            }];
-            return (
-                <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={90} key={`${data.title}-${i}`} >
-                    <InventoryListItem index={i + 1} handleTouch={this.handleItemTouch} data={data} />
-                </Swipeout>
-            )
-        });
-        return restockList;
-    }
+            },
+        ]
+    );
     render() {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
-                    {this.buildRestockList()}
+                    <InventoryListItemSwipeout buildSwipeoutBtns={this.buildSwipeoutBtns} handlePress={this.handleItemTouch} data={this.state.restockData} />
                 </ScrollView>
             </View>
         );

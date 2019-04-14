@@ -142,7 +142,7 @@ class InventoryListItem extends React.Component {
                     {this.renderImg(img)}
                     <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
                         <Text style={[styles.detailsText, styles.titleText]}>{data.title}</Text>
-                        <Text style={[styles.detailsText, styles.priceText]}>{`$${data.price.min} - $${data.price.max}`}</Text>
+                        {typeof data.price !== "undefined" ? <Text style={[styles.detailsText, styles.priceText]}>{`$${data.price.min} - $${data.price.max}`}</Text> : null}
                     </View>
                     {this.renderScreenSpecificItems()}
                 </View >

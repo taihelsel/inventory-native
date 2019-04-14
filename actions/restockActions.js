@@ -1,11 +1,5 @@
-import { BUILD_RESTOCK_LIST, DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM } from "./actionTypes";
+import { DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM } from "./actionTypes";
 
-export const buildRestockList = ({ restockItems }) => {
-    return {
-        type: BUILD_RESTOCK_LIST,
-        payload: { restockItems },
-    }
-}
 export const deleteRestockItem = ({ restockData }) => {
     return {
         type: DELETE_RESTOCK_ITEM,

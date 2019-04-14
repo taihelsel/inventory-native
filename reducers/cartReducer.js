@@ -1,9 +1,8 @@
-import { UPDATE_CART, BUILD_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "../actions/actionTypes";
+import { UPDATE_CART, DELETE_CART_ITEM, ADD_CART_ITEM } from "../actions/actionTypes";
 const initState = {
     cartData: {}, //source data
     minPrice: 0,
     maxPrice: 0,
-    cartItems: [], //items rendering on DOM (component list)
 }
 const cartReducer = (state = initState, action) => {
     switch (action.type) {
@@ -16,29 +15,32 @@ const cartReducer = (state = initState, action) => {
                 cartData
             }
         }
-        case BUILD_CART: {
-            const { minPrice, maxPrice, cartItems } = action.payload;
-            return {
-                ...state,
-                minPrice,
-                maxPrice,
-                cartItems
-            }
-        }
         case DELETE_CART_ITEM: {
-            const { cartData } = action.payload;
+            const { key } = action.payload;
+            const cartData = { ...state.cartData };
+            let { minPrice, maxPrice } = state;
+            minPrice -= parseInt(cartData[key].price.min);
+            maxPrice -= parseInt(cartData[key].price.max);
+            delete cartData[key];
             return {
                 ...state,
-                cartData
+                cartData,
+                minPrice,
+                maxPrice
             }
         }
         case ADD_CART_ITEM: {
             const { data } = action.payload;
             const cartData = { ...state.cartData };
+            let { minPrice, maxPrice } = state;
             cartData[data.barcode] = { ...data };
+            minPrice += parseInt(data.price.min);
+            maxPrice += parseInt(data.price.max);
             return {
                 ...state,
-                cartData
+                cartData,
+                minPrice,
+                maxPrice
             }
         }
         default: return state;

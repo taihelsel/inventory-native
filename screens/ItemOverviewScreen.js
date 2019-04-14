@@ -50,9 +50,7 @@ class ItemOverviewScreen extends Component {
             data.amnt = 1;
             addCartItem({ data });
         } else {
-            let clonedCartData = { ...cartData };
-            delete clonedCartData[barcode];
-            deleteCartItem({ cartData: clonedCartData });
+            deleteCartItem({ key: barcode });
         }
         //updating component
         this.setState({ inCart: !inCart });

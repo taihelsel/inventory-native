@@ -1,6 +1,5 @@
 //cart
 export const UPDATE_CART = "UPDATE_CART";
-export const BUILD_CART = "BUILD_CART";
 export const ADD_CART_ITEM = "ADD_CART_ITEM";
 export const DELETE_CART_ITEM = "DELETE_CART_ITEM";
 //restock

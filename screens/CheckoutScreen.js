@@ -1,24 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { Constants } from "expo";
-import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
-import { updateCart, buildCart, deleteCartItem } from "../actions/cartActions";
+import { updateCart, deleteCartItem } from "../actions/cartActions";
 /*Components*/
-import InventoryListItem from "../components/InventoryListItem";
+import InventoryListItemSwipeout from "../components/InventoryListItemSwipeout";
 class CheckoutScreen extends React.Component {
-  componentDidMount() {
-    const { buildCart, cartData } = this.props;
-    const { minPrice, maxPrice, cartItems } = this.buildCartItems(cartData);
-    buildCart({ minPrice, maxPrice, cartItems });
-  }
-  componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.cartData) !== JSON.stringify(this.props.cartData)) {
-      const { buildCart, cartData } = this.props;
-      const { minPrice, maxPrice, cartItems } = this.buildCartItems(cartData);
-      buildCart({ minPrice, maxPrice, cartItems });
-    }
-  }
   updateCartTotal = (barcode, amntTxt) => {
     const { maxPrice, minPrice, cartData, updateCart } = this.props;
     // setting vars
@@ -33,6 +20,7 @@ class CheckoutScreen extends React.Component {
       newCartMin = 0,
       newCartMax = 0;
     // setting new data
+    console.log("new", newAmnt, "old", currentAmnt);
     if (currentAmnt === newAmnt) return false;
     if (currentAmnt > newAmnt) {
       //subtract from current Cart min/max
@@ -55,46 +43,34 @@ class CheckoutScreen extends React.Component {
     console.log("cart item touched");
   }
   handleDeleteTouch = key => {
-    const { cartData, deleteCartItem } = this.props;
-    const clonedCartData = { ...cartData };
-    delete clonedCartData[key];
-    deleteCartItem({ cartData: clonedCartData });
+    const { deleteCartItem } = this.props;
+    deleteCartItem({ key });
   }
-  buildCartItems = (cartData) => {
-    let minPrice = 0, maxPrice = 0;
-    const keys = Object.keys(cartData);
-    const cartItems = keys.map((k, i) => {
-      const data = cartData[k];
-      minPrice += data.price.min * data.amnt;
-      maxPrice += data.price.max * data.amnt;
-      const swipeoutBtns = [{
-        type: "delete",
-        text: "Delete",
-        onPress: () => this.handleDeleteTouch(k),
-        color: "white",
-        backgroundColor: "red",
-      }];
-      return (
-        <Swipeout backgroundColor="transparent" right={swipeoutBtns} buttonWidth={90} key={`${data.title}-${i}`} >
-          <InventoryListItem isCartView={true} updateCartTotal={this.updateCartTotal} index={i + 1} handleTouch={this.handleItemTouch} data={data} />
-        </Swipeout>
-      )
-    });
-    return { cartItems, minPrice, maxPrice };
-  }
+  buildSwipeoutBtns = k => (
+    [{
+      type: "delete",
+      text: "Delete",
+      onPress: () => this.handleDeleteTouch(k),
+      color: "white",
+      backgroundColor: "red",
+    }]
+  );
   render() {
-    const { cartItems, minPrice, maxPrice } = this.props;
-    return (
+    const { minPrice, maxPrice, cartData, deleteCartItem } = this.props;
+    return (Object.keys(cartData).length > 0) ? (
       <View style={styles.container}>
-        {cartItems.length <= 0 ? <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in cart</Text> : null}
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          {cartItems}
+          <InventoryListItemSwipeout isCartView={true} updateCartTotal={this.updateCartTotal} buildSwipeoutBtns={this.buildSwipeoutBtns} data={cartData} handleTouch={handleItemTouch} />
         </ScrollView>
-        {cartItems.length > 0 ? <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>
+        <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>
           Price range: <Text style={styles.price}>{`$${minPrice} - $${maxPrice}`}</Text>
-        </Text> : null}
+        </Text>
       </View>
-    );
+    ) : (
+        <View style={styles.container} >
+          <Text style={{ textAlign: "center", marginTop: 25, fontSize: 25, color: "black" }}>No items in cart</Text>
+        </View>
+      );
   }
 }
 const styles = StyleSheet.create({
@@ -109,20 +85,16 @@ const styles = StyleSheet.create({
     color: "green",
   }
 });
-
 const mapStateToProps = (state) => {
   return {
     cartData: state.cart.cartData,
     minPrice: state.cart.minPrice,
     maxPrice: state.cart.maxPrice,
-    cartItems: state.cart.cartItems,
   }
 }
-
 const mapDispatchToProps = (dispatch) => {
   return {
     updateCart: (content) => { dispatch(updateCart(content)) },
-    buildCart: (content) => { dispatch(buildCart(content)) },
     deleteCartItem: (content) => { dispatch(deleteCartItem(content)) },
   }
 }

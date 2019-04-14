@@ -7,7 +7,7 @@ import BoxHandlerNavigation from "./BoxHandlerNavigation";
 import UserTypeOptions from "../components/UserTypeOptions";
 export default class NavigationRoot extends Component {
     state = {
-        userType: null,
+        userType: "box-handler",
     };
     handleOptionTypePress = type => e => {
         this.setState({ userType: type });

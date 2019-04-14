@@ -3,7 +3,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { createAppContainer, createBottomTabNavigator } from "react-navigation";
 /*Screens*/
 import InventoryStack from "../screens/InventoryScreen";
-import RestockScreen from "../screens/RestockScreen";
+import ClerkRestockScreen from "../screens/ClerkRestockScreen";
 import ScanBarcodeStack from "../screens/ScanBarcodeScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 
@@ -17,7 +17,7 @@ const AppStackNavigator = createBottomTabNavigator({
         }
     },
     Restock: {
-        screen: RestockScreen,
+        screen: ClerkRestockScreen,
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
                 <FontAwesome name="list" size={30} style={{ color: tintColor }} />

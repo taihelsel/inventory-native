@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { buildRestockList, deleteRestockItem } from "../actions/restockActions";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
-class RestockScreen extends React.Component {
+class ClerkRestockScreen extends React.Component {
   componentDidMount = () => {
     const { buildRestockList, restockData } = this.props;
     const restockItems = this.buildRestockList(restockData);
@@ -81,4 +81,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RestockScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ClerkRestockScreen);

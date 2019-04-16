@@ -1,6 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
-export default UserTypeOptions = ({ handlePress }) => {
+const handlePress = option => {
+    console.log("item pressed");
+}
+export default UserTypeOptions = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.contentContainer}>

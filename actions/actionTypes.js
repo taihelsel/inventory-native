@@ -8,3 +8,5 @@ export const DELETE_RESTOCK_ITEM = "DELETE_RESTOCK_ITEM";
 //inventory
 export const UPDATE_SEARCH_TEXT = "UPDATE_SEARCH_TEXT";
 export const SET_INVENTORY = "SET_INVENTORY";
+//user
+export const SET_SHOPS = "SET_SHOPS";

@@ -6,7 +6,7 @@ import AuthNavigation from "./AuthNavigation";
 import ClerkNavigation from "./ClerkNavigation";
 import BoxHandlerNavigation from "./BoxHandlerNavigation";
 /*Components*/
-import UserTypeOptions from "../components/UserTypeOptions";
+import UserTypeOptions from "../screens/UserTypeOptions";
 
 const navigationRootSwitchStack = createSwitchNavigator({
     Auth: {

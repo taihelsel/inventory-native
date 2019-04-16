@@ -1,23 +1,21 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-
+import { setShops } from "../actions/userActions";
 class LoadingScreen extends Component {
-    state = {
-        shops: [],
-    };
-    // componentDidMount() {
-    //     const { firebase } = this.props;
-    //     firebase.auth().onAuthStateChanged(user => {
-    //         const { user } = res;
-    //         const userRef = firebase.database().ref("users/" + user.uid);
-    //         userRef.on("value", snapshot => {
-    //             const data = snapshot.val();
-    //             const { shops } = data;
-    //             this.setState({ shops, screenType: null });
-    //         });
-    //     })
-    // }
+    componentDidMount() {
+        const { firebase, setShops, navigation } = this.props;
+        firebase.auth().onAuthStateChanged(user => {
+            //*need to handle no logged in user...
+            const userRef = firebase.database().ref("users/" + user.uid);
+            userRef.on("value", snapshot => {
+                const data = snapshot.val();
+                const { shops } = data;
+                setShops({ shops });
+                navigation.navigate("ScreenSelect");
+            });
+        })
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -40,4 +38,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
     firebase: state.firebase.firebaseApp,
 });
-export default connect(mapStateToProps, null)(LoadingScreen);
+const mapDispatchToProps = dispatch => ({
+    setShops: (content) => { dispatch(setShops(content)) },
+});
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingScreen);

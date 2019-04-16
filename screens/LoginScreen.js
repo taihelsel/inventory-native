@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableHighlight } from "react-native";
-
+import { connect } from "react-redux";
 class LoginScreen extends Component {
     state = {
         errorMessage: "",
@@ -25,7 +25,15 @@ class LoginScreen extends Component {
     handleEmailInput = email => this.setState({ email });
     handlePasswordInput = password => this.setState({ password });
     handleLoginPress = e => {
-        console.log("do login stuff here");
+        const { firebase } = this.props;
+        const { email, password } = this.state;
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(res => {
+                console.log("user logged in!", res);
+            })
+            .catch(error => this.setState({ errorMessage: "Invalid email or password" }));
     }
     render() {
         return (
@@ -81,5 +89,9 @@ const styles = StyleSheet.create({
         color: "red",
     }
 });
-
-export default LoginScreen;
+const mapStateToProps = state => {
+    return {
+        firebase: state.firebase.firebaseApp
+    }
+}
+export default connect(mapStateToProps, null)(LoginScreen);

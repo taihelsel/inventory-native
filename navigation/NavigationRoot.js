@@ -1,17 +1,31 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
+import { connect } from "react-redux";
 /*Nav Stacks*/
 import AuthNavigation from "./AuthNavigation";
 import ClerkNavigation from "./ClerkNavigation";
 import BoxHandlerNavigation from "./BoxHandlerNavigation";
 /*Components*/
 import UserTypeOptions from "../components/UserTypeOptions";
-export default class NavigationRoot extends Component {
+class NavigationRoot extends Component {
     state = {
-        userType: "logged-out",
+        screenType: "logged-out",
+        shops: [],
     };
+    componentDidMount() {
+        const { firebase } = this.props;
+        firebase.auth().onAuthStateChanged(user => {
+            const { user } = res;
+            const userRef = firebase.database().ref("users/" + user.uid);
+            userRef.on("value", snapshot => {
+                const data = snapshot.val();
+                const { shops } = data;
+                this.setState({ shops, screenType: null });
+            });
+        })
+    }
     handleOptionTypePress = type => e => {
-        this.setState({ userType: type });
+        this.setState({ screenType: type });
     }
     render() {
         switch (this.state.userType) {
@@ -28,8 +42,12 @@ export default class NavigationRoot extends Component {
                 return <Text>Admin Screen Here</Text>
             }
             default: {
-                return <UserTypeOptions handlePress={this.handleOptionTypePress} />
+                return <UserTypeOptions shops={this.state.shops} handlePress={this.handleOptionTypePress} />
             }
         }
     }
 }
+const mapStateToProps = state => ({
+    firebase: state.firebase.firebaseApp,
+});
+export default connect(mapStateToProps, null)(NavigationRoot);

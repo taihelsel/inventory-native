@@ -5,10 +5,6 @@ import { createStackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import { updateSearchText, setInventory } from "../actions/inventoryActions";
 import { Ionicons } from "@expo/vector-icons";
-/*firebase*/
-import * as firebase from "firebase";
-import firebaseConfig from "../firebaseConfig";
-const firebaseApp = firebase.initializeApp(firebaseConfig);
 /*Components*/
 import InventoryIconItem from "../components/InventoryIconItem";
 /*Screens*/
@@ -60,11 +56,13 @@ class InventoryScreen extends React.Component {
     header: null,
   }
   componentWillMount() {
-    const inventoryRef = firebaseApp.database().ref('inventoryItems');
-    inventoryRef.on("value", snapshot => {
-      const inventoryData = snapshot.val();
-      this.sortInventory(inventoryData);
-    });
+    /*NEED TO UPDATE WITH NEW SCHEMA*/
+    // const { firebase } = this.props;
+    // const inventoryRef = firebase.database().ref('inventoryItems');
+    // inventoryRef.on("value", snapshot => {
+    //   const inventoryData = snapshot.val();
+    //   this.sortInventory(inventoryData);
+    // });
   }
   sortInventory = (inventory) => {
     const keys = Object.values(inventory), { setInventory } = this.props;
@@ -120,6 +118,7 @@ const mapStateToProps = (state) => {
     searchText: state.inventory.searchText,
     inventoryCategories: state.inventory.inventoryCategories,
     inventoryItems: state.inventory.inventoryItems,
+    firebase: state.firebase.firebaseApp,
   }
 }
 

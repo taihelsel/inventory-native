@@ -25,13 +25,14 @@ class LoginScreen extends Component {
     handleEmailInput = email => this.setState({ email });
     handlePasswordInput = password => this.setState({ password });
     handleLoginPress = e => {
-        const { firebase } = this.props;
+        const { firebase, navigation } = this.props;
         const { email, password } = this.state;
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(res => {
-                console.log("user logged in!", res);
+                // console.log("user logged in!", res);
+                navigation.navigate("Loading");
             })
             .catch(error => this.setState({ errorMessage: "Invalid email or password" }));
     }

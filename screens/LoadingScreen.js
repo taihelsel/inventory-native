@@ -6,14 +6,19 @@ class LoadingScreen extends Component {
     componentDidMount() {
         const { firebase, setShops, navigation } = this.props;
         firebase.auth().onAuthStateChanged(user => {
-            //*need to handle no logged in user...
-            const userRef = firebase.database().ref("users/" + user.uid);
-            userRef.on("value", snapshot => {
-                const data = snapshot.val();
-                const { shops } = data;
-                setShops({ shops });
-                navigation.navigate("ScreenSelect");
-            });
+            if (user) {
+                //user account in db
+                const userRef = firebase.database().ref("users/" + user.uid);
+                userRef.on("value", snapshot => {
+                    const data = snapshot.val();
+                    const { shops } = data;
+                    setShops({ shops });
+                    navigation.navigate("ScreenSelect");
+                });
+            } else {
+                //need to log user in 
+                navigation.navigate("Auth");
+            }
         })
     }
     render() {

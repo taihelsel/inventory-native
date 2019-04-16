@@ -1,13 +1,13 @@
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { createAppContainer, createBottomTabNavigator } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation";
 /*Screens*/
 import InventoryStack from "../screens/InventoryScreen";
 import ClerkRestockScreen from "../screens/ClerkRestockScreen";
 import ScanBarcodeStack from "../screens/ScanBarcodeScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 
-const AppStackNavigator = createBottomTabNavigator({
+const clerkStackNavigator = createBottomTabNavigator({
     Inventory: {
         screen: InventoryStack,
         navigationOptions: {
@@ -52,5 +52,4 @@ const AppStackNavigator = createBottomTabNavigator({
         }
     }
 )
-const AppContainer = createAppContainer(AppStackNavigator);
-export default AppContainer;
+export default clerkStackNavigator;

@@ -1,6 +1,7 @@
-import { SET_SHOPS } from "../actions/actionTypes";
+import { SET_SHOPS, SET_CURRENT_SHOP } from "../actions/actionTypes";
 const initState = {
     shops: [],
+    currentShop: "",
 }
 const userReducer = (state = initState, action) => {
     switch (action.type) {
@@ -9,6 +10,13 @@ const userReducer = (state = initState, action) => {
             return {
                 ...state,
                 shops
+            }
+        }
+        case SET_CURRENT_SHOP: {
+            const { currentShop } = action.payload;
+            return {
+                ...state,
+                currentShop
             }
         }
         default: return state;

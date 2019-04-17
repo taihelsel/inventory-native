@@ -1,18 +1,29 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
-const handlePress = (option, navigation) => e => {
-    console.log(navigation.navigate("UserTypeOptions"));
+import { connect } from "react-redux";
+import { setCurrentShop } from "../actions/userActions";
+const handlePress = (shop, setCurrentShop, navigation) => e => {
+    const { shopId, group } = shop;
+    setCurrentShop({ currentShop: shopId });
+    navigation.navigate("ShopUserType", { data: { group, shopId } });
 }
-export default ShopSelectScreen = ({ navigation }) => {
+const ShopSelectScreen = ({ shops, setCurrentShop, navigation }) => {
+    if (shops.length < 1) return <View style={styles.container}><Text>Error fetching shops</Text></View>
     return (
         <View style={styles.container}>
-            <View style={styles.contentContainer}>
-                <TouchableHighlight style={styles.optionContainer} underlayColor="rgba(212, 212, 212, 0.25)" onPress={handlePress("testshop", navigation)}>
-                    <View style={styles.optionContentContainer}>
-                        <Text style={styles.optionText}>Test shop</Text>
-                    </View>
-                </TouchableHighlight>
-            </View>
+            {
+                shops.map((shop) => {
+                    return (
+                        <View key={shop.shopId} style={styles.contentContainer}>
+                            <TouchableHighlight style={styles.optionContainer} underlayColor="rgba(212, 212, 212, 0.25)" onPress={handlePress(shop, setCurrentShop, navigation)}>
+                                <View style={styles.optionContentContainer}>
+                                    <Text style={styles.optionText}>{shop.shopName}</Text>
+                                </View>
+                            </TouchableHighlight>
+                        </View>
+                    );
+                })
+            }
         </View>
     );
 }
@@ -24,9 +35,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         height: 125,
-        flexDirection: "row",
-        flexWrap: "nowrap",
-        justifyContent: "space-evenly",
     },
     optionContainer: {
         flex: 1,
@@ -43,3 +51,11 @@ const styles = StyleSheet.create({
         color: "white"
     }
 });
+
+const mapStateToProps = state => ({
+    shops: state.user.shops,
+});
+const mapDispatchToProps = dispatch => ({
+    setCurrentShop: content => { dispatch(setCurrentShop(content)) }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ShopSelectScreen);

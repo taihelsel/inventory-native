@@ -10,3 +10,4 @@ export const UPDATE_SEARCH_TEXT = "UPDATE_SEARCH_TEXT";
 export const SET_INVENTORY = "SET_INVENTORY";
 //user
 export const SET_SHOPS = "SET_SHOPS";
+export const SET_CURRENT_SHOP = "SET_CURRENT_SHOP";

@@ -56,6 +56,7 @@ class InventoryScreen extends React.Component {
     header: null,
   }
   componentWillMount() {
+    console.log("inventory screen");
     /*NEED TO UPDATE WITH NEW SCHEMA*/
     // const { firebase } = this.props;
     // const inventoryRef = firebase.database().ref('inventoryItems');

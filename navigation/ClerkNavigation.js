@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "react-navigation";
 /*Screens*/
@@ -52,12 +52,4 @@ const ClerkStackNavigator = createBottomTabNavigator({
         }
     }
 )
-class ClerkScreen extends Component {
-    static router = ClerkStackNavigator.router;
-    render() {
-        return (
-            <ClerkStackNavigator navigation={this.props.navigation} />
-        );
-    };
-}
-export default ClerkScreen;
+export default ClerkStackNavigator;

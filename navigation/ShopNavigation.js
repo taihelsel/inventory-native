@@ -1,14 +1,19 @@
-import React from "react";
 import { createStackNavigator } from "react-navigation";
 /*Screens*/
 import ShopSelectScreen from "../screens/ShopSelectScreen";
-import UserTypeOptionsScreen from "../screens/UserTypeOptions";
+import ShopUserTypeScreen from "../screens/ShopUserTypeScreen";
 
 export default createStackNavigator({
     ShopSelect: {
         screen: ShopSelectScreen,
     },
-    UserTypeOptions: {
-        screen: UserTypeOptionsScreen,
+    ShopUserType: {
+        screen: ShopUserTypeScreen,
     }
-});
+}, {
+        initialRouteName: "ShopSelect",
+        defaultNavigationOptions: {
+            header: null,
+        }
+    }
+);

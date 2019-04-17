@@ -5,8 +5,7 @@ import LoadingScreen from "../screens/LoadingScreen";
 import AuthNavigation from "./AuthNavigation";
 import ClerkNavigation from "./ClerkNavigation";
 import BoxHandlerNavigation from "./BoxHandlerNavigation";
-import UserHomeNavigation from "./UserHomeNavigation";
-
+import ShopNavigation from "./ShopNavigation";
 const navigationRootSwitchStack = createSwitchNavigator({
     Auth: {
         screen: AuthNavigation
@@ -18,7 +17,7 @@ const navigationRootSwitchStack = createSwitchNavigator({
         screen: BoxHandlerNavigation
     },
     UserHome: {
-        screen: UserHomeNavigation,
+        screen: ShopNavigation,
     },
     Loading: {
         screen: LoadingScreen

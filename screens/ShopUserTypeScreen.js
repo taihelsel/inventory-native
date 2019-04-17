@@ -7,7 +7,7 @@ const handlePress = (option, navigation) => e => {
 }
 export default ShopUserTypeScreen = ({ navigation }) => {
     const data = navigation.getParam("data", {});
-    const { shopId, group } = data;
+    const { group } = data;
     return (
         <View style={styles.container}>
             <View style={styles.contentContainer}>

@@ -56,14 +56,12 @@ class InventoryScreen extends React.Component {
     header: null,
   }
   componentWillMount() {
-    console.log("inventory screen");
-    /*NEED TO UPDATE WITH NEW SCHEMA*/
-    // const { firebase } = this.props;
-    // const inventoryRef = firebase.database().ref('inventoryItems');
-    // inventoryRef.on("value", snapshot => {
-    //   const inventoryData = snapshot.val();
-    //   this.sortInventory(inventoryData);
-    // });
+    const { firebase, currentShop } = this.props;
+    const inventoryRef = firebase.database().ref(`/shops/${currentShop}/inventoryItems`);
+    inventoryRef.on("value", snapshot => {
+      const inventoryData = snapshot.val();
+      this.sortInventory(inventoryData);
+    });
   }
   sortInventory = (inventory) => {
     const keys = Object.values(inventory), { setInventory } = this.props;
@@ -120,6 +118,7 @@ const mapStateToProps = (state) => {
     inventoryCategories: state.inventory.inventoryCategories,
     inventoryItems: state.inventory.inventoryItems,
     firebase: state.firebase.firebaseApp,
+    currentShop: state.user.currentShop,
   }
 }
 

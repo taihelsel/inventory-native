@@ -13,7 +13,7 @@ class LoadingScreen extends Component {
                     const data = snapshot.val();
                     const { shops } = data;
                     setShops({ shops });
-                    navigation.navigate("ScreenSelect");
+                    navigation.navigate("UserHome");
                 });
             } else {
                 //need to log user in 

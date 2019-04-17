@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 const handlePress = option => {
     console.log("item pressed");
 }
-export default UserTypeOptions = ({ navigation }) => {
+export default ShopUserTypeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.contentContainer}>

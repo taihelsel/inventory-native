@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "react-navigation";
 /*Screens*/
@@ -7,7 +7,7 @@ import ClerkRestockScreen from "../screens/ClerkRestockScreen";
 import ScanBarcodeStack from "../screens/ScanBarcodeScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
 
-const clerkStackNavigator = createBottomTabNavigator({
+const ClerkStackNavigator = createBottomTabNavigator({
     Inventory: {
         screen: InventoryStack,
         navigationOptions: {
@@ -52,4 +52,12 @@ const clerkStackNavigator = createBottomTabNavigator({
         }
     }
 )
-export default clerkStackNavigator;
+class ClerkScreen extends Component {
+    static router = ClerkStackNavigator.router;
+    render() {
+        return (
+            <ClerkStackNavigator navigation={this.props.navigation} />
+        );
+    };
+}
+export default ClerkScreen;

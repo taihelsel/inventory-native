@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableHighlight } from "react-native";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
@@ -9,7 +9,7 @@ class CreateInventoryScreen extends Component {
         title: "",
         manufacturer: "",
         category: "",
-        description: ["saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf"],
+        description: [],
         imgUrl: "",
         barcode: "",
     }
@@ -59,6 +59,9 @@ class CreateInventoryScreen extends Component {
             scrollView.scrollTo({ x: 0, y: newOffset, duration: 500 });
         })
     }
+    removeBarcode = e => {
+        this.setState({ barcode: "" });
+    }
     render() {
         return (
             <View style={styles.container} >
@@ -84,12 +87,21 @@ class CreateInventoryScreen extends Component {
                         <TextInput ref="_imgUrlInput" onBlur={this.onInputBlur("_imgUrlInput")} onFocus={this.onInputFocus("_imgUrlInput")} style={styles.textInput} value={this.state.imgUrl} onChangeText={this.updateImgUrl} />
                     </View>
                     <View style={styles.btnWrapper}>
-                        <View style={styles.listItemWrapper}>
-                            <LargeListItem parentStyle={{ height: 60 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
-                        </View>
                         {this.state.barcode.length > 0 ? (
-                            <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
-                        ) : null}
+                            <View style={styles.barcodeContainer}>
+                                <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
+                                <TouchableHighlight underlayColor="transparent" onPress={this.removeBarcode}>
+                                    <View style={styles.barcodeDelBtn}>
+                                        <Text style={styles.barcodeDelBtnText}>X</Text>
+                                    </View>
+                                </TouchableHighlight>
+                            </View>
+
+                        ) : (
+                                <View style={styles.listItemWrapper}>
+                                    <LargeListItem parentStyle={{ height: 60 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
+                                </View>
+                            )}
                     </View>
                 </ScrollView>
             </View>
@@ -134,10 +146,32 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderRadius: 3,
     },
+    barcodeContainer: {
+        flexDirection: "row",
+        marginHorizontal: 5,
+        padding: 4,
+        borderStyle: "solid",
+        borderRadius: 2,
+        borderColor: "grey",
+        borderWidth: 0.25,
+    },
     barcodeLabel: {
-        textAlign: "center",
+        textAlign: "left",
         fontSize: 18,
-        marginTop: 15
-    }
+        margin: 10,
+        flex: 1,
+    },
+    barcodeDelBtn: {
+        width: 40,
+        height: 40,
+        justifyContent: "center",
+        backgroundColor: "red",
+        borderRadius: 3,
+    },
+    barcodeDelBtnText: {
+        fontSize: 18,
+        color: "white",
+        textAlign: "center",
+    },
 });
 export default CreateInventoryScreen;

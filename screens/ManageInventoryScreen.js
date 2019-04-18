@@ -11,7 +11,7 @@ class ManageInventoryScreen extends Component {
             headerLeft: (<BackButton navigation={navigation} dest={"AdminHome"} />)
         }
     }
-    handlePress = navigation => option => e => {
+    handlePress = navigation => option => {
         switch (option) {
             case "create-inventory": {
                 navigation.navigate("CreateInventory");

@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
     },
     addItemButton: {
         paddingHorizontal: 30,
-        paddingVertical: 10,
+        paddingVertical: 7,
+        marginTop: 4,
         justifyContent: "center",
         backgroundColor: "green",
         borderRadius: 3,

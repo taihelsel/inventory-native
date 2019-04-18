@@ -1,10 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 
-const LargeListItem = ({ handlePress, option, title }) => {
+const onPress = (handlePress, option) => e => {
+    if (typeof option !== "undefined") {
+        handlePress(option);
+    } else handlePress();
+}
+const LargeListItem = ({ handlePress, option, title, parentStyle }) => {
+    const allStyle = typeof parentStyle === "undefined" ? { ...styles.contentContainer } : { ...styles.contentContainer, ...parentStyle };
     return (
-        <TouchableHighlight style={styles.container} underlayColor="transparent" onPress={handlePress(option)}>
-            <View style={styles.contentContainer}>
+        <TouchableHighlight style={styles.container} underlayColor="transparent" onPress={onPress(handlePress, option)}>
+            <View style={allStyle}>
                 <Text style={styles.label}>{title}</Text>
             </View>
         </TouchableHighlight>

@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
+import LargeListItem from "../components/LargeListItem";
 class CreateInventoryScreen extends Component {
     state = {
         title: "",
         manufacturer: "",
         category: "",
-        description: ["test"],
+        description: ["saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf", "saldkfj;;lkjasdf",],
     }
     static navigationOptions = ({ navigation }) => {
         return {
@@ -29,25 +30,39 @@ class CreateInventoryScreen extends Component {
         desc.splice(desc.indexOf(item), 1);
         this.setState({ description: desc });
     }
+    handleImgBtnPress = () => {
+        console.log("img button pressed");
+    }
+    handleBarcodeBtnPress = () => {
+        console.log("barcode button pressed");
+    }
     render() {
         return (
             <View style={styles.container} >
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.textLabel}>Title:</Text>
+                        <Text style={styles.textLabel}>Title</Text>
                         <TextInput style={styles.textInput} value={this.state.title} onChangeText={this.updateTitle} />
                     </View>
-                    <View style={styles.descWrapper}>
-                        <Text style={styles.descLabel}>Desc:</Text>
+                    <View style={styles.inputWrapper}>
+                        <Text style={styles.textLabel}>Desc</Text>
                         <ManageItemDescription desc={this.state.description} addItem={this.addDescriptionItem} removeItem={this.removeDescriptionItem} />
                     </View>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.textLabel}>Manufacturer:</Text>
+                        <Text style={styles.textLabel}>Manufacturer</Text>
                         <TextInput style={styles.textInput} value={this.state.manufacturer} onChangeText={this.updateManufacturer} />
                     </View>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.textLabel}>Category:</Text>
+                        <Text style={styles.textLabel}>Category</Text>
                         <TextInput style={styles.textInput} value={this.state.category} onChangeText={this.updateCategory} />
+                    </View>
+                    <View style={styles.btnWrapper}>
+                        <View style={styles.listItemWrapper}>
+                            <LargeListItem parentStyle={{ height: 60 }} title={"Add Image"} handlePress={this.handleImgBtnPress} />
+                        </View>
+                        <View style={styles.listItemWrapper}>
+                            <LargeListItem parentStyle={{ height: 60 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
+                        </View>
                     </View>
                 </ScrollView>
             </View>
@@ -59,39 +74,38 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainer: {
-        flex: 1,
         justifyContent: "flex-start",
         paddingTop: 30,
     },
     inputWrapper: {
-        flexDirection: "row",
         marginHorizontal: 10,
-        marginVertical: 15,
-    },
-    descWrapper: {
-        marginHorizontal: 10,
-        marginVertical: 15,
+        marginBottom: 25,
     },
     textLabel: {
-        fontSize: 22,
+        fontSize: 25,
+        fontWeight: "500",
         textAlign: "center",
         marginRight: 15,
-    },
-    descLabel: {
-        textAlign: "left",
-        fontSize: 22,
-        marginBottom: 4,
+        marginBottom: 15,
     },
     textInput: {
-        flex: 1,
         paddingHorizontal: 8,
-        paddingVertical: 5,
+        paddingVertical: 8,
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: "#dedcdc",
         borderStyle: "solid",
         borderRadius: 5,
-        fontSize: 15,
+        fontSize: 17,
+    },
+    btnWrapper: {
+        paddingTop: 20,
+        paddingBottom: 40,
+    },
+    listItemWrapper: {
+        marginTop: 10,
+        marginHorizontal: 10,
+        borderRadius: 3,
     }
 });
 export default CreateInventoryScreen;

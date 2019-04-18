@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 /*Components*/
 import LargeListItem from "../components/LargeListItem";
-const handlePress = navigation => option => e => {
+const handlePress = navigation => option => {
     switch (option) {
         case "manage-inventory": {
             navigation.navigate("ManageInventory");

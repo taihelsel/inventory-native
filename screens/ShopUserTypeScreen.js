@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 const handlePress = (option, navigation) => e => {
     if (option === "clerk") navigation.navigate("Clerk");
     if (option === "box-handler") navigation.navigate("BoxHandler");
-    if (option === "admin") console.log("need to create admin screen");
+    if (option === "admin") navigation.navigate("Admin");
 }
 export default ShopUserTypeScreen = ({ navigation }) => {
     const data = navigation.getParam("data", {});

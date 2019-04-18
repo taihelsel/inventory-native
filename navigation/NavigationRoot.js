@@ -6,9 +6,13 @@ import AuthNavigation from "./AuthNavigation";
 import ClerkNavigation from "./ClerkNavigation";
 import BoxHandlerNavigation from "./BoxHandlerNavigation";
 import ShopNavigation from "./ShopNavigation";
+import AdminNavigation from "./AdminNavigation";
 const navigationRootSwitchStack = createSwitchNavigator({
     Auth: {
         screen: AuthNavigation
+    },
+    UserHome: {
+        screen: ShopNavigation,
     },
     Clerk: {
         screen: ClerkNavigation,
@@ -16,14 +20,14 @@ const navigationRootSwitchStack = createSwitchNavigator({
     BoxHandler: {
         screen: BoxHandlerNavigation
     },
-    UserHome: {
-        screen: ShopNavigation,
+    Admin: {
+        screen: AdminNavigation,
     },
     Loading: {
         screen: LoadingScreen
     },
 }, {
-        initialRouteName: "Loading",
+        initialRouteName: "Admin", /*change back to loading screen once admin route is complete*/
     }
 );
 

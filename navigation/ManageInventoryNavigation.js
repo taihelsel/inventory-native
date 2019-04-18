@@ -1,22 +1,18 @@
-import React from "react";
 import { createStackNavigator } from "react-navigation";
 /*Screens*/
 import ManageInventoryScreen from "../screens/ManageInventoryScreen";
 import CreateInventoryScreen from "../screens/CreateInventoryScreen";
+import ViewInventoryScreen from "../screens/ViewInventoryScreen";
 
 const ManageInventoryNavigation = createStackNavigator({
     ManageInventory: {
         screen: ManageInventoryScreen,
-        navigationOptions: {
-            title: "Manage Inventory",
-        }
     },
     CreateInventory: {
         screen: CreateInventoryScreen,
-        navigationOptions: {
-            title: "Add Inventory Item",
-            headerBackTitle: "test",
-        }
+    },
+    ViewInventory: {
+        screen: ViewInventoryScreen,
     }
 }, {
         initialRouteName: "ManageInventory",

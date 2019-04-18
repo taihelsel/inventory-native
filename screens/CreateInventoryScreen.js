@@ -62,6 +62,9 @@ class CreateInventoryScreen extends Component {
     removeBarcode = e => {
         this.setState({ barcode: "" });
     }
+    handleAddInventoryPress = () => {
+        console.log("pressed");
+    }
     render() {
         return (
             <View style={styles.container} >
@@ -86,22 +89,27 @@ class CreateInventoryScreen extends Component {
                         <Text style={styles.textLabel}>Image URL</Text>
                         <TextInput ref="_imgUrlInput" onBlur={this.onInputBlur("_imgUrlInput")} onFocus={this.onInputFocus("_imgUrlInput")} style={styles.textInput} value={this.state.imgUrl} onChangeText={this.updateImgUrl} />
                     </View>
-                    <View style={styles.btnWrapper}>
-                        {this.state.barcode.length > 0 ? (
-                            <View style={styles.barcodeContainer}>
-                                <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
-                                <TouchableHighlight underlayColor="transparent" onPress={this.removeBarcode}>
-                                    <View style={styles.barcodeDelBtn}>
-                                        <Text style={styles.barcodeDelBtnText}>X</Text>
-                                    </View>
-                                </TouchableHighlight>
-                            </View>
-
-                        ) : (
-                                <View style={styles.listItemWrapper}>
-                                    <LargeListItem parentStyle={{ height: 60 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
+                    {this.state.barcode.length > 0 ? (
+                        <View style={styles.barcodeContainer}>
+                            <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
+                            <TouchableHighlight underlayColor="transparent" onPress={this.removeBarcode}>
+                                <View style={styles.barcodeDelBtn}>
+                                    <Text style={styles.barcodeDelBtnText}>X</Text>
                                 </View>
-                            )}
+                            </TouchableHighlight>
+                        </View>
+
+                    ) : (
+                            <View style={styles.listItemWrapper}>
+                                <LargeListItem parentStyle={{ height: 45 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
+                            </View>
+                        )}
+                    <View style={styles.addToInventoryContainer}>
+                        <TouchableHighlight underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleAddInventoryPress}>
+                            <View style={styles.addToInventoryBtn}>
+                                <Text style={styles.addToInventoryLabel}>Add to Inventory</Text>
+                            </View>
+                        </TouchableHighlight>
                     </View>
                 </ScrollView>
             </View>
@@ -137,10 +145,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         fontSize: 17,
     },
-    btnWrapper: {
-        paddingTop: 20,
-        paddingBottom: 40,
-    },
     listItemWrapper: {
         marginTop: 10,
         marginHorizontal: 10,
@@ -172,6 +176,21 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "white",
         textAlign: "center",
+    },
+    addToInventoryContainer: {
+        flex: 1,
+        marginTop: 20,
+        paddingVertical: 15,
+        backgroundColor: "green",
+    },
+    addToInventoryBtn: {
+        flex: 1,
+        justifyContent: "center",
+    },
+    addToInventoryLabel: {
+        fontSize: 22,
+        color: "white",
+        textAlign: "center"
     },
 });
 export default CreateInventoryScreen;

@@ -4,9 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { createStackNavigator } from "react-navigation";
 import { connect } from "react-redux";
 import { updateSearchText, setInventory } from "../actions/inventoryActions";
-import { Ionicons } from "@expo/vector-icons";
 /*Components*/
 import InventoryIconItem from "../components/InventoryIconItem";
+import BackButton from "../components/BackButton";
 /*Screens*/
 import InventoryItemsScreen from "./InventoryItemsScreen";
 import ItemOverviewScreen from "./ItemOverviewScreen";
@@ -137,9 +137,7 @@ export default InventoryStack = createStackNavigator({
 }, {
     defaultNavigationOptions: ({ navigation }) => ({
       headerLeft: (
-        <TouchableHighlight style={{ paddingBottom: 5, paddingHorizontal: 25 }} underlayColor="transparent" onPress={() => { navigation.goBack() }}>
-          <Ionicons size={48} style={{ flex: 1, textAlign: "center", color: "grey" }} name={"ios-arrow-round-back"} />
-        </TouchableHighlight>
+        <BackButton navigation={navigation} />
       )
     })
   });

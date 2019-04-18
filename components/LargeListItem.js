@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         height: 100,
         justifyContent: "center",
-        backgroundColor: "orange",
+        backgroundColor: "#44bad4",
     },
     label: {
         textAlign: "center",

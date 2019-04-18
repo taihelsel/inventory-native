@@ -1,17 +1,46 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { Component } from "react";
+import { View, StyleSheet } from "react-native";
+/*Components*/
+import LargeListItem from "../components/LargeListItem";
+import BackButton from "../components/BackButton";
 
-const ManageInventoryScreen = () => {
-    return (
-        <View style={styles.container}>
-            <Text>ManageInventoryScreen</Text>
-        </View>
-    );
-};
+class ManageInventoryScreen extends Component {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerLeft: (<BackButton navigation={navigation} dest={"AdminHome"} />)
+        }
+    }
+    handlePress = navigation => option => e => {
+        switch (option) {
+            case "create-inventory": {
+                navigation.navigate("CreateInventory");
+                break;
+            }
+            default: {
+                console.log("error: item not found in admin navigation");
+                break;
+            }
+        }
+    }
+    render() {
+        const { navigation } = this.props;
+        return (
+            <View style={styles.container}>
+                <View style={styles.listItemWrapper}>
+                    <LargeListItem title={"Add new item"} handlePress={this.handlePress(navigation)} option={"create-inventory"} />
+                </View>
+            </View>
+        );
+    }
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "flex-start",
+    },
+    listItemWrapper: {
+        marginTop: 2,
+        marginHorizontal: 2,
     }
 });
 export default ManageInventoryScreen;

@@ -40,11 +40,11 @@ const AdminHomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 60,
         justifyContent: "flex-start",
     },
     listItemWrapper: {
-        marginVertical: 0.5,
+        marginTop: 2,
+        marginHorizontal: 2,
     }
 });
 export default AdminHomeScreen;

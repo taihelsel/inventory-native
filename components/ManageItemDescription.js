@@ -19,7 +19,6 @@ class ManageItemDescription extends Component {
     }
     render() {
         const { desc } = this.props;
-        console.log(desc);
         return (
             <View style={styles.container}>
                 <View style={styles.descList}>

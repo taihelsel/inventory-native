@@ -7,10 +7,19 @@ import { Ionicons } from "@expo/vector-icons";
 import ItemOverviewScreen from "./ItemOverviewScreen";
 /*Components*/
 import ExpoScanner from "../components/ExpoScanner";
+const onScan = (navigation, handleBarcodeScan, inventoryItems) => data => {
+    if (typeof handleBarcodeScan !== "undefined") {
+        handleBarcodeScan(data);
+    } else {
+        navigation.navigate("ItemOverviewScreen", { data: inventoryItems[barcodeID] });
+    }
+}
 const ScanBarcodeScreen = ({ navigation, inventoryItems }) => {
+    const data = navigation.getParam("data", {});
+    const { handleBarcodeScan } = data;
     return (
         <View style={styles.container}>
-            <ExpoScanner navigation={navigation} barcodeDataset={inventoryItems} />
+            <ExpoScanner onScan={onScan(navigation, handleBarcodeScan, inventoryItems)} navigation={navigation} />
         </View>
     );
 }

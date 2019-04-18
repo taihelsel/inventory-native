@@ -27,7 +27,7 @@ class ExpoScanner extends Component {
 
     onBarCodeRead = ({ type, data }) => {
         const barcodeID = data;
-        const { navigation, barcodeDataset } = this.props;
+        const { onScan } = this.props;
         if (barcodeID === null || this.props.isFocused === false) {
             return;
         }
@@ -35,7 +35,7 @@ class ExpoScanner extends Component {
             // Do something for EAN
             console.log(`EAN scanned: ${barcodeID}`);
             this.resetScanner();
-            navigation.navigate("ItemOverviewScreen", { data: barcodeDataset[barcodeID] });
+            onScan({ data: barcodeID});
         } else if (type.startsWith('org.iso.QRCode')) {
             // Do samething for QRCode
             console.log(`QRCode scanned: ${barcodeID}`);

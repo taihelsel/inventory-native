@@ -33,8 +33,12 @@ class CreateInventoryScreen extends Component {
     handleImgBtnPress = () => {
         console.log("img button pressed");
     }
+    handleBarcodeScan = (data) => {
+        console.log("BARCODE SCAN", data);
+    }
     handleBarcodeBtnPress = () => {
-        console.log("barcode button pressed");
+        const { navigation } = this.props;
+        navigation.navigate("ScanBarcode", { data: { handleBarcodeScan: this.handleBarcodeScan } });
     }
     render() {
         return (

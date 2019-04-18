@@ -3,7 +3,7 @@ import { createStackNavigator } from "react-navigation";
 import ManageInventoryScreen from "../screens/ManageInventoryScreen";
 import CreateInventoryScreen from "../screens/CreateInventoryScreen";
 import ViewInventoryScreen from "../screens/ViewInventoryScreen";
-
+import ScanBarcodeScreen from "../screens/ScanBarcodeScreen";
 const ManageInventoryNavigation = createStackNavigator({
     ManageInventory: {
         screen: ManageInventoryScreen,
@@ -13,6 +13,9 @@ const ManageInventoryNavigation = createStackNavigator({
     },
     ViewInventory: {
         screen: ViewInventoryScreen,
+    },
+    ScanBarcode: {
+        screen: ScanBarcodeScreen
     }
 }, {
         initialRouteName: "ManageInventory",

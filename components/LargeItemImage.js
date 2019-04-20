@@ -13,7 +13,7 @@ const LargeItemImage = ({ imgUrl }) => {
         <View style={{ height: 200, width: 200, marginHorizontal: 75 }}>
             <Image style={{
                 flex: 1,
-                resizeMode: 'contain'
+                resizeMode: "contain"
             }} source={{ uri: imgUrl }} />
         </View>
     );

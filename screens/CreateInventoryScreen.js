@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import { ImageManipulator } from "expo";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
@@ -84,9 +85,25 @@ class CreateInventoryScreen extends Component {
     removeBarcode = e => {
         this.setState({ barcode: "" });
     }
+    handleImgSelect = imgData => e => {
+        console.log("NEED TO UPLOAD TO FIREBASE");
+        const { image } = { ...imgData };
+        const actions = [
+            { resize: { width: 200, } }
+        ];
+        const saveOptions = { format: "jpeg" };
+        (async () => {
+            const newImage = await ImageManipulator.manipulateAsync(image.uri, actions, saveOptions);
+            this.setState({ imgUrl: newImage.uri, });
+            this.props.navigation.goBack(null);
+        })();
+    }
     handleAddImagePress = () => {
         const { navigation } = this.props;
-        navigation.navigate("ViewCameraRoll");
+        const data = {
+            handleImgSelect: this.handleImgSelect
+        };
+        navigation.navigate("ViewCameraRoll", { data });
     }
     handleAddInventoryPress = () => {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");

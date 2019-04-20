@@ -5,6 +5,24 @@ import LargeListItem from "../components/LargeListItem";
 import BackButton from "../components/BackButton";
 
 class ManageInventoryScreen extends Component {
+    state = {
+        testInventoryData: {
+            "0000000": {
+                title: "test title",
+                price: {
+                    min: 0,
+                    max: 5,
+                },
+                desc: [
+                    "test desc",
+                    "magical desc test",
+                    "amazing super awesome desc",
+                ],
+                category: "test cat",
+                manufacturer: "test manu",
+            }
+        }
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Manage Inventory",
@@ -18,7 +36,7 @@ class ManageInventoryScreen extends Component {
                 break;
             }
             case "view-inventory": {
-                navigation.navigate("ViewInventory");
+                navigation.navigate("ViewInventory", { data: { items: this.state.testInventoryData, dest: "ManageItem" } });
                 break;
             }
             default: {

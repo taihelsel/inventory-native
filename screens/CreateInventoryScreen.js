@@ -63,7 +63,7 @@ class CreateInventoryScreen extends Component {
         this.setState({ barcode: "" });
     }
     handleAddInventoryPress = () => {
-        console.log("pressed");
+        console.log("add to inventory pressed", "add to redux store and firebase realtime db");
     }
     render() {
         return (

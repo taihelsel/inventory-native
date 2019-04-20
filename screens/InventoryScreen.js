@@ -86,12 +86,12 @@ class InventoryScreen extends React.Component {
     Object.values(inventoryItems).forEach(data => {
       if (data.title.toLowerCase().indexOf(searchText.toLowerCase()) >= 0) possibleItems.push(data);
     });
-    navigation.navigate("InventoryItemsScreen", { data: possibleItems });
+    navigation.navigate("InventoryItemsScreen", { data: { items: possibleItems, dest: "ItemOverviewScreen", referer: "InventoryOverview" } });
     updateSearchText({ text: "" });
   }
   handleCategoryTouch = data => e => {
     const { navigation } = this.props;
-    navigation.navigate("InventoryItemsScreen", data);
+    navigation.navigate("InventoryItemsScreen", { data: { items: data, dest: "ItemOverviewScreen", referer: "InventoryOverview" } });
   }
   renderInventoryCategories = (inventoryCategories) => {
     return Object.keys(inventoryCategories).map((category, i) => {

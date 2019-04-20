@@ -3,7 +3,11 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "rea
 /*Components*/
 import HyperLink from "../components/HyperLink";
 class ManageItemScreen extends Component {
-    handleEditPress = data => e => console.log("edit btn pressed");
+    handleEditPress = d => e => {
+        const { navigation } = this.props;
+        const data = { ...d, isEditMode: true };
+        navigation.navigate("CreateInventory", { data });
+    }
     handledRemovePress = data => e => console.log("remove btn pressed");
     renderImg = img => {
         if (typeof img === "undefined") {
@@ -34,28 +38,30 @@ class ManageItemScreen extends Component {
                 </View>
             );
         }
-        const { title, price, desc, img, manufacturer, videoLink } = data;
+        const { title, price, desc, img, manufacturer, videoLink, isPreview } = data;
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
                     {this.renderImg(img)}
                     <Text style={styles.title}>{title}</Text>
                     {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
-                    <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
+                    {typeof price !== "undefined" ? <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text> : null}
                     {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={videoLink} /> : null}
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {
                             return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>
                         })}
                     </View>
-                    <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                        <TouchableOpacity onPress={this.handleEditPress(data)} style={styles.editBtn} >
-                            <Text style={styles.btnText}>Edit</Text>
-                        </TouchableOpacity >
-                        <TouchableOpacity onPress={this.handledRemovePress(data)} style={styles.removeBtn}>
-                            <Text style={styles.btnText}>Delete</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {isPreview === true ? null : (
+                        <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
+                            <TouchableOpacity onPress={this.handleEditPress(data)} style={styles.editBtn} >
+                                <Text style={styles.btnText}>Edit</Text>
+                            </TouchableOpacity >
+                            <TouchableOpacity onPress={this.handledRemovePress(data)} style={styles.removeBtn}>
+                                <Text style={styles.btnText}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
 
                 </ScrollView>
             </View>

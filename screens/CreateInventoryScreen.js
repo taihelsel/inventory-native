@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableHighlight } from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
@@ -12,11 +12,30 @@ class CreateInventoryScreen extends Component {
         description: [],
         imgUrl: "",
         barcode: "",
+        isEditMode: false,
     }
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Add Inventory",
             headerLeft: (<BackButton navigation={navigation} />)
+        }
+    }
+    componentWillMount() {
+        const { navigation } = this.props;
+        const data = navigation.getParam("data", false);
+        if (data !== false) {
+            const { title, price, desc, img, manufacturer, videoLink, category, isEditMode, barcode } = data;
+            this.setState({
+                category: typeof category !== "undefined" ? category : "",
+                title: typeof title !== "undefined" ? title : "",
+                manufacturer: typeof manufacturer !== "undefined" ? manufacturer : "",
+                description: typeof desc !== "undefined" ? desc : [],
+                imgUrl: typeof img !== "undefined" ? img : "",
+                barcode: typeof barcode !== "undefined" ? barcode : "",
+                isEditMode,
+                // price: typeof price !== "undefined" ? price:"",
+                // videoLink: typeof videoLink !== "undefined" ? videoLink:"",
+            });
         }
     }
     updateTitle = title => { this.setState({ title }); }
@@ -65,6 +84,26 @@ class CreateInventoryScreen extends Component {
     handleAddInventoryPress = () => {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");
     }
+    handleSaveBtnPress = () => {
+        console.log("save btn pressed");
+    }
+    handlePreviewBtnPress = () => {
+        const { navigation } = this.props;
+        const {
+            title,
+            manufacturer,
+            category,
+            description,
+        } = this.state;
+        const data = {
+            title,
+            manufacturer,
+            category,
+            desc: description,
+            isPreview: true,
+        };
+        navigation.navigate("ManageItem", { data });
+    }
     render() {
         return (
             <View style={styles.container} >
@@ -92,11 +131,11 @@ class CreateInventoryScreen extends Component {
                     {this.state.barcode.length > 0 ? (
                         <View style={styles.barcodeContainer}>
                             <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
-                            <TouchableHighlight underlayColor="transparent" onPress={this.removeBarcode}>
+                            <TouchableOpacity underlayColor="transparent" onPress={this.removeBarcode}>
                                 <View style={styles.barcodeDelBtn}>
                                     <Text style={styles.barcodeDelBtnText}>X</Text>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         </View>
 
                     ) : (
@@ -104,15 +143,23 @@ class CreateInventoryScreen extends Component {
                                 <LargeListItem parentStyle={{ height: 45 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
                             </View>
                         )}
-                    <View style={styles.addToInventoryContainer}>
-                        <TouchableHighlight underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleAddInventoryPress}>
-                            <View style={styles.addToInventoryBtn}>
-                                <Text style={styles.addToInventoryLabel}>Add to Inventory</Text>
-                            </View>
-                        </TouchableHighlight>
-                    </View>
+
+                    {this.state.isEditMode ? (
+                        <View style={styles.footerBtnContainer}>
+                            <TouchableOpacity underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleSaveBtnPress}>
+                                <Text style={styles.btnText}>Save Changes</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : (<View style={styles.footerBtnContainer}>
+                        <TouchableOpacity onPress={this.handlePreviewBtnPress} style={styles.previewBtn}>
+                            <Text style={styles.btnText}>Preview</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleAddInventoryPress}>
+                            <Text style={styles.btnText}>Add to Inventory</Text>
+                        </TouchableOpacity>
+                    </View>)}
                 </ScrollView>
-            </View>
+            </View >
         );
     }
 };
@@ -177,20 +224,31 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
     },
-    addToInventoryContainer: {
+    footerBtnContainer: {
+        flexDirection: "row",
+        marginHorizontal: 25,
+        height: 50,
+        marginTop: 35,
+        marginBottom: 45,
+    },
+    previewBtn: {
         flex: 1,
-        marginTop: 20,
-        paddingVertical: 15,
-        backgroundColor: "green",
+        backgroundColor: "grey",
+        marginRight: 4,
+        borderRadius: 5,
+        justifyContent: "center"
     },
     addToInventoryBtn: {
         flex: 1,
-        justifyContent: "center",
+        backgroundColor: "green",
+        marginRight: 4,
+        borderRadius: 5,
+        justifyContent: "center"
     },
-    addToInventoryLabel: {
-        fontSize: 22,
+    btnText: {
         color: "white",
         textAlign: "center"
-    },
+    }
+
 });
 export default CreateInventoryScreen;

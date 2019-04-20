@@ -20,6 +20,7 @@ class ManageInventoryScreen extends Component {
                 ],
                 category: "test cat",
                 manufacturer: "test manu",
+                barcode: "0000000",
             }
         }
     }

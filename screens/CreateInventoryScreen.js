@@ -82,9 +82,8 @@ class CreateInventoryScreen extends Component {
             scrollView.scrollTo({ x: 0, y: newOffset, duration: 500 });
         })
     }
-    removeBarcode = e => {
-        this.setState({ barcode: "" });
-    }
+    removeBarcode = e => { this.setState({ barcode: "" }); }
+    removeImage = e => { this.setState({ imgUrl: "" }); }
     handleImgSelect = imgData => e => {
         console.log("NEED TO UPLOAD TO FIREBASE");
         const { image } = { ...imgData };
@@ -148,8 +147,15 @@ class CreateInventoryScreen extends Component {
                     ) : null}
                     <View style={styles.headerPreviewContainer}>
                         {this.state.imgUrl.length > 0 ? (
-                            <View style={styles.imgPreviewContainer}>
-                                <LargeItemImage imgUrl={this.state.imgUrl} />
+                            <View style={styles.imageContainer}>
+                                <View style={styles.imgPreviewContainer}>
+                                    <LargeItemImage imgUrl={this.state.imgUrl} />
+                                </View>
+                                <TouchableOpacity underlayColor="transparent" onPress={this.removeImage}>
+                                    <View style={styles.imgDeleteBtn}>
+                                        <Text style={styles.imgDeleteBtnText}>X</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         ) : null}
                         {this.state.barcode.length > 0 ? (
@@ -234,8 +240,31 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderRadius: 3,
     },
-    imgPreviewContainer: {
+    imageContainer: {
+        flexDirection: "row",
+        marginHorizontal: 5,
+        padding: 4,
+        borderStyle: "solid",
+        borderRadius: 2,
+        borderColor: "grey",
+        borderBottomWidth: 0.25,
         marginBottom: 20,
+        justifyContent: "center",
+    },
+    imagePreviewContainer: {
+        flex: 1,
+    },
+    imgDeleteBtn: {
+        width: 40,
+        height: 40,
+        justifyContent: "center",
+        backgroundColor: "red",
+        borderRadius: 3,
+    },
+    imgDeleteBtnText: {
+        fontSize: 18,
+        color: "white",
+        textAlign: "center",
     },
     barcodeContainer: {
         flexDirection: "row",

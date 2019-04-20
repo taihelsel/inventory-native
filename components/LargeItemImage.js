@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, Text } from "react-native";
 
 const LargeItemImage = ({ imgUrl }) => {
-    if (typeof imgUrl === "undefined" || imgUrl === "testing") {
+    if (typeof imgUrl === "undefined") {
         return (
             <View style={{ height: 200, width: 200, alignSelf: "center", backgroundColor: "orange" }}>
                 <Text>Err displaying image</Text>
@@ -10,12 +10,11 @@ const LargeItemImage = ({ imgUrl }) => {
         );
     }
     return (
-        <View style={{ height: 200, width: 200, marginHorizontal: 75 }}>
-            <Image style={{
-                flex: 1,
-                resizeMode: "contain"
-            }} source={{ uri: imgUrl }} />
-        </View>
+        <Image style={{
+            height: 200,
+            width: 200,
+            resizeMode: "contain"
+        }} source={{ uri: imgUrl }} />
     );
 }
 export default LargeItemImage;

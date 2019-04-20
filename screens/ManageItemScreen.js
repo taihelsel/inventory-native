@@ -26,7 +26,9 @@ class ManageItemScreen extends Component {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
-                    <LargeItemImage imgUrl={img} />
+                    <View style={{ marginHorizontal: 75 }}>
+                        <LargeItemImage imgUrl={img} />
+                    </View>
                     <Text style={styles.title}>{title}</Text>
                     {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
                     {typeof price !== "undefined" ? <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text> : null}

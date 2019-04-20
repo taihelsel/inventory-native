@@ -85,7 +85,8 @@ class CreateInventoryScreen extends Component {
         this.setState({ barcode: "" });
     }
     handleAddImagePress = () => {
-        this.setState({ imgUrl: "testing" });
+        const { navigation } = this.props;
+        navigation.navigate("ViewCameraRoll");
     }
     handleAddInventoryPress = () => {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");

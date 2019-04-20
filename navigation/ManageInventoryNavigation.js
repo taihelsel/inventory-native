@@ -8,7 +8,7 @@ import CreateInventoryScreen from "../screens/CreateInventoryScreen";
 import InventoryItemsScreen from "../screens/InventoryItemsScreen";
 import ManageItemScreen from "../screens/ManageItemScreen";
 import ScanBarcodeScreen from "../screens/ScanBarcodeScreen";
-
+import ViewCameraRollScreen from "../screens/ViewCameraRollScreen";
 const ManageInventoryNavigation = createStackNavigator({
     ManageInventory: {
         screen: ManageInventoryScreen,
@@ -36,6 +36,15 @@ const ManageInventoryNavigation = createStackNavigator({
     },
     ScanBarcode: {
         screen: ScanBarcodeScreen
+    },
+    ViewCameraRoll: {
+        screen: ViewCameraRollScreen,
+        navigationOptions: ({ navigation }) => {
+            return {
+                title: "Camera Roll",
+                headerLeft: (<BackButton navigation={navigation} />),
+            }
+        },
     }
 }, {
         initialRouteName: "ManageInventory",

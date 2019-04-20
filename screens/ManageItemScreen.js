@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
 /*Components*/
 import HyperLink from "../components/HyperLink";
+import LargeItemImage from "../components/LargeItemImage";
 class ManageItemScreen extends Component {
     handleEditPress = d => e => {
         const { navigation } = this.props;
@@ -9,23 +10,6 @@ class ManageItemScreen extends Component {
         navigation.navigate("CreateInventory", { data });
     }
     handledRemovePress = data => e => console.log("remove btn pressed");
-    renderImg = img => {
-        if (typeof img === "undefined") {
-            return (
-                <View style={{ height: 200, marginHorizontal: 75, backgroundColor: "orange" }}>
-                    <Text>Err displaying image</Text>
-                </View>
-            );
-        }
-        return (
-            <View style={{ height: 200, marginHorizontal: 75 }}>
-                <Image style={{
-                    flex: 1,
-                    resizeMode: 'contain'
-                }} source={{ uri: img }} />
-            </View>
-        );
-    }
     render() {
         const { navigation } = this.props;
         const data = navigation.getParam("data", false);
@@ -42,7 +26,7 @@ class ManageItemScreen extends Component {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
-                    {this.renderImg(img)}
+                    <LargeItemImage imgUrl={img} />
                     <Text style={styles.title}>{title}</Text>
                     {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
                     {typeof price !== "undefined" ? <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text> : null}

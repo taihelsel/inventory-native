@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
-import LargeListItem from "../components/LargeListItem";
+import LargeItemImage from "../components/LargeItemImage";
 class CreateInventoryScreen extends Component {
     state = {
         title: "",
@@ -45,7 +45,6 @@ class CreateInventoryScreen extends Component {
     updateTitle = title => { this.setState({ title }); }
     updateManufacturer = manufacturer => { this.setState({ manufacturer }); }
     updateCategory = category => { this.setState({ category }); }
-    updateImgUrl = imgUrl => { this.setState({ imgUrl }); }
     addDescriptionItem = item => {
         const desc = [...this.state.description];
         desc.push(item);
@@ -85,6 +84,9 @@ class CreateInventoryScreen extends Component {
     removeBarcode = e => {
         this.setState({ barcode: "" });
     }
+    handleAddImagePress = () => {
+        this.setState({ imgUrl: "testing" });
+    }
     handleAddInventoryPress = () => {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");
     }
@@ -112,6 +114,37 @@ class CreateInventoryScreen extends Component {
         return (
             <View style={styles.container} >
                 <ScrollView contentContainerStyle={styles.contentContainer} contentOffset={this.state.contentOffset} ref="_scrollView">
+                    {this.state.imgUrl.length < 1 || this.state.barcode.length < 1 ? (
+                        <View style={styles.headerBtnContainer}>
+                            {this.state.imgUrl.length < 1 ? (
+                                <TouchableOpacity underlayColor="transparent" style={styles.addImgBtn} onPress={this.handleAddImagePress}>
+                                    <Text style={styles.btnText}>Add Image</Text>
+                                </TouchableOpacity>
+                            ) : null}
+                            {this.state.barcode.length < 1 ? (
+                                <TouchableOpacity underlayColor="transparent" style={styles.addBarcodeBtn} onPress={this.handleBarcodeBtnPress}>
+                                    <Text style={styles.btnText}>Add Barcode</Text>
+                                </TouchableOpacity>
+                            ) : null}
+                        </View>
+                    ) : null}
+                    <View style={styles.headerPreviewContainer}>
+                        {this.state.imgUrl.length > 0 ? (
+                            <View style={styles.imgPreviewContainer}>
+                                <LargeItemImage imgUrl={this.state.imgUrl} />
+                            </View>
+                        ) : null}
+                        {this.state.barcode.length > 0 ? (
+                            <View style={styles.barcodeContainer}>
+                                <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
+                                <TouchableOpacity underlayColor="transparent" onPress={this.removeBarcode}>
+                                    <View style={styles.barcodeDelBtn}>
+                                        <Text style={styles.barcodeDelBtnText}>X</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        ) : null}
+                    </View>
                     <View style={styles.inputWrapper}>
                         <Text style={styles.textLabel}>Title</Text>
                         <TextInput ref="_titleInput" onBlur={this.onInputBlur("_titleInput")} onFocus={this.onInputFocus("_titleInput")} style={styles.textInput} value={this.state.title} onChangeText={this.updateTitle} />
@@ -128,29 +161,9 @@ class CreateInventoryScreen extends Component {
                         <Text style={styles.textLabel}>Category</Text>
                         <TextInput ref="_categoryInput" onBlur={this.onInputBlur("_categoryInput")} onFocus={this.onInputFocus("_categoryInput")} style={styles.textInput} value={this.state.category} onChangeText={this.updateCategory} />
                     </View>
-                    <View style={styles.inputWrapper}>
-                        <Text style={styles.textLabel}>Image URL</Text>
-                        <TextInput ref="_imgUrlInput" onBlur={this.onInputBlur("_imgUrlInput")} onFocus={this.onInputFocus("_imgUrlInput")} style={styles.textInput} value={this.state.imgUrl} onChangeText={this.updateImgUrl} />
-                    </View>
-                    {this.state.barcode.length > 0 ? (
-                        <View style={styles.barcodeContainer}>
-                            <Text style={styles.barcodeLabel}>Barcode: {this.state.barcode}</Text>
-                            <TouchableOpacity underlayColor="transparent" onPress={this.removeBarcode}>
-                                <View style={styles.barcodeDelBtn}>
-                                    <Text style={styles.barcodeDelBtnText}>X</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-
-                    ) : (
-                            <View style={styles.listItemWrapper}>
-                                <LargeListItem parentStyle={{ height: 45 }} title={"Scan Barcode"} handlePress={this.handleBarcodeBtnPress} />
-                            </View>
-                        )}
-
                     {this.state.isEditMode ? (
                         <View style={styles.footerBtnContainer}>
-                            <TouchableOpacity underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleSaveBtnPress}>
+                            <TouchableOpacity underlayColor="transparent" style={styles.greenBtn} onPress={this.handleSaveBtnPress}>
                                 <Text style={styles.btnText}>Save Changes</Text>
                             </TouchableOpacity>
                         </View>
@@ -158,7 +171,7 @@ class CreateInventoryScreen extends Component {
                         <TouchableOpacity onPress={this.handlePreviewBtnPress} style={styles.previewBtn}>
                             <Text style={styles.btnText}>Preview</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity underlayColor="transparent" style={styles.addToInventoryBtn} onPress={this.handleAddInventoryPress}>
+                        <TouchableOpacity underlayColor="transparent" style={styles.greenBtn} onPress={this.handleAddInventoryPress}>
                             <Text style={styles.btnText}>Add to Inventory</Text>
                         </TouchableOpacity>
                     </View>)}
@@ -174,6 +187,8 @@ const styles = StyleSheet.create({
     contentContainer: {
         justifyContent: "flex-start",
         paddingTop: 30,
+    },
+    headerPreviewContainer: {
     },
     inputWrapper: {
         marginHorizontal: 10,
@@ -201,6 +216,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderRadius: 3,
     },
+    imgPreviewContainer: {
+        marginBottom: 20,
+    },
     barcodeContainer: {
         flexDirection: "row",
         marginHorizontal: 5,
@@ -209,6 +227,7 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         borderColor: "grey",
         borderWidth: 0.25,
+        marginBottom: 20,
     },
     barcodeLabel: {
         textAlign: "left",
@@ -228,12 +247,32 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
     },
+    headerBtnContainer: {
+        flexDirection: "row",
+        marginHorizontal: 25,
+        height: 50,
+        marginBottom: 35,
+    },
     footerBtnContainer: {
         flexDirection: "row",
         marginHorizontal: 25,
         height: 50,
         marginTop: 35,
         marginBottom: 45,
+    },
+    addImgBtn: {
+        flex: 1,
+        backgroundColor: "orange",
+        marginRight: 4,
+        borderRadius: 5,
+        justifyContent: "center"
+    },
+    addBarcodeBtn: {
+        flex: 1,
+        backgroundColor: "grey",
+        marginRight: 4,
+        borderRadius: 5,
+        justifyContent: "center"
     },
     previewBtn: {
         flex: 1,
@@ -242,7 +281,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: "center"
     },
-    addToInventoryBtn: {
+    greenBtn: {
         flex: 1,
         backgroundColor: "green",
         marginRight: 4,

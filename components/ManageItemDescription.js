@@ -4,6 +4,12 @@ import { View, TouchableHighlight, Text, StyleSheet, TextInput } from "react-nat
 class ManageItemDescription extends Component {
     state = {
         newItem: "",
+        descInputRef: null,
+    }
+    setRef = ref => {
+        const { setDescRef } = this.props;
+        this.setState({ descInputRef: ref });
+        setDescRef(ref);
     }
     handleAddItemPress = e => {
         const { newItem } = this.state;
@@ -18,7 +24,7 @@ class ManageItemDescription extends Component {
         removeItem(itemText);
     }
     render() {
-        const { desc } = this.props;
+        const { desc, onBlur, onFocus } = this.props;
         return (
             <View style={styles.container}>
                 <View style={styles.descList}>
@@ -36,7 +42,7 @@ class ManageItemDescription extends Component {
                     })}
                 </View>
                 <View style={styles.addItemContainer}>
-                    <TextInput value={this.state.newItem} onChangeText={(newItem) => { this.setState({ newItem }) }} style={styles.addItemInput} />
+                    <TextInput ref={this.setRef} onBlur={onBlur(this.state.descInputRef)} onFocus={onFocus(this.state.descInputRef)} value={this.state.newItem} onChangeText={(newItem) => { this.setState({ newItem }) }} style={styles.addItemInput} />
                     <TouchableHighlight underlayColor="transparent" onPress={this.handleAddItemPress}>
                         <View style={styles.addItemButton}>
                             <Text style={styles.addItemLabel}>Add</Text>

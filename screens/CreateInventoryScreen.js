@@ -14,6 +14,10 @@ class CreateInventoryScreen extends Component {
         barcode: "",
         isEditMode: false,
     }
+    descInputRef = React.createRef();
+    setDescRef = (ref) => {
+        this.descInputRef = ref;
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Add Inventory",
@@ -60,8 +64,8 @@ class CreateInventoryScreen extends Component {
         const { navigation } = this.props;
         navigation.navigate("ScanBarcode", { data: { handleBarcodeScan: this.handleBarcodeScan } });
     }
-    onInputFocus = refId => e => {
-        const c = this.refs[refId];
+    onInputFocus = ref => e => {
+        const c = typeof this.refs[ref] === "undefined" ? ref : this.refs[ref];
         const scrollView = this.refs._scrollView;
         const yOffset = 100;
         c.measure((fx, fy, width, height, px, py) => {
@@ -69,8 +73,8 @@ class CreateInventoryScreen extends Component {
             scrollView.scrollTo({ x: 0, y: newOffset, duration: 500 });
         })
     }
-    onInputBlur = refId => e => {
-        const c = this.refs[refId];
+    onInputBlur = ref => e => {
+        const c = typeof this.refs[ref] === "undefined" ? ref : this.refs[ref];
         const scrollView = this.refs._scrollView;
         const yOffset = 100;
         c.measure((fx, fy, width, height, px, py) => {
@@ -114,7 +118,7 @@ class CreateInventoryScreen extends Component {
                     </View>
                     <View style={styles.inputWrapper}>
                         <Text style={styles.textLabel}>Desc</Text>
-                        <ManageItemDescription desc={this.state.description} addItem={this.addDescriptionItem} removeItem={this.removeDescriptionItem} />
+                        <ManageItemDescription setDescRef={this.setDescRef} onBlur={this.onInputBlur} onFocus={this.onInputFocus} desc={this.state.description} addItem={this.addDescriptionItem} removeItem={this.removeDescriptionItem} />
                     </View>
                     <View style={styles.inputWrapper}>
                         <Text style={styles.textLabel}>Manufacturer</Text>

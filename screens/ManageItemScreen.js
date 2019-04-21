@@ -10,6 +10,15 @@ class ManageItemScreen extends Component {
         navigation.navigate("CreateInventory", { data });
     }
     handledRemovePress = data => e => console.log("remove btn pressed");
+    renderPrice = price => {
+        return typeof price !== "undefined" ?
+            typeof price === "object" ? (
+                <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
+            ) : isNaN(parseFloat(price)) === false ? (
+                <Text style={styles.price}>{`$${price}`}</Text>
+            ) : null
+            : null;
+    }
     render() {
         const { navigation } = this.props;
         const data = navigation.getParam("data", false);
@@ -31,7 +40,7 @@ class ManageItemScreen extends Component {
                     </View>
                     <Text style={styles.title}>{title}</Text>
                     {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
-                    {typeof price !== "undefined" ? <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text> : null}
+                    {this.renderPrice(price)}
                     {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={videoLink} /> : null}
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {

@@ -8,6 +8,7 @@ import LargeItemImage from "../components/LargeItemImage";
 class CreateInventoryScreen extends Component {
     state = {
         title: "",
+        price: null,
         manufacturer: "",
         category: "",
         description: [],
@@ -30,6 +31,16 @@ class CreateInventoryScreen extends Component {
         const data = navigation.getParam("data", false);
         if (data !== false) {
             const { title, price, desc, img, manufacturer, videoLink, category, isEditMode, barcode } = data;
+            let newPrice = typeof price !== "undefined" ? (
+                typeof price !== "object" ? (
+                    price.toString()
+                ) : (
+                        {
+                            min: price.min.toString(),
+                            max: price.max.toString(),
+                        }
+                    )
+            ) : null
             this.setState({
                 category: typeof category !== "undefined" ? category : "",
                 title: typeof title !== "undefined" ? title : "",
@@ -38,7 +49,7 @@ class CreateInventoryScreen extends Component {
                 imgUrl: typeof img !== "undefined" ? img : "",
                 barcode: typeof barcode !== "undefined" ? barcode : "",
                 isEditMode,
-                // price: typeof price !== "undefined" ? price:"",
+                price: newPrice,
                 // videoLink: typeof videoLink !== "undefined" ? videoLink:"",
             });
         }
@@ -84,6 +95,8 @@ class CreateInventoryScreen extends Component {
     }
     removeBarcode = e => { this.setState({ barcode: "" }); }
     removeImage = e => { this.setState({ imgUrl: "" }); }
+    handleFixedPricePress = e => { this.setState({ price: "" }); }
+    handlePriceRangePress = e => { this.setState({ price: { min: "", max: "" } }); }
     handleImgSelect = imgData => e => {
         console.log("NEED TO UPLOAD TO FIREBASE");
         const { image } = { ...imgData };
@@ -114,18 +127,111 @@ class CreateInventoryScreen extends Component {
         const { navigation } = this.props;
         const {
             title,
+            price,
             manufacturer,
             category,
             description,
         } = this.state;
         const data = {
             title,
+            price,
             manufacturer,
             category,
             desc: description,
             isPreview: true,
         };
         navigation.navigate("ManageItem", { data });
+    }
+    removePrice = e => { this.setState({ price: null }); }
+    updateFixedPrice = price => {
+        const priceNum = parseFloat(price);
+        if (price[price.length - 1] === "." && price.indexOf(".") !== price.length - 1) return null;
+        if (isNaN(priceNum) === false) {
+            if (price.length > 12) return null;
+            this.setState({ price: price })
+        }
+    }
+    updateMinPrice = minPrice => {
+        const priceNum = parseFloat(minPrice);
+        if (minPrice[minPrice.length - 1] === "." && minPrice.indexOf(".") !== minPrice.length - 1) return null;
+        if (isNaN(priceNum) === false) {
+            if (minPrice.length > 12) return null;
+            const newPrice = { ...this.state.price }
+            newPrice.min = minPrice;
+            this.setState({ price: newPrice });
+        }
+    }
+    updateMaxPrice = maxPrice => {
+        const priceNum = parseFloat(maxPrice);
+        if (maxPrice[maxPrice.length - 1] === "." && maxPrice.indexOf(".") !== maxPrice.length - 1) return null;
+        if (isNaN(priceNum) === false) {
+            const newPrice = { ...this.state.price }
+            newPrice.max = maxPrice;
+            this.setState({ price: newPrice });
+        }
+    }
+    renderPriceInput = price => {
+        if (price === null) return null;
+        if (typeof price !== "object") {
+            //is fixed
+            const priceString = price.toString();
+            return (
+                <View style={styles.barcodeContainer}>
+                    <TextInput
+                        placeholder={"Enter a fixed price"}
+                        onChangeText={this.updateFixedPrice}
+                        value={priceString}
+                        style={styles.barcodeLabel}
+                        keyboardType="numeric"
+                    />
+                    <TouchableOpacity underlayColor="transparent" onPress={this.removePrice}>
+                        <View style={styles.barcodeDelBtn}>
+                            <Text style={styles.barcodeDelBtnText}>X</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        } else {
+            //is range
+            const { min, max } = this.state.price;
+            if (typeof min === "undefined" || typeof max === "undefined") {
+                this.setState({
+                    price: {
+                        min: "",
+                        max: "",
+                    }
+                });
+            }
+            return (
+
+                <View style={styles.barcodeContainer}>
+                    <TextInput
+                        placeholder={"Enter a min"}
+                        onChangeText={this.updateMinPrice}
+                        value={min}
+                        style={[styles.priceRangeInput, {
+                            borderStyle: "solid",
+                            borderColor: "grey",
+                            borderRightWidth: 0.25,
+                        }]}
+                        keyboardType="numeric"
+                    />
+                    <TextInput
+                        placeholder={"Enter a max"}
+                        onChangeText={this.updateMaxPrice}
+                        value={max}
+                        style={styles.priceRangeInput}
+                        keyboardType="numeric"
+                    />
+                    <TouchableOpacity underlayColor="transparent" onPress={this.removePrice}>
+                        <View style={styles.barcodeDelBtn}>
+                            <Text style={styles.barcodeDelBtnText}>X</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+            )
+        }
     }
     render() {
         return (
@@ -173,6 +279,20 @@ class CreateInventoryScreen extends Component {
                         <Text style={styles.textLabel}>Title</Text>
                         <TextInput ref="_titleInput" onBlur={this.onInputBlur("_titleInput")} onFocus={this.onInputFocus("_titleInput")} style={styles.textInput} value={this.state.title} onChangeText={this.updateTitle} />
                     </View>
+                    {this.state.price === null ? (
+                        <View style={styles.headerBtnContainer}>
+                            <TouchableOpacity underlayColor="transparent" style={styles.addImgBtn} onPress={this.handleFixedPricePress}>
+                                <Text style={styles.btnText}>Add Fixed Price</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity underlayColor="transparent" style={styles.addBarcodeBtn} onPress={this.handlePriceRangePress}>
+                                <Text style={styles.btnText}>Add Price Range</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ) : <View style={styles.inputWrapper}>
+                            <Text style={styles.textLabel}>Price</Text>
+                            {this.renderPriceInput(this.state.price)}
+                        </View>}
+
                     <View style={styles.inputWrapper}>
                         <Text style={styles.textLabel}>Desc</Text>
                         <ManageItemDescription setDescRef={this.setDescRef} onBlur={this.onInputBlur} onFocus={this.onInputFocus} desc={this.state.description} addItem={this.addDescriptionItem} removeItem={this.removeDescriptionItem} />
@@ -338,7 +458,12 @@ const styles = StyleSheet.create({
     btnText: {
         color: "white",
         textAlign: "center"
+    },
+    priceRangeInput: {
+        flex: 1,
+        textAlign: "left",
+        fontSize: 18,
+        margin: 10,
     }
-
 });
 export default CreateInventoryScreen;

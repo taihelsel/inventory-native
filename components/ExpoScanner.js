@@ -35,13 +35,13 @@ class ExpoScanner extends Component {
             // Do something for EAN
             console.log(`EAN scanned: ${barcodeID}`);
             this.resetScanner();
-            onScan({ data: barcodeID});
+            onScan({ data: barcodeID });
         } else if (type.startsWith('org.iso.QRCode')) {
             // Do samething for QRCode
             console.log(`QRCode scanned: ${barcodeID}`);
             this.resetScanner();
         } else {
-            this.renderAlert(
+            console.log(
                 'This barcode is not supported.',
                 `${type} : ${barcodeID}`,
             );

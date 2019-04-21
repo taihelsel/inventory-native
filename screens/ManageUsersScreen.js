@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
 /*Components*/
 import BackButton from "../components/BackButton";
-import LargeListItem from "../components/LargeListItem";
+import UserList from "../components/UserList";
 class ManageUsersScreen extends Component {
     state = {
         testUserData: [
@@ -18,35 +18,13 @@ class ManageUsersScreen extends Component {
             headerLeft: (<BackButton navigation={navigation} dest={"AdminHome"} />)
         }
     }
-    handlePress = navigation => option => {
-        switch (option) {
-            case "create-user": {
-                console.log("create user btn pressed");
-                break;
-            }
-            case "view-users": {
-                const data = {
-                    users: [...this.state.testUserData]
-                };
-                navigation.navigate("UserList", { data });
-                break;
-            }
-            default: {
-                console.log("error: item not found in admin navigation");
-                break;
-            }
-        }
+    handleUserTouch = user => e => {
+        console.log("user touched", user);
     }
     render() {
-        const { navigation } = this.props;
         return (
             <View style={styles.container}>
-                <View style={styles.listItemWrapper}>
-                    <LargeListItem title={"Add User"} handlePress={this.handlePress(navigation)} option={"create-user"} />
-                </View>
-                <View style={styles.listItemWrapper}>
-                    <LargeListItem title={"View Users"} handlePress={this.handlePress(navigation)} option={"view-users"} />
-                </View>
+                <UserList users={this.state.testUserData} handleTouch={this.handleUserTouch} />
             </View>
         );
     }

@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 /*Screens*/
 import ManageUsersScreen from "../screens/ManageUsersScreen";
-import UserListScreen from "../screens/UserListScreen";
+import CreateUserScreen from "../screens/CreateUserScreen";
 
 const ManageUsersNavigation = createStackNavigator({
     ManageUsers: {
@@ -10,9 +10,9 @@ const ManageUsersNavigation = createStackNavigator({
             title: "Manage Users",
         }
     },
-    UserList: {
-        screen: UserListScreen
-    }
+    CreateUser: {
+        screen: CreateUserScreen
+    },
 }, {
         initialRouteName: "ManageUsers",
     }

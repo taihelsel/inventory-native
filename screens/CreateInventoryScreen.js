@@ -78,7 +78,7 @@ class CreateInventoryScreen extends Component {
     onInputFocus = ref => e => {
         const c = typeof this.refs[ref] === "undefined" ? ref : this.refs[ref];
         const scrollView = this.refs._scrollView;
-        const yOffset = 100;
+        const yOffset = 200;
         c.measure((fx, fy, width, height, px, py) => {
             const newOffset = py - yOffset;
             scrollView.scrollTo({ x: 0, y: newOffset, duration: 500 });

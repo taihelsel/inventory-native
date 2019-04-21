@@ -2,10 +2,27 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 /*Components*/
 import LargeListItem from "../components/LargeListItem";
+const testInventoryData = {
+    "0000000": {
+        title: "test title",
+        price: {
+            min: 0,
+            max: 5,
+        },
+        desc: [
+            "test desc",
+            "magical desc test",
+            "amazing super awesome desc",
+        ],
+        category: "test cat",
+        manufacturer: "test manu",
+        barcode: "0000000",
+    }
+};
 const handlePress = navigation => option => {
     switch (option) {
         case "manage-inventory": {
-            navigation.navigate("ManageInventory");
+            navigation.navigate("ManageInventory", { data: { items: testInventoryData, dest: "ManageItem" } });
             break;
         }
         case "manage-users": {

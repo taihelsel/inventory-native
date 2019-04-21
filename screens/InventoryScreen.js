@@ -67,6 +67,7 @@ class InventoryScreen extends React.Component {
     const keys = Object.values(inventory), { setInventory } = this.props;
     let categories = {}, items = {};
     keys.forEach((item) => {
+      console.log(item);
       if (typeof categories[item.category] === "undefined") categories[item.category] = {};
       if (typeof items[item.barcode] === "undefined") items[item.barcode] = { ...item };
       const category = categories[item.category];
@@ -91,7 +92,8 @@ class InventoryScreen extends React.Component {
   }
   handleCategoryTouch = data => e => {
     const { navigation } = this.props;
-    navigation.navigate("InventoryItemsScreen", { data: { items: data, dest: "ItemOverviewScreen", referer: "InventoryOverview" } });
+    const items = data.data;
+    navigation.navigate("InventoryItemsScreen", { data: { items, dest: "ItemOverviewScreen", referer: "InventoryOverview" } });
   }
   renderInventoryCategories = (inventoryCategories) => {
     return Object.keys(inventoryCategories).map((category, i) => {

@@ -35,6 +35,7 @@ export default InventoryItemsScreen = ({ navigation }) => {
         );
     }
     let { items, dest, referer } = data;
+    console.log(items);
     const fallbackDest = "ItemOverviewScreen";
     if (typeof dest === "undefined") {
         console.log("dest provided was undefined. Navigating to fallback dest");

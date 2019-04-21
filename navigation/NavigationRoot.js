@@ -27,7 +27,7 @@ const navigationRootSwitchStack = createSwitchNavigator({
         screen: LoadingScreen
     },
 }, {
-        initialRouteName: "Admin", /*change back to loading screen once admin route is complete*/
+        initialRouteName: "Loading",
     }
 );
 

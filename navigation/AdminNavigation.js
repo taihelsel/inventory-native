@@ -1,4 +1,7 @@
+import React from "react";
 import { createStackNavigator } from "react-navigation";
+/*Components*/
+import BackButton from "../components/BackButton";
 /*Screens*/
 import AdminHomeScreen from "../screens/AdminHomeScreen";
 /*Navigation Stacks*/
@@ -7,9 +10,12 @@ import ManageUsersNavigation from "./ManageUsersNavigation";
 export default createStackNavigator({
     AdminHome: {
         screen: AdminHomeScreen,
-        navigationOptions: {
-            title: "Admin Pannel",
-        }
+        navigationOptions: ({ navigation }) => {
+            return {
+                title: "Admin Pannel",
+                headerLeft: (<BackButton navigation={navigation} dest={"ShopUserType"} />),
+            }
+        },
     },
     ManageInventory: {
         screen: ManageInventoryNavigation,

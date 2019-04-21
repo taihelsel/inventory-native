@@ -131,8 +131,10 @@ class CreateInventoryScreen extends Component {
             manufacturer,
             category,
             description,
+            imgUrl,
         } = this.state;
         const data = {
+            img: imgUrl,
             title,
             price,
             manufacturer,
@@ -149,24 +151,32 @@ class CreateInventoryScreen extends Component {
         if (isNaN(priceNum) === false) {
             if (price.length > 12) return null;
             this.setState({ price: price })
+        } else {
+            this.setState({ price: "" });
         }
     }
     updateMinPrice = minPrice => {
         const priceNum = parseFloat(minPrice);
+        const newPrice = { ...this.state.price }
         if (minPrice[minPrice.length - 1] === "." && minPrice.indexOf(".") !== minPrice.length - 1) return null;
         if (isNaN(priceNum) === false) {
             if (minPrice.length > 12) return null;
-            const newPrice = { ...this.state.price }
             newPrice.min = minPrice;
+            this.setState({ price: newPrice });
+        } else {
+            newPrice.min = "";
             this.setState({ price: newPrice });
         }
     }
     updateMaxPrice = maxPrice => {
         const priceNum = parseFloat(maxPrice);
+        const newPrice = { ...this.state.price }
         if (maxPrice[maxPrice.length - 1] === "." && maxPrice.indexOf(".") !== maxPrice.length - 1) return null;
         if (isNaN(priceNum) === false) {
-            const newPrice = { ...this.state.price }
             newPrice.max = maxPrice;
+            this.setState({ price: newPrice });
+        } else {
+            newPrice.max = "";
             this.setState({ price: newPrice });
         }
     }

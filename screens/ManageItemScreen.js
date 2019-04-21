@@ -11,7 +11,7 @@ class ManageItemScreen extends Component {
     }
     handledRemovePress = data => e => console.log("remove btn pressed");
     renderPrice = price => {
-        return typeof price !== "undefined" ?
+        return price !== null && typeof price !== "undefined" ?
             typeof price === "object" ? (
                 <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
             ) : isNaN(parseFloat(price)) === false ? (
@@ -32,6 +32,7 @@ class ManageItemScreen extends Component {
             );
         }
         const { title, price, desc, img, manufacturer, videoLink, isPreview } = data;
+        console.log(img);
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -57,7 +58,6 @@ class ManageItemScreen extends Component {
                             </TouchableOpacity>
                         </View>
                     )}
-
                 </ScrollView>
             </View>
         );

@@ -1,10 +1,9 @@
 import { createStackNavigator } from "react-navigation";
 /*Screens*/
 import AdminHomeScreen from "../screens/AdminHomeScreen";
-import ManageRestockScreen from "../screens/ManageRestockScreen";
-import ManageUsersScreen from "../screens/ManageUsersScreen";
 /*Navigation Stacks*/
 import ManageInventoryNavigation from "./ManageInventoryNavigation";
+import ManageUsersNavigation from "./ManageUsersNavigation";
 export default createStackNavigator({
     AdminHome: {
         screen: AdminHomeScreen,
@@ -15,11 +14,8 @@ export default createStackNavigator({
     ManageInventory: {
         screen: ManageInventoryNavigation,
     },
-    ManageRestock: {
-        screen: ManageRestockScreen,
-    },
     ManageUsers: {
-        screen: ManageUsersScreen,
+        screen: ManageUsersNavigation,
     },
 }, {
         initialRouteName: "AdminHome",

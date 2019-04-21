@@ -8,10 +8,6 @@ const handlePress = navigation => option => {
             navigation.navigate("ManageInventory");
             break;
         }
-        case "manage-restock": {
-            navigation.navigate("ManageRestock");
-            break;
-        }
         case "manage-users": {
             navigation.navigate("ManageUsers");
             break;
@@ -27,9 +23,6 @@ const AdminHomeScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.listItemWrapper}>
                 <LargeListItem title={"Manage Inventory"} handlePress={handlePress(navigation)} option={"manage-inventory"} />
-            </View>
-            <View style={styles.listItemWrapper}>
-                <LargeListItem title={"Manage Restock"} handlePress={handlePress(navigation)} option={"manage-restock"} />
             </View>
             <View style={styles.listItemWrapper}>
                 <LargeListItem title={"Manage Users"} handlePress={handlePress(navigation)} option={"manage-users"} />

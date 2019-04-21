@@ -4,6 +4,14 @@ import { View, StyleSheet } from "react-native";
 import BackButton from "../components/BackButton";
 import LargeListItem from "../components/LargeListItem";
 class ManageUsersScreen extends Component {
+    state = {
+        testUserData: [
+            {
+                email: "test@test.com",
+                group: "admin",
+            }
+        ]
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Manage Users",
@@ -17,7 +25,10 @@ class ManageUsersScreen extends Component {
                 break;
             }
             case "view-users": {
-                console.log("view users btn pressed");
+                const data = {
+                    users: [...this.state.testUserData]
+                };
+                navigation.navigate("UserList", { data });
                 break;
             }
             default: {

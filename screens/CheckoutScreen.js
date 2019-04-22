@@ -5,6 +5,10 @@ import { connect } from "react-redux";
 import { updateCart, deleteCartItem } from "../actions/cartActions";
 /*Components*/
 import InventoryListItemSwipeout from "../components/InventoryListItemSwipeout";
+const getPrice = (k, price) => {
+  if (typeof price === "object") return parseFloat(price[k]);
+  else return (parseFloat(price))
+}
 const updateCartTotal = (maxPrice, minPrice, cartData, updateCart) => (barcode, amntTxt) => {
   // setting vars
   let currentCartMax = maxPrice,
@@ -21,12 +25,12 @@ const updateCartTotal = (maxPrice, minPrice, cartData, updateCart) => (barcode, 
   if (currentAmnt === newAmnt) return false;
   if (currentAmnt > newAmnt) {
     //subtract from current Cart min/max
-    newCartMax = currentCartMax - (price.max * diff);
-    newCartMin = currentCartMin - (price.min * diff);
+    newCartMax = currentCartMax - (getPrice("max", price) * diff);
+    newCartMin = currentCartMin - (getPrice("min", price) * diff);
   } else {
     //add to current Cart min/max
-    newCartMax = currentCartMax + (price.max * diff);
-    newCartMin = currentCartMin + (price.min * diff);
+    newCartMax = currentCartMax + (getPrice("max", price) * diff);
+    newCartMin = currentCartMin + (getPrice("min", price) * diff);
   }
   // updating with new data
   itemData.amnt = newAmnt;

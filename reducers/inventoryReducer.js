@@ -1,4 +1,4 @@
-import { SET_INVENTORY, UPDATE_SEARCH_TEXT } from "../actions/actionTypes";
+import { SET_INVENTORY, UPDATE_SEARCH_TEXT, UPDATE_INVENTORY_ITEM } from "../actions/actionTypes";
 const initState = {
     searchText: "",
     inventoryCategories: {},
@@ -19,6 +19,18 @@ const inventoryReducer = (state = initState, action) => {
             return {
                 ...state,
                 searchText: text,
+            }
+        }
+        case UPDATE_INVENTORY_ITEM: {
+            const { barcode, category, newData } = action.payload;
+            const inventoryItems = { ...state.inventoryItems };
+            const inventoryCategories = { ...state.inventoryCategories };
+            inventoryCategories[category][inventoryItems[barcode].title] = { ...newData };
+            inventoryItems[barcode] = { ...newData };
+            return {
+                ...state,
+                inventoryItems,
+                inventoryCategories,
             }
         }
         default: return state;

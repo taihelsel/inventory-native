@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import { updateInventoryItem } from "../actions/inventoryActions";
 import { ImageManipulator } from "expo";
+import { connect } from "react-redux";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
@@ -15,6 +17,8 @@ class CreateInventoryScreen extends Component {
         imgUrl: "",
         barcode: "",
         isEditMode: false,
+        originalBarcode: "",
+        originalCategory: "",
     }
     descInputRef = React.createRef();
     setDescRef = (ref) => {
@@ -48,6 +52,8 @@ class CreateInventoryScreen extends Component {
                 description: typeof desc !== "undefined" ? desc : [],
                 imgUrl: typeof img !== "undefined" ? img : "",
                 barcode: typeof barcode !== "undefined" ? barcode : "",
+                originalBarcode: typeof barcode !== "undefined" ? barcode : null,
+                originalCategory: typeof category !== "undefined" ? category : null,
                 isEditMode,
                 price: newPrice,
                 // videoLink: typeof videoLink !== "undefined" ? videoLink:"",
@@ -121,7 +127,34 @@ class CreateInventoryScreen extends Component {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");
     }
     handleSaveBtnPress = () => {
-        console.log("save btn pressed");
+        const { updateInventoryItem, navigation } = this.props;
+        const {
+            category,
+            title,
+            manufacturer,
+            description,
+            imgUrl,
+            barcode,
+            originalBarcode,
+            originalCategory,
+            price,
+        } = this.state;
+        if (originalBarcode === null || originalCategory === null) {
+            console.log("error getting original barcode or category in create inventory screen");
+            return null;
+        }
+        updateInventoryItem({
+            barcode: originalBarcode, category: originalCategory, newData: {
+                category,
+                title,
+                manufacturer,
+                desc: description,
+                img: imgUrl,
+                barcode,
+                price,
+            }
+        });
+        navigation.navigate("ManageInventory", { data: { items: false, dest: "ManageItem" } });
     }
     handlePreviewBtnPress = () => {
         const { navigation } = this.props;
@@ -476,4 +509,7 @@ const styles = StyleSheet.create({
         margin: 10,
     }
 });
-export default CreateInventoryScreen;
+const mapDispatchToPros = dispatch => ({
+    updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) }
+})
+export default connect(null, mapDispatchToPros)(CreateInventoryScreen);

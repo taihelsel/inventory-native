@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text } from "react-native";
+import { connect } from "react-redux";
 /*Components*/
 import InventoryListItem from "../components/InventoryListItem";
 import InventoryIconItem from "../components/InventoryIconItem";
@@ -17,7 +18,8 @@ const renderItems = (items, nav, dest, referer) => {
         return viewType === "list" ? <InventoryListItem isInventoryView={referer === "InventoryOverview"} index={i + 1} length={itemValues.length} handleTouch={handleListItemTouch(nav, dest)} key={`${data.title}-${i}`} data={data} /> : <InventoryIconItem handleTouch={handleIconItemTouch(nav)} key={`${data.title}-${i}`} data={data} title={data.title} />;
     });
 }
-export default InventoryItemsScreen = ({ navigation }) => {
+
+const InventoryItemsScreen = ({ navigation, inventory }) => {
     /*           
     data should contain:
         items: an object containing data to be displayed,
@@ -40,14 +42,18 @@ export default InventoryItemsScreen = ({ navigation }) => {
         console.log("dest provided was undefined. Navigating to fallback dest");
         dest = fallbackDest;
     }
-    return Object.keys(items).length ? (
+    return items !== false && Object.keys(items).length ? (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles["contentContainer" + viewType]}>
                 {renderItems(items, navigation, dest, referer)}
             </ScrollView>
         </View>
     ) : (
-            <Text style={{ textAlign: "center", fontSize: 22 }}>No items found</Text>
+            <View style={styles.container}>
+                <ScrollView contentContainerStyle={styles["contentContainer" + viewType]}>
+                    {renderItems(inventory, navigation, dest, referer)}
+                </ScrollView>
+            </View>
         );
 }
 const styles = StyleSheet.create({
@@ -65,3 +71,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly",
     }
 });
+const mapStateToProps = ({ inventory }) => ({
+    inventory: inventory.inventoryItems
+});
+
+export default connect(mapStateToProps, null)(InventoryItemsScreen)

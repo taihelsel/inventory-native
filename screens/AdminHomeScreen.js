@@ -1,13 +1,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { connect } from "react-redux";
 /*Components*/
 import LargeListItem from "../components/LargeListItem";
 
-const handlePress = (navigation, items) => option => {
+const handlePress = (navigation) => option => {
     switch (option) {
         case "manage-inventory": {
-            navigation.navigate("ManageInventory", { data: { items, dest: "ManageItem" } });
+            navigation.navigate("ManageInventory", { data: { items: false, dest: "ManageItem" } });
             break;
         }
         case "manage-users": {
@@ -20,11 +19,11 @@ const handlePress = (navigation, items) => option => {
         }
     }
 }
-const AdminHomeScreen = ({ navigation, inventory }) => {
+const AdminHomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.listItemWrapper}>
-                <LargeListItem title={"Manage Inventory"} handlePress={handlePress(navigation, inventory)} option={"manage-inventory"} />
+                <LargeListItem title={"Manage Inventory"} handlePress={handlePress(navigation)} option={"manage-inventory"} />
             </View>
             <View style={styles.listItemWrapper}>
                 <LargeListItem title={"Manage Users"} handlePress={handlePress(navigation)} option={"manage-users"} />
@@ -42,7 +41,4 @@ const styles = StyleSheet.create({
         marginHorizontal: 2,
     }
 });
-const mapStateToProps = ({ inventory }) => ({
-    inventory: inventory.inventoryItems
-});
-export default connect(mapStateToProps, null)(AdminHomeScreen);
+export default AdminHomeScreen;

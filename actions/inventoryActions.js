@@ -1,4 +1,4 @@
-import { UPDATE_SEARCH_TEXT, SET_INVENTORY } from "./actionTypes";
+import { UPDATE_SEARCH_TEXT, SET_INVENTORY, UPDATE_INVENTORY_ITEM } from "./actionTypes";
 
 export const updateSearchText = ({ text }) => {
     return {
@@ -10,5 +10,11 @@ export const setInventory = ({ inventoryItems, inventoryCategories }) => {
     return {
         type: SET_INVENTORY,
         payload: { inventoryItems, inventoryCategories },
+    }
+}
+export const updateInventoryItem = ({ barcode, category, newData }) => {
+    return {
+        type: UPDATE_INVENTORY_ITEM,
+        payload: { barcode, category, newData }
     }
 }

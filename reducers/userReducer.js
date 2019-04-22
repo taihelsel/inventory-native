@@ -2,6 +2,7 @@ import { SET_SHOPS, SET_CURRENT_SHOP } from "../actions/actionTypes";
 const initState = {
     shops: [],
     currentShop: "",
+    currentGroup: "",
 }
 const userReducer = (state = initState, action) => {
     switch (action.type) {
@@ -14,9 +15,11 @@ const userReducer = (state = initState, action) => {
         }
         case SET_CURRENT_SHOP: {
             const { currentShop } = action.payload;
+            const { shopId, group } = currentShop;
             return {
                 ...state,
-                currentShop
+                currentShop: shopId,
+                currentGroup: group,
             }
         }
         default: return state;

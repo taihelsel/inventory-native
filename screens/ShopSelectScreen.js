@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { setCurrentShop } from "../actions/userActions";
 const handlePress = (shop, setCurrentShop, navigation) => e => {
     const { shopId, group } = shop;
-    setCurrentShop({ currentShop: shopId });
+    setCurrentShop({ currentShop: { shopId, group } });
     navigation.navigate("Clerk");
 }
 const ShopSelectScreen = ({ shops, setCurrentShop, navigation }) => {
@@ -56,6 +56,6 @@ const mapStateToProps = state => ({
     shops: state.user.shops,
 });
 const mapDispatchToProps = dispatch => ({
-    setCurrentShop: content => { dispatch(setCurrentShop(content)) }
+    setCurrentShop: content => { dispatch(setCurrentShop(content)) },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ShopSelectScreen);

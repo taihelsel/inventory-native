@@ -1,4 +1,4 @@
-import { SET_SHOPS, SET_CURRENT_SHOP } from "./actionTypes";
+import { SET_SHOPS, SET_CURRENT_SHOP, } from "./actionTypes";
 
 export const setShops = ({ shops }) => {
     return {

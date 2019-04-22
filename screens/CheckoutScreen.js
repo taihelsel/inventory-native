@@ -51,15 +51,20 @@ const buildSwipeoutBtns = deleteCartItem => k => (
     backgroundColor: "red",
   }]
 );
+const renderPrice = (min, max) => {
+  return (
+    <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>
+      Price range: <Text style={styles.price}>{min !== max ? `$${min} - $${max}` : `$${max}`}</Text>
+    </Text>
+  )
+}
 const CheckoutScreen = ({ minPrice, maxPrice, cartData, updateCart, deleteCartItem }) => {
   return (Object.keys(cartData).length > 0) ? (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <InventoryListItemSwipeout isCartView={true} updateCartTotal={updateCartTotal(maxPrice, minPrice, cartData, updateCart)} buildSwipeoutBtns={buildSwipeoutBtns(deleteCartItem)} data={cartData} handleTouch={handleItemTouch} />
       </ScrollView>
-      <Text style={{ textAlign: "center", marginBottom: 15, fontSize: 20, fontWeight: "600" }}>
-        Price range: <Text style={styles.price}>{`$${minPrice} - $${maxPrice}`}</Text>
-      </Text>
+      {renderPrice(minPrice, maxPrice)}
     </View>
   ) : (
       <View style={styles.container} >

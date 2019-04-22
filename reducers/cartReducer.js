@@ -4,6 +4,17 @@ const initState = {
     minPrice: 0,
     maxPrice: 0,
 }
+const calculatePrice = (k, o) => {
+    if (typeof o.price === "object") {
+        return parseFloat(o.price[k]) * parseFloat(o.amnt);
+    } else {
+        return parseFloat(o.price) * parseFloat(o.amnt);
+    }
+}
+const getPrice = (k, price) => {
+    if (typeof price === "object") return parseFloat(price[k]);
+    else return (parseFloat(price))
+}
 const cartReducer = (state = initState, action) => {
     switch (action.type) {
         case UPDATE_CART: {
@@ -19,12 +30,14 @@ const cartReducer = (state = initState, action) => {
             const { barcode, newData } = action.payload;
             let cartData = { ...state.cartData };
             let { minPrice, maxPrice } = state;
-            minPrice -= parseInt(cartData[barcode].price.min) * parseInt(cartData[barcode].amnt);
-            maxPrice -= parseInt(cartData[barcode].price.max) * parseInt(cartData[barcode].amnt);
+            //remove old item
+            minPrice -= calculatePrice("min", cartData[barcode]);
+            maxPrice -= calculatePrice("max", cartData[barcode]);
             delete cartData[barcode];
+            //add new item
             cartData[newData.barcode] = { ...newData };
-            minPrice += parseInt(newData.price.min) * parseInt(newData.amnt);
-            maxPrice += parseInt(newData.price.max) * parseInt(newData.amnt);
+            minPrice += calculatePrice("min", newData);
+            maxPrice += calculatePrice("max", newData);
             return {
                 ...state,
                 cartData,
@@ -36,8 +49,8 @@ const cartReducer = (state = initState, action) => {
             const { key } = action.payload;
             const cartData = { ...state.cartData };
             let { minPrice, maxPrice } = state;
-            minPrice -= parseInt(cartData[key].price.min);
-            maxPrice -= parseInt(cartData[key].price.max);
+            minPrice -= getPrice("min", cartData[key].price);
+            maxPrice -= getPrice("max", cartData[key].price);
             delete cartData[key];
             return {
                 ...state,
@@ -51,8 +64,8 @@ const cartReducer = (state = initState, action) => {
             const cartData = { ...state.cartData };
             let { minPrice, maxPrice } = state;
             cartData[data.barcode] = { ...data };
-            minPrice += parseInt(data.price.min);
-            maxPrice += parseInt(data.price.max);
+            minPrice += getPrice("min", data.price);
+            maxPrice += getPrice("max", data.price);
             return {
                 ...state,
                 cartData,

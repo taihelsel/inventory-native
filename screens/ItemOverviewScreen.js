@@ -101,6 +101,15 @@ class ItemOverviewScreen extends Component {
             </View>
         );
     }
+    renderPrice = price => {
+        return price !== null && typeof price !== "undefined" ?
+            typeof price === "object" ? (
+                <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
+            ) : isNaN(parseFloat(price)) === false ? (
+                <Text style={styles.price}>{`$${price}`}</Text>
+            ) : null
+            : null;
+    }
     render() {
         const { navigation } = this.props;
         const data = navigation.getParam("data", {});
@@ -112,7 +121,7 @@ class ItemOverviewScreen extends Component {
                     {this.renderImg(img)}
                     <Text style={styles.title}>{title}</Text>
                     {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
-                    <Text style={styles.price}>{`$${price.min} - $${price.max}`}</Text>
+                    {this.renderPrice(price)}
                     {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={videoLink} /> : null}
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {

@@ -130,6 +130,15 @@ class InventoryListItem extends React.Component {
             </View>
         );
     }
+    renderPrice = price => {
+        return price !== null && typeof price !== "undefined" ?
+            typeof price === "object" ? (
+                <Text style={[styles.detailsText, styles.priceText]}>{`$${price.min} - $${price.max}`}</Text>
+            ) : isNaN(parseFloat(price)) === false ? (
+                <Text style={[styles.detailsText, styles.priceText]}>{`$${price}`}</Text>
+            ) : null
+            : null;
+    }
     render() {
         const { data, isCartView, isRestockView } = this.props;
         const dynamicUnderlayColor = isCartView || isRestockView ? "transparent" : "rgba(212, 212, 212, 0.25)";
@@ -140,7 +149,7 @@ class InventoryListItem extends React.Component {
                     {this.renderImg(img)}
                     <View style={{ flex: 1, paddingLeft: 15, justifyContent: "center" }} >
                         <Text style={[styles.detailsText, styles.titleText]}>{data.title}</Text>
-                        {typeof data.price !== "undefined" ? <Text style={[styles.detailsText, styles.priceText]}>{`$${data.price.min} - $${data.price.max}`}</Text> : null}
+                        {this.renderPrice(data.price)}
                     </View>
                     {this.renderScreenSpecificItems()}
                 </View >

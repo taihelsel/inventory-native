@@ -1,4 +1,4 @@
-import { SET_INVENTORY, UPDATE_SEARCH_TEXT, UPDATE_INVENTORY_ITEM } from "../actions/actionTypes";
+import { SET_INVENTORY, UPDATE_SEARCH_TEXT, UPDATE_INVENTORY_ITEM, ADD_INVENTORY_ITEM } from "../actions/actionTypes";
 const initState = {
     searchText: "",
     inventoryCategories: {},
@@ -12,6 +12,19 @@ const inventoryReducer = (state = initState, action) => {
                 ...state,
                 inventoryItems,
                 inventoryCategories,
+            }
+        }
+        case ADD_INVENTORY_ITEM: {
+            const { newItem } = action.payload;
+            let inventoryItems = { ...state.inventoryItems };
+            let inventoryCategories = { ...state.inventoryCategories };
+            inventoryItems[newItem.barcode] = { ...newItem };
+            if (typeof inventoryCategories[newItem.category] === "undefined") inventoryCategories[newItem.category] = {};
+            inventoryCategories[newItem.category][newItem.title] = { ...newItem };
+            return {
+                ...state,
+                inventoryItems,
+                inventoryCategories
             }
         }
         case UPDATE_SEARCH_TEXT: {

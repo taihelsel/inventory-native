@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
-import { updateInventoryItem } from "../actions/inventoryActions";
+import { updateInventoryItem, addInventoryItem } from "../actions/inventoryActions";
 import { updateCartItem } from "../actions/cartActions";
 import { updateRestockItem } from "../actions/restockActions";
 import { ImageManipulator } from "expo";
@@ -126,7 +126,31 @@ class CreateInventoryScreen extends Component {
         navigation.navigate("ViewCameraRoll", { data });
     }
     handleAddInventoryPress = () => {
-        console.log("add to inventory pressed", "add to redux store and firebase realtime db");
+        console.log("NEED TO ADD TO FIREBASE");
+        const { addInventoryItem } = this.props;
+        const {
+            category,
+            title,
+            manufacturer,
+            description,
+            imgUrl,
+            barcode,
+            price,
+        } = this.state;
+        if (typeof barcode !== "undefined") {
+            addInventoryItem({
+                newItem: {
+                    category,
+                    title,
+                    manufacturer,
+                    desc: description,
+                    img: imgUrl,
+                    barcode,
+                    price,
+                }
+            });
+        } else console.log("ERR IN CREATEINVENTORY SCREEN, NEED TO ADD REQUIRED FIELDS");
+
     }
     handleSaveBtnPress = () => {
         const {
@@ -164,7 +188,6 @@ class CreateInventoryScreen extends Component {
             }
         });
         if (typeof restockData[originalBarcode] !== "undefined") {
-            console.log("updating restock list");
             updateRestockItem({
                 barcode: originalBarcode,
                 newData: {
@@ -555,6 +578,7 @@ const mapStateToProps = ({ cart, restock }) => ({
 });
 const mapDispatchToProps = dispatch => ({
     updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) },
+    addInventoryItem: (content) => { dispatch(addInventoryItem(content)) },
     updateCartItem: (content) => { dispatch(updateCartItem(content)) },
     updateRestockItem: (content) => { dispatch(updateRestockItem(content)) },
 });

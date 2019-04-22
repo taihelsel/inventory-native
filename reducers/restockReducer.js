@@ -7,12 +7,12 @@ const restockReducer = (state = initState, action) => {
         case UPDATE_RESTOCK_ITEM: {
             console.log("update restock item ");
             const { barcode, newData } = action.payload;
-            let { restockData } = state;
+            let restockData = { ...state.restockData };
             delete restockData[barcode];
             restockData[newData.barcode] = { ...newData };
             return {
                 ...state,
-                restockData: { ...restockData }
+                restockData
             }
         }
         case DELETE_RESTOCK_ITEM: {

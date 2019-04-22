@@ -3,23 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 /*Components*/
 import LargeListItem from "../components/LargeListItem";
-const testInventoryData = {
-    "0000000": {
-        title: "test title",
-        price: {
-            min: 0,
-            max: 5,
-        },
-        desc: [
-            "test desc",
-            "magical desc test",
-            "amazing super awesome desc",
-        ],
-        category: "test cat",
-        manufacturer: "test manu",
-        barcode: "0000000",
-    }
-};
+
 const handlePress = (navigation, items) => option => {
     switch (option) {
         case "manage-inventory": {

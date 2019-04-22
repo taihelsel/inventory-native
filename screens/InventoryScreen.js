@@ -67,7 +67,6 @@ class InventoryScreen extends React.Component {
     const keys = Object.values(inventory), { setInventory } = this.props;
     let categories = {}, items = {};
     keys.forEach((item) => {
-      console.log(item);
       if (typeof categories[item.category] === "undefined") categories[item.category] = {};
       if (typeof items[item.barcode] === "undefined") items[item.barcode] = { ...item };
       const category = categories[item.category];

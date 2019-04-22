@@ -6,6 +6,7 @@ import InventoryStack from "../screens/InventoryScreen";
 import ClerkRestockScreen from "../screens/ClerkRestockScreen";
 import ScanBarcodeStack from "../screens/ScanBarcodeScreen";
 import CheckoutScreen from "../screens/CheckoutScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const ClerkStackNavigator = createBottomTabNavigator({
     Inventory: {
@@ -37,6 +38,14 @@ const ClerkStackNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarIcon: ({ tintColor }) => (
                 <FontAwesome name="shopping-cart" size={30} style={{ color: tintColor }} />
+            ),
+        }
+    },
+    Profile: {
+        screen: ProfileScreen,
+        navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+                <FontAwesome name="user" size={30} style={{ color: tintColor }} />
             ),
         }
     },

@@ -31,7 +31,7 @@ const ProfileScreen = ({ navigation, group }) => {
                 </View>
                 {group === "admin" ? (
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity underlayColor="transparent" style={styles.button} onPress={navigate("Admin")}>
+                        <TouchableOpacity underlayColor="transparent" style={styles.button} onPress={navigate(navigation, "Admin")}>
                             <View style={styles.buttonIconContainer}>
                                 <FontAwesome name="user-circle" size={40} style={styles.buttonIcon} />
                             </View>

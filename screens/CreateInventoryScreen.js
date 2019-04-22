@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { updateInventoryItem } from "../actions/inventoryActions";
 import { updateCartItem } from "../actions/cartActions";
+import { updateRestockItem } from "../actions/restockActions";
 import { ImageManipulator } from "expo";
 import { connect } from "react-redux";
 /*Componenets*/
@@ -131,7 +132,9 @@ class CreateInventoryScreen extends Component {
         const {
             updateInventoryItem,
             updateCartItem,
+            updateRestockItem,
             cartData,
+            restockData,
             navigation
         } = this.props;
         const {
@@ -160,6 +163,21 @@ class CreateInventoryScreen extends Component {
                 price,
             }
         });
+        if (typeof restockData[originalBarcode] !== "undefined") {
+            console.log("updating restock list");
+            updateRestockItem({
+                barcode: originalBarcode,
+                newData: {
+                    category,
+                    title,
+                    manufacturer,
+                    desc: description,
+                    img: imgUrl,
+                    barcode,
+                    price,
+                }
+            });
+        }
         if (typeof cartData[originalBarcode] !== "undefined") {
             const cartItem = cartData[originalBarcode];
             updateCartItem({
@@ -531,11 +549,13 @@ const styles = StyleSheet.create({
         margin: 10,
     }
 });
-const mapStateToProps = ({ cart }) => ({
+const mapStateToProps = ({ cart, restock }) => ({
     cartData: cart.cartData,
+    restockData: restock.restockData,
 });
 const mapDispatchToProps = dispatch => ({
     updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) },
-    updateCartItem: (content) => { dispatch(updateCartItem(content)) }
+    updateCartItem: (content) => { dispatch(updateCartItem(content)) },
+    updateRestockItem: (content) => { dispatch(updateRestockItem(content)) },
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CreateInventoryScreen);

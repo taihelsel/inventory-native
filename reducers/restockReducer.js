@@ -1,9 +1,20 @@
-import { DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM } from "../actions/actionTypes";
+import { DELETE_RESTOCK_ITEM, ADD_RESTOCK_ITEM, UPDATE_RESTOCK_ITEM } from "../actions/actionTypes";
 const initState = {
     restockData: {}, //source data
 }
 const restockReducer = (state = initState, action) => {
     switch (action.type) {
+        case UPDATE_RESTOCK_ITEM: {
+            console.log("update restock item ");
+            const { barcode, newData } = action.payload;
+            let { restockData } = state;
+            delete restockData[barcode];
+            restockData[newData.barcode] = { ...newData };
+            return {
+                ...state,
+                restockData: { ...restockData }
+            }
+        }
         case DELETE_RESTOCK_ITEM: {
             const { restockData } = action.payload;
             return {

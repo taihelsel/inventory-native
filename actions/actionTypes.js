@@ -4,6 +4,7 @@ export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
 export const ADD_CART_ITEM = "ADD_CART_ITEM";
 export const DELETE_CART_ITEM = "DELETE_CART_ITEM";
 //restock
+export const UPDATE_RESTOCK_ITEM = "UPDATE_RESTOCK_ITEM";
 export const ADD_RESTOCK_ITEM = "ADD_RESTOCK_ITEM";
 export const DELETE_RESTOCK_ITEM = "DELETE_RESTOCK_ITEM";
 //inventory

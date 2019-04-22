@@ -66,8 +66,6 @@ const cartReducer = (state = initState, action) => {
             cartData[data.barcode] = { ...data };
             minPrice += getPrice("min", data.price);
             maxPrice += getPrice("max", data.price);
-            console.log("new cart item added", data);
-
             return {
                 ...state,
                 cartData,

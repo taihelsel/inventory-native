@@ -1,8 +1,10 @@
 import { createStackNavigator } from "react-navigation";
 /*Screens*/
 import ShopSelectScreen from "../screens/ShopSelectScreen";
-import ShopUserTypeScreen from "../screens/ShopUserTypeScreen";
-
+/*Nav Stacks*/
+import ClerkNavigation from "./ClerkNavigation";
+import BoxHandlerNavigation from "./BoxHandlerNavigation";
+import AdminNavigation from "./AdminNavigation";
 export default createStackNavigator({
     ShopSelect: {
         screen: ShopSelectScreen,
@@ -12,9 +14,31 @@ export default createStackNavigator({
             }
         },
     },
-    ShopUserType: {
-        screen: ShopUserTypeScreen,
-    }
+    Clerk: {
+        screen: ClerkNavigation,
+        navigationOptions: ({ navigation }) => {
+            return {
+                header: null,
+            }
+        },
+    },
+    BoxHandler: {
+        screen: BoxHandlerNavigation,
+        navigationOptions: ({ navigation }) => {
+            return {
+                header: null,
+            }
+        },
+        
+    },
+    Admin: {
+        screen: AdminNavigation,
+        navigationOptions: ({ navigation }) => {
+            return {
+                header: null,
+            }
+        },
+    },
 }, {
         initialRouteName: "ShopSelect",
     }

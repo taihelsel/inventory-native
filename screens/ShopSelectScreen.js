@@ -5,7 +5,7 @@ import { setCurrentShop } from "../actions/userActions";
 const handlePress = (shop, setCurrentShop, navigation) => e => {
     const { shopId, group } = shop;
     setCurrentShop({ currentShop: shopId });
-    navigation.navigate("ShopUserType", { data: { group, shopId } });
+    navigation.navigate("Clerk");
 }
 const ShopSelectScreen = ({ shops, setCurrentShop, navigation }) => {
     if (shops.length < 1) return <View style={styles.container}><Text>Error fetching shops</Text></View>

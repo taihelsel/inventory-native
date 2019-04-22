@@ -13,7 +13,7 @@ export default createStackNavigator({
         navigationOptions: ({ navigation }) => {
             return {
                 title: "Admin Pannel",
-                headerLeft: (<BackButton navigation={navigation} dest={"ShopUserType"} />),
+                headerLeft: (<BackButton navigation={navigation} />),
             }
         },
     },

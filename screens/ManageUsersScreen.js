@@ -16,7 +16,7 @@ class ManageUsersScreen extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: "Manage Users",
-            headerLeft: (<BackButton navigation={navigation} dest={"AdminHome"} />),
+            headerLeft: (<BackButton navigation={navigation} />),
             headerRight: (
                 <TouchableOpacity underlayColor="transparent" onPress={() => { navigation.navigate("CreateUser") }}>
                     <View style={{ paddingHorizontal: 25, paddingTop: 6, }}>

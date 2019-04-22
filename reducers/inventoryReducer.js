@@ -23,10 +23,11 @@ const inventoryReducer = (state = initState, action) => {
         }
         case UPDATE_INVENTORY_ITEM: {
             const { barcode, category, newData } = action.payload;
-            const inventoryItems = { ...state.inventoryItems };
-            const inventoryCategories = { ...state.inventoryCategories };
-            inventoryCategories[category][inventoryItems[barcode].title] = { ...newData };
-            inventoryItems[barcode] = { ...newData };
+            let inventoryItems = { ...state.inventoryItems };
+            let inventoryCategories = { ...state.inventoryCategories };
+            delete inventoryCategories[category][inventoryItems[barcode].title]
+            inventoryCategories[newData.category][newData.title] = { ...newData };
+            inventoryItems[newData.barcode] = { ...newData };
             return {
                 ...state,
                 inventoryItems,

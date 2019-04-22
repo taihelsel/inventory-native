@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { updateInventoryItem } from "../actions/inventoryActions";
+import { updateCartItem } from "../actions/cartActions";
 import { ImageManipulator } from "expo";
 import { connect } from "react-redux";
 /*Componenets*/
@@ -127,7 +128,12 @@ class CreateInventoryScreen extends Component {
         console.log("add to inventory pressed", "add to redux store and firebase realtime db");
     }
     handleSaveBtnPress = () => {
-        const { updateInventoryItem, navigation } = this.props;
+        const {
+            updateInventoryItem,
+            updateCartItem,
+            cartData,
+            navigation
+        } = this.props;
         const {
             category,
             title,
@@ -154,6 +160,22 @@ class CreateInventoryScreen extends Component {
                 price,
             }
         });
+        if (typeof cartData[originalBarcode] !== "undefined") {
+            const cartItem = cartData[originalBarcode];
+            updateCartItem({
+                barcode: originalBarcode,
+                newData: {
+                    amnt: cartItem.amnt,
+                    category,
+                    title,
+                    manufacturer,
+                    desc: description,
+                    img: imgUrl,
+                    barcode,
+                    price,
+                }
+            });
+        }
         navigation.navigate("ManageInventory", { data: { items: false, dest: "ManageItem" } });
     }
     handlePreviewBtnPress = () => {
@@ -509,7 +531,11 @@ const styles = StyleSheet.create({
         margin: 10,
     }
 });
-const mapDispatchToPros = dispatch => ({
-    updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) }
-})
-export default connect(null, mapDispatchToPros)(CreateInventoryScreen);
+const mapStateToProps = ({ cart }) => ({
+    cartData: cart.cartData,
+});
+const mapDispatchToProps = dispatch => ({
+    updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) },
+    updateCartItem: (content) => { dispatch(updateCartItem(content)) }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(CreateInventoryScreen);

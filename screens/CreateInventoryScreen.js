@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import imgurConfig from "../imgurConfig";
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { updateInventoryItem, addInventoryItem } from "../actions/inventoryActions";
 import { updateCartItem } from "../actions/cartActions";
@@ -17,6 +18,7 @@ class CreateInventoryScreen extends Component {
         category: "",
         description: [],
         imgUrl: "",
+        imgBase64: "",
         barcode: "",
         isEditMode: false,
         originalBarcode: "",
@@ -106,15 +108,14 @@ class CreateInventoryScreen extends Component {
     handleFixedPricePress = e => { this.setState({ price: "" }); }
     handlePriceRangePress = e => { this.setState({ price: { min: "", max: "" } }); }
     handleImgSelect = imgData => e => {
-        console.log("NEED TO UPLOAD TO FIREBASE");
         const { image } = { ...imgData };
         const actions = [
             { resize: { width: 200, } }
         ];
-        const saveOptions = { format: "jpeg" };
+        const saveOptions = { format: "jpeg", base64: true };
         (async () => {
             const newImage = await ImageManipulator.manipulateAsync(image.uri, actions, saveOptions);
-            this.setState({ imgUrl: newImage.uri, });
+            this.setState({ imgUrl: newImage.uri, imgBase64: newImage.base64 });
             this.props.navigation.goBack(null);
         })();
     }
@@ -125,8 +126,26 @@ class CreateInventoryScreen extends Component {
         };
         navigation.navigate("ViewCameraRoll", { data });
     }
+    updloadImage = img64 => {
+        let formdata = new FormData();
+        formdata.append("image", img64);
+        formdata.append("type", "base64");
+        fetch("https://api.imgur.com/3/image", {
+            method: "POST",
+            headers: {
+                "Authorization": `Client-ID ${imgurConfig}`
+            },
+            body: formdata
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log("error", err);
+            })
+    }
     handleAddInventoryPress = () => {
-        console.log("NEED TO ADD TO FIREBASE");
         const { addInventoryItem } = this.props;
         const {
             category,
@@ -138,17 +157,18 @@ class CreateInventoryScreen extends Component {
             price,
         } = this.state;
         if (typeof barcode !== "undefined") {
-            addInventoryItem({
-                newItem: {
-                    category,
-                    title,
-                    manufacturer,
-                    desc: description,
-                    img: imgUrl,
-                    barcode,
-                    price,
-                }
-            });
+
+            // addInventoryItem({
+            //     newItem: {
+            //         category,
+            //         title,
+            //         manufacturer,
+            //         desc: description,
+            //         img: imgUrl,
+            //         barcode,
+            //         price,
+            //     }
+            // });
         } else console.log("ERR IN CREATEINVENTORY SCREEN, NEED TO ADD REQUIRED FIELDS");
 
     }

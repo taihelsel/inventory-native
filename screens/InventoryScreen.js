@@ -60,7 +60,7 @@ class InventoryScreen extends React.Component {
     const inventoryRef = firebase.database().ref(`/shops/${currentShop}/inventoryItems`);
     inventoryRef.on("value", snapshot => {
       const inventoryData = snapshot.val();
-      this.sortInventory(inventoryData);
+      if (inventoryData !== null) this.sortInventory(inventoryData);
     });
   }
   sortInventory = (inventory) => {

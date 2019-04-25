@@ -12,11 +12,11 @@ import ManageItemDescription from "../components/ManageItemDescription";
 import LargeItemImage from "../components/LargeItemImage";
 class CreateInventoryScreen extends Component {
     state = {
-        title: "",
+        title: "Test title",
         price: null,
-        manufacturer: "",
-        category: "",
-        description: [],
+        manufacturer: "test manu",
+        category: "test category",
+        description: ["test desc1", "Test desc2"],
         imgUrl: "",
         imgBase64: "",
         barcode: "",
@@ -126,7 +126,7 @@ class CreateInventoryScreen extends Component {
         };
         navigation.navigate("ViewCameraRoll", { data });
     }
-    updloadImage = img64 => {
+    uploadToImgur = (img64, cb) => {
         let formdata = new FormData();
         formdata.append("image", img64);
         formdata.append("type", "base64");
@@ -138,12 +138,19 @@ class CreateInventoryScreen extends Component {
             body: formdata
         })
             .then(res => res.json())
-            .then(res => {
-                console.log(res);
+            .then(({ data }) => {
+                cb(data);
             })
-            .catch((err) => {
-                console.log("error", err);
-            })
+            .catch(err => {
+                console.log("error uploading to imgur", err);
+            });
+    }
+    uploadItemToDB = itemData => {
+        const { firebase, currentShop } = this.props;
+        const dbInsert = {};
+        dbInsert[itemData.barcode] = { ...itemData };
+        const database = firebase.database().ref(`/shops/${currentShop}/inventoryItems`)
+        database.update(dbInsert);
     }
     handleAddInventoryPress = () => {
         const { addInventoryItem } = this.props;
@@ -152,23 +159,25 @@ class CreateInventoryScreen extends Component {
             title,
             manufacturer,
             description,
-            imgUrl,
+            imgBase64,
             barcode,
             price,
         } = this.state;
-        if (typeof barcode !== "undefined") {
-
-            // addInventoryItem({
-            //     newItem: {
-            //         category,
-            //         title,
-            //         manufacturer,
-            //         desc: description,
-            //         img: imgUrl,
-            //         barcode,
-            //         price,
-            //     }
-            // });
+        if (typeof barcode !== "undefined" && typeof imgBase64 !== "undefined") {
+            this.uploadToImgur(imgBase64, ({ link }) => {
+                const newItem = {
+                    category,
+                    title,
+                    manufacturer,
+                    desc: description,
+                    img: link,
+                    barcode,
+                    price,
+                };
+                console.log(newItem);
+                this.uploadItemToDB(newItem);
+                addInventoryItem({ newItem });
+            });
         } else console.log("ERR IN CREATEINVENTORY SCREEN, NEED TO ADD REQUIRED FIELDS");
 
     }
@@ -592,9 +601,11 @@ const styles = StyleSheet.create({
         margin: 10,
     }
 });
-const mapStateToProps = ({ cart, restock }) => ({
+const mapStateToProps = ({ cart, restock, firebase, user }) => ({
     cartData: cart.cartData,
     restockData: restock.restockData,
+    firebase: firebase.firebaseApp,
+    currentShop: user.currentShop
 });
 const mapDispatchToProps = dispatch => ({
     updateInventoryItem: (content) => { dispatch(updateInventoryItem(content)) },

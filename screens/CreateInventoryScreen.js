@@ -174,7 +174,6 @@ class CreateInventoryScreen extends Component {
                     barcode,
                     price,
                 };
-                console.log(newItem);
                 this.uploadItemToDB(newItem);
                 addInventoryItem({ newItem });
             });

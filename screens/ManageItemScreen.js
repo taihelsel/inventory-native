@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
 /*Components*/
 import HyperLink from "../components/HyperLink";
@@ -9,7 +10,13 @@ class ManageItemScreen extends Component {
         const data = { ...d, isEditMode: true };
         navigation.navigate("CreateInventory", { data });
     }
-    handledRemovePress = data => e => console.log("remove btn pressed");
+    handledRemovePress = data => e => {
+        const { firebase, currentShop, navigation } = this.props;
+        const database = firebase.database();
+        const inventoryItemRef = database.ref(`/shops/${currentShop}/inventoryItems/${data.barcode}`);
+        inventoryItemRef.remove();
+        navigation.goBack(null);
+    }
     renderPrice = price => {
         return price !== null && typeof price !== "undefined" ?
             typeof price === "object" ? (
@@ -114,5 +121,10 @@ const styles = StyleSheet.create({
     }
 
 });
-
-export default ManageItemScreen;
+const mapStateToProps = ({ firebase, user }) => {
+    return {
+        firebase: firebase.firebaseApp,
+        currentShop: user.currentShop
+    }
+}
+export default connect(mapStateToProps, null)(ManageItemScreen);

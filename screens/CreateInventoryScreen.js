@@ -12,11 +12,11 @@ import ManageItemDescription from "../components/ManageItemDescription";
 import LargeItemImage from "../components/LargeItemImage";
 class CreateInventoryScreen extends Component {
     state = {
-        title: "Test title",
+        title: "",
         price: null,
-        manufacturer: "test manu",
-        category: "test category",
-        description: ["test desc1", "Test desc2"],
+        manufacturer: "",
+        category: "",
+        description: [],
         imgUrl: "",
         imgBase64: "",
         barcode: "",
@@ -142,15 +142,32 @@ class CreateInventoryScreen extends Component {
                 cb(data);
             })
             .catch(err => {
-                console.log("error uploading to imgur", err);
+                console.log("error uploading item", err);
             });
     }
     uploadItemToDB = itemData => {
         const { firebase, currentShop } = this.props;
+        const database = firebase.database()
         const dbInsert = {};
         dbInsert[itemData.barcode] = { ...itemData };
-        const database = firebase.database().ref(`/shops/${currentShop}/inventoryItems`)
-        database.update(dbInsert);
+        const inventoryItemsRef = database.ref(`/shops/${currentShop}/inventoryItems`)
+        inventoryItemsRef.update(dbInsert);
+    }
+    updateInventoryItemInDB = (oldBarcode, itemData) => {
+        const { firebase, currentShop } = this.props;
+        const database = firebase.database();
+        const dbInsert = {};
+        dbInsert[itemData.barcode] = { ...itemData };
+        if (oldBarcode !== itemData.barcode) {
+            //remove item from db. key is different;
+            database.ref(`/shops/${currentShop}/inventoryItems/${oldBarcode}`).remove();
+            const inventoryItemsRef = database.ref(`/shops/${currentShop}/inventoryItems/`)
+            inventoryItemsRef.update(dbInsert);
+        } else {
+            //key is the same. update existing item in db.
+            const inventoryItemRef = database.ref(`/shops/${currentShop}/inventoryItems/${oldBarcode}`)
+            inventoryItemRef.set({ ...itemData });
+        }
     }
     handleAddInventoryPress = () => {
         const { addInventoryItem } = this.props;
@@ -182,7 +199,6 @@ class CreateInventoryScreen extends Component {
     }
     handleSaveBtnPress = () => {
         const {
-            updateInventoryItem,
             updateCartItem,
             updateRestockItem,
             cartData,
@@ -195,6 +211,7 @@ class CreateInventoryScreen extends Component {
             manufacturer,
             description,
             imgUrl,
+            imgBase64,
             barcode,
             originalBarcode,
             originalCategory,
@@ -204,17 +221,21 @@ class CreateInventoryScreen extends Component {
             console.log("error getting original barcode or category in create inventory screen");
             return null;
         }
-        updateInventoryItem({
-            barcode: originalBarcode, category: originalCategory, newData: {
+        if (typeof barcode !== "undefined" && typeof imgUrl !== "undefined") {
+            let img = imgUrl;
+            if (imgBase64.length > 0) img = imgBase64;
+            const newData = {
                 category,
                 title,
                 manufacturer,
                 desc: description,
-                img: imgUrl,
+                img: img,
                 barcode,
                 price,
             }
-        });
+            this.updateInventoryItemInDB(originalBarcode, newData);
+        } else console.log("ERROR MISSING REQUIRED FIELDS");
+
         if (typeof restockData[originalBarcode] !== "undefined") {
             updateRestockItem({
                 barcode: originalBarcode,

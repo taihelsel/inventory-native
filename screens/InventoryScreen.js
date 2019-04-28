@@ -134,7 +134,9 @@ export default InventoryStack = createStackNavigator({
     screen: connect(mapStateToProps, mapDispatchToProps)(InventoryScreen)
   },
   InventoryItemsScreen: { screen: InventoryItemsScreen },
-  ItemOverviewScreen: { screen: ItemOverviewScreen },
+  ItemOverviewScreen: {
+    screen: ItemOverviewScreen,
+  },
 }, {
     defaultNavigationOptions: ({ navigation }) => ({
       headerLeft: (

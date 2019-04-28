@@ -11,11 +11,19 @@ import ProfileScreen from "../screens/ProfileScreen";
 const ClerkStackNavigator = createBottomTabNavigator({
     Inventory: {
         screen: InventoryStack,
-        navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-                <FontAwesome name="dropbox" size={30} style={{ color: tintColor }} />
-            ),
-        }
+        navigationOptions: ({ navigation }) => {
+            const currentScreen = navigation.state.routes[navigation.state.routes.length - 1].routeName;
+            if (currentScreen === "ItemOverviewScreen") {
+                return {
+                    tabBarVisible: false,
+                }
+            }
+            return {
+                tabBarIcon: ({ tintColor }) => (
+                    <FontAwesome name="dropbox" size={30} style={{ color: tintColor }} />
+                ),
+            }
+        },
     },
     Restock: {
         screen: ClerkRestockScreen,

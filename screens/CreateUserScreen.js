@@ -8,12 +8,6 @@ class CreateUserScreen extends Component {
         email: "",
         isAdmin: false,
     }
-    static navigationOptions = ({ navigation }) => {
-        return {
-            title: "Add User",
-            headerLeft: (<BackButton navigation={navigation} />)
-        }
-    }
     handleEmailInput = email => { this.setState({ email }); }
     handleAdminCheck = () => {
         const { isAdmin } = this.state;

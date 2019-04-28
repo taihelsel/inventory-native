@@ -58,8 +58,8 @@ class ItemOverviewScreen extends Component {
     buildRestockBtn = () => {
         const { navigation } = this.props, data = navigation.getParam("data", {}),
             styles = {
-                container: { flex: 1, backgroundColor: this.state.inRestock ? "red" : "grey", marginRight: 4, borderRadius: 5, justifyContent: "center" },
-                text: { color: "white", textAlign: "center" }
+                container: { flex: 1, height: 45, backgroundColor: this.state.inRestock ? "red" : "grey", marginRight: 7, borderRadius: 3, justifyContent: "center" },
+                text: { color: "white", textAlign: "center", fontWeight: "600" }
             },
             text = this.state.inRestock ? "Remove from Restock" : "Add to Restock";
         return (
@@ -71,8 +71,8 @@ class ItemOverviewScreen extends Component {
     buildCartBtn = () => {
         const { navigation } = this.props, data = navigation.getParam("data", {}),
             styles = {
-                container: { flex: 1, backgroundColor: this.state.inCart ? "red" : "green", marginRight: 4, borderRadius: 5, justifyContent: "center" },
-                text: { color: "white", textAlign: "center" }
+                container: { flex: 1, height: 45, backgroundColor: this.state.inCart ? "red" : "green", marginLeft: 7, borderRadius: 3, justifyContent: "center" },
+                text: { color: "white", textAlign: "center", fontWeight: "600" }
             },
             text = this.state.inCart ? "Remove from Cart" : "Add to Cart";
         return (
@@ -118,21 +118,26 @@ class ItemOverviewScreen extends Component {
         return (
             <View style={styles.container}>
                 <ScrollView contentContainerStyle={styles.contentContainer}>
-                    {this.renderImg(img)}
-                    <Text style={styles.title}>{title}</Text>
-                    {typeof manufacturer !== "undefined" ? <Text style={styles.price}>By {manufacturer}</Text> : null}
-                    {this.renderPrice(price)}
-                    {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price, color: "#4e4eff", marginTop: 10, }} title={"Demo Video"} url={videoLink} /> : null}
+                    <View style={styles.imgContainer}>
+                        {this.renderImg(img)}
+                    </View>
+                    <View style={styles.detailsContainer}>
+                        <Text style={styles.title}>
+                            {title} {typeof manufacturer !== "undefined" ? `by ${manufacturer}` : null}
+                        </Text>
+                        {this.renderPrice(price)}
+                    </View>
+                    {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price }} title={"Demo Video"} url={videoLink} /> : null}
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {
                             return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>
                         })}
                     </View>
-                    <View style={{ flexDirection: "row", marginHorizontal: 25, height: 50, marginTop: 75 }}>
-                        {this.buildRestockBtn()}
-                        {this.buildCartBtn()}
-                    </View>
                 </ScrollView>
+                <View style={styles.footerBtnContainer}>
+                    {this.buildRestockBtn()}
+                    {this.buildCartBtn()}
+                </View>
             </View>
         );
     }
@@ -142,32 +147,51 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     contentContainer: {
-        paddingVertical: 15,
+    },
+    imgContainer: {
+        backgroundColor: "rgba(247,247,247,0.8)",
+    },
+    detailsContainer: {
+        paddingHorizontal: 15,
+        marginTop: 5,
+        paddingVertical: 10,
+        borderColor: "rgba(111,111,111,0.35)",
+        borderStyle: "solid",
+        borderBottomWidth: 0.25
     },
     title: {
-        fontSize: 40,
+        fontSize: 20,
+        paddingBottom: 5,
         fontWeight: "bold",
-        textAlign: "center",
-        marginTop: 10,
-        marginBottom: 5,
+        textAlign: "left",
+    },
+    manufacturer: {
+        color: "#4e4eff",
+        marginTop: 18,
     },
     price: {
-        fontSize: 25,
-        textAlign: "center"
+        fontSize: 20,
+        textAlign: "left",
+        color: "green",
     },
     descriptionContainer: {
-        borderStyle: "solid",
-        borderColor: "grey",
-        borderWidth: 1,
-        marginTop: 30,
-        marginHorizontal: 25,
-        paddingHorizontal: 12,
+        paddingHorizontal: 22,
         paddingVertical: 7.5
     },
     descriptionText: {
-        fontSize: 15,
+        fontSize: 17,
         marginVertical: 2,
-    }
+    },
+    footerBtnContainer: {
+        flexDirection: "row",
+        paddingHorizontal: 25,
+        paddingBottom: 30,
+        paddingTop: 10,
+        backgroundColor: "rgba(247,247,247,0.75)",
+        borderColor: "rgba(111,111,111,0.35)",
+        borderStyle: "solid",
+        borderTopWidth: 0.25
+    },
 });
 const mapStateToProps = (state) => {
     return {

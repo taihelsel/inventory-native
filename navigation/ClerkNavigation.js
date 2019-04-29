@@ -35,11 +35,19 @@ const ClerkStackNavigator = createBottomTabNavigator({
     },
     ScanBarcode: {
         screen: ScanBarcodeStack,
-        navigationOptions: {
-            tabBarIcon: ({ tintColor }) => (
-                <FontAwesome name="barcode" size={30} style={{ color: tintColor }} />
-            ),
-        }
+        navigationOptions: ({ navigation }) => {
+            const currentScreen = navigation.state.routes[navigation.state.routes.length - 1].routeName;
+            if (currentScreen === "ItemOverviewScreen") {
+                return {
+                    tabBarVisible: false,
+                }
+            }
+            return {
+                tabBarIcon: ({ tintColor }) => (
+                    <FontAwesome name="barcode" size={30} style={{ color: tintColor }} />
+                ),
+            }
+        },
     },
     Checkout: {
         screen: CheckoutScreen,

@@ -11,7 +11,7 @@ const onScan = (navigation, handleBarcodeScan, inventoryItems) => data => {
     if (typeof handleBarcodeScan !== "undefined") {
         handleBarcodeScan(data);
     } else {
-        navigation.navigate("ItemOverviewScreen", { data: inventoryItems[barcodeID] });
+        navigation.navigate("ItemOverviewScreen", { data: inventoryItems[data.data] });
     }
 }
 const ScanBarcodeScreen = ({ navigation, inventoryItems }) => {

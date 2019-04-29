@@ -127,7 +127,9 @@ class ItemOverviewScreen extends Component {
                         </Text>
                         {this.renderPrice(price)}
                     </View>
-                    {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.price }} title={"Demo Video"} url={videoLink} /> : null}
+                    <View style={styles.videoLinkWrapper}>
+                        {typeof videoLink !== "undefined" ? <HyperLink styles={{ ...styles.videoLink }} title={"Demo Video"} url={videoLink} /> : null}
+                    </View>
                     <View style={styles.descriptionContainer}>
                         {desc.map((item, i) => {
                             return <Text style={styles.descriptionText} key={`${item}-${i}`}>• {item}</Text>
@@ -173,6 +175,17 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: "left",
         color: "green",
+    },
+    videoLinkWrapper: {
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderColor: "rgba(111,111,111,0.35)",
+        borderStyle: "solid",
+        borderBottomWidth: 0.25
+    },
+    videoLink: {
+        fontSize: 20,
+        color: "#0963da",
     },
     descriptionContainer: {
         paddingHorizontal: 22,

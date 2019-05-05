@@ -202,8 +202,7 @@ class CreateInventoryScreen extends Component {
             return null;
         }
         if (typeof barcode !== "undefined" && typeof imgUrl !== "undefined") {
-            let img = imgUrl;
-            if (imgBase64.length > 0) img = imgBase64;
+            let img = imgBase64.length > 0 ? imgBase64 : imgUrl;
             const newData = {
                 category,
                 title,

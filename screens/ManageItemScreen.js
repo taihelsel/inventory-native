@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from "react-native";
+/*Functions*/
+import { db_removeInventoryItem } from "../functions/firebaseFunctions";
 /*Components*/
 import HyperLink from "../components/HyperLink";
 import LargeItemImage from "../components/LargeItemImage";
@@ -12,9 +14,7 @@ class ManageItemScreen extends Component {
     }
     handledRemovePress = data => e => {
         const { firebase, currentShop, navigation } = this.props;
-        const database = firebase.database();
-        const inventoryItemRef = database.ref(`/shops/${currentShop}/inventoryItems/${data.barcode}`);
-        inventoryItemRef.remove();
+        db_removeInventoryItem({ barcode: data.barcode, firebase, shopId: currentShop });
         navigation.goBack(null);
     }
     renderPrice = price => {

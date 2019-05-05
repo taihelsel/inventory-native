@@ -6,6 +6,8 @@ import { updateCartItem } from "../actions/cartActions";
 import { updateRestockItem } from "../actions/restockActions";
 import { ImageManipulator } from "expo";
 import { connect } from "react-redux";
+/*Functions*/
+import { db_uploadInventoryItem, db_updateInventoryItem } from "../functions/firebaseFunctions";
 /*Componenets*/
 import BackButton from "../components/BackButton";
 import ManageItemDescription from "../components/ManageItemDescription";
@@ -145,32 +147,8 @@ class CreateInventoryScreen extends Component {
                 console.log("error uploading item", err);
             });
     }
-    uploadItemToDB = itemData => {
-        const { firebase, currentShop } = this.props;
-        const database = firebase.database()
-        const dbInsert = {};
-        dbInsert[itemData.barcode] = { ...itemData };
-        const inventoryItemsRef = database.ref(`/shops/${currentShop}/inventoryItems`)
-        inventoryItemsRef.update(dbInsert);
-    }
-    updateInventoryItemInDB = (oldBarcode, itemData) => {
-        const { firebase, currentShop } = this.props;
-        const database = firebase.database();
-        const dbInsert = {};
-        dbInsert[itemData.barcode] = { ...itemData };
-        if (oldBarcode !== itemData.barcode) {
-            //remove item from db. key is different;
-            database.ref(`/shops/${currentShop}/inventoryItems/${oldBarcode}`).remove();
-            const inventoryItemsRef = database.ref(`/shops/${currentShop}/inventoryItems/`)
-            inventoryItemsRef.update(dbInsert);
-        } else {
-            //key is the same. update existing item in db.
-            const inventoryItemRef = database.ref(`/shops/${currentShop}/inventoryItems/${oldBarcode}`)
-            inventoryItemRef.set({ ...itemData });
-        }
-    }
     handleAddInventoryPress = () => {
-        const { addInventoryItem } = this.props;
+        const { addInventoryItem, firebase, currentShop } = this.props;
         const {
             category,
             title,
@@ -191,7 +169,7 @@ class CreateInventoryScreen extends Component {
                     barcode,
                     price,
                 };
-                this.uploadItemToDB(newItem);
+                db_uploadInventoryItem({ itemData: newItem, firebase, shopId: currentShop });
                 addInventoryItem({ newItem });
             });
         } else console.log("ERR IN CREATEINVENTORY SCREEN, NEED TO ADD REQUIRED FIELDS");
@@ -203,7 +181,9 @@ class CreateInventoryScreen extends Component {
             updateRestockItem,
             cartData,
             restockData,
-            navigation
+            navigation,
+            firebase,
+            currentShop,
         } = this.props;
         const {
             category,
@@ -233,7 +213,7 @@ class CreateInventoryScreen extends Component {
                 barcode,
                 price,
             }
-            this.updateInventoryItemInDB(originalBarcode, newData);
+            db_updateInventoryItem({ oldBarcode: originalBarcode, itemData: newData, firebase, shopId: currentShop });
         } else console.log("ERROR MISSING REQUIRED FIELDS");
 
         if (typeof restockData[originalBarcode] !== "undefined") {

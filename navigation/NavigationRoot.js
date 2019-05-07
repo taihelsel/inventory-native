@@ -4,6 +4,7 @@ import LoadingScreen from "../screens/LoadingScreen";
 /*Nav Stacks*/
 import AuthNavigation from "./AuthNavigation";
 import ShopNavigation from "./ShopNavigation";
+import CreateInventoryNavigation from "./CreateInventoryNavigation";
 const navigationRootSwitchStack = createSwitchNavigator({
     Auth: {
         screen: AuthNavigation
@@ -14,8 +15,11 @@ const navigationRootSwitchStack = createSwitchNavigator({
     Loading: {
         screen: LoadingScreen
     },
+    CreateInventory: {
+        screen: CreateInventoryNavigation,
+    }
 }, {
-        initialRouteName: "Loading",
+        initialRouteName: "CreateInventory",//remove once testing is done
     }
 );
 

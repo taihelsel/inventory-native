@@ -1,6 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
+/*Components*/
+import CreateInventoryFooter from "../../components/CreateInventoryFooter";
+
+const handleNextPress = e => {
+    console.log("change page");
+}
 const AddMediaScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
@@ -20,6 +26,7 @@ const AddMediaScreen = ({ navigation }) => {
                     <Text style={styles.addBarcodeText}>Scan Barcode</Text>
                 </TouchableOpacity>
             </View>
+            <CreateInventoryFooter handleNextPress={handleNextPress} />
         </View>
     )
 }
